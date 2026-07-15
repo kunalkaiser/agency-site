@@ -30,9 +30,9 @@ export default function ServicesPage() {
               <Link
                 key={service.slug}
                 href={`/services/${service.slug}`}
-                className="group flex flex-col rounded-xl border border-navy-100 bg-white p-8 transition-shadow hover:shadow-lg"
+                className="group flex flex-col rounded-xl border border-navy-100 bg-white p-8 transition hover:border-navy-300 hover:shadow-lg"
               >
-                <p className="text-xs uppercase tracking-widest text-sand-600">
+                <p className="text-xs uppercase tracking-widest text-sand-700">
                   {service.outcomeGroup}
                 </p>
                 <h2 className="mt-2 font-serif text-2xl font-semibold text-navy-900">

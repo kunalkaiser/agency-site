@@ -18,7 +18,7 @@ export default function CtaSection({
         <p className="mx-auto mt-4 max-w-xl text-sand-200">{body}</p>
         <Link
           href="/contact"
-          className="mt-8 inline-block rounded-md bg-sand-100 px-6 py-3 font-medium text-navy-900 transition-colors hover:bg-white"
+          className="mt-8 inline-block rounded-md bg-sand-100 px-6 py-3 font-medium text-navy-900 transition-colors hover:bg-white active:bg-sand-200"
         >
           Book a Consult
         </Link>

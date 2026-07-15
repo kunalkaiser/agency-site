@@ -8,7 +8,7 @@ const FORM_ENDPOINT = process.env.NEXT_PUBLIC_FORM_ENDPOINT;
 const FALLBACK_EMAIL = "hello@example.com";
 
 const inputClasses =
-  "w-full rounded-md border bg-white px-4 py-3 text-navy-900 placeholder:text-navy-300 focus:border-navy-500 focus:outline-none";
+  "w-full rounded-md border bg-white px-4 py-3 text-navy-900 placeholder:text-navy-500 focus:border-navy-500";
 
 type FieldErrors = { name?: string; email?: string; message?: string };
 
@@ -226,7 +226,7 @@ export default function ContactForm() {
       <button
         type="submit"
         disabled={status === "submitting"}
-        className="mt-8 rounded-md bg-navy-900 px-7 py-3 font-medium text-sand-50 transition-colors hover:bg-navy-800 disabled:cursor-not-allowed disabled:opacity-60"
+        className="mt-8 rounded-md bg-navy-900 px-7 py-3 font-medium text-sand-50 transition-colors hover:bg-navy-800 active:bg-navy-950 disabled:cursor-not-allowed disabled:opacity-60"
       >
         {status === "submitting" ? "Sending…" : "Send message"}
       </button>

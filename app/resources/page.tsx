@@ -42,8 +42,8 @@ export default function ResourcesPage() {
 
       {AUDIENCES.map((section, i) => (
         <section key={section.audience} className={i % 2 === 1 ? "bg-sand-100" : undefined}>
-          <div className="mx-auto max-w-content px-5 py-14 sm:px-8 sm:py-16">
-            <h2 className="font-serif text-3xl font-semibold text-navy-900">
+          <div className="mx-auto max-w-content px-5 py-16 sm:px-8 sm:py-20">
+            <h2 className="font-serif text-2xl font-semibold text-navy-900 sm:text-3xl">
               For {section.audience.toLowerCase()}
             </h2>
             <p className="mt-3 max-w-2xl text-navy-700">{section.intro}</p>
@@ -52,9 +52,9 @@ export default function ResourcesPage() {
                 <Link
                   key={article.slug}
                   href={`/resources/${article.slug}`}
-                  className="group flex flex-col rounded-xl border border-navy-100 bg-white p-6 transition-shadow hover:shadow-lg"
+                  className="group flex flex-col rounded-xl border border-navy-100 bg-white p-6 transition hover:border-navy-300 hover:shadow-lg"
                 >
-                  <p className="text-xs uppercase tracking-widest text-sand-600">{article.type}</p>
+                  <p className="text-xs uppercase tracking-widest text-sand-700">{article.type}</p>
                   <h3 className="mt-2 font-serif text-lg font-semibold text-navy-900">
                     {article.title}
                   </h3>
@@ -73,7 +73,7 @@ export default function ResourcesPage() {
 
       {/* Email capture (not yet wired to a provider) */}
       <section className="bg-navy-900">
-        <div className="mx-auto max-w-content px-5 py-14 sm:px-8 sm:py-16">
+        <div className="mx-auto max-w-content px-5 py-16 sm:px-8 sm:py-20">
           <div className="mx-auto max-w-xl text-center">
             <h2 className="font-serif text-2xl font-semibold text-sand-50 sm:text-3xl">
               Get new resources by email
@@ -90,11 +90,11 @@ export default function ResourcesPage() {
                 type="email"
                 name="email"
                 placeholder="you@example.com"
-                className="w-full rounded-md border border-navy-700 bg-navy-800 px-4 py-3 text-sand-50 placeholder:text-sand-400 focus:border-sand-300 focus:outline-none"
+                className="w-full rounded-md border border-navy-700 bg-navy-800 px-4 py-3 text-sand-50 placeholder:text-sand-400 focus:border-sand-300"
               />
               <button
                 type="button"
-                className="shrink-0 rounded-md bg-sand-100 px-6 py-3 font-medium text-navy-900 transition-colors hover:bg-white"
+                className="shrink-0 rounded-md bg-sand-100 px-6 py-3 font-medium text-navy-900 transition-colors hover:bg-white active:bg-sand-200"
               >
                 Sign up
               </button>

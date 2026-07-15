@@ -5,8 +5,15 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    /* Keep skip-link targets clear of the sticky header */
+    scroll-padding-top: 5rem;
   }
   body {
     @apply bg-sand-50 text-navy-900 antialiased;
+  }
+  /* navy-500 clears 3:1 against both the sand and navy surfaces */
+  :focus-visible {
+    outline: 3px solid theme("colors.navy.500");
+    outline-offset: 2px;
   }
 }

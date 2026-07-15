@@ -6,7 +6,7 @@ export default function ArticlePage({ article }: { article: Article }) {
   return (
     <>
       <section className="bg-navy-950">
-        <div className="mx-auto max-w-content px-5 py-16 sm:px-8 sm:py-20">
+        <div className="mx-auto max-w-content px-5 py-16 sm:px-8 sm:py-24">
           <p className="text-sm uppercase tracking-widest text-sand-300">
             For {article.audience.toLowerCase()} · {article.type}
           </p>
@@ -17,7 +17,7 @@ export default function ArticlePage({ article }: { article: Article }) {
       </section>
 
       <article>
-        <div className="mx-auto max-w-content px-5 py-14 sm:px-8 sm:py-16">
+        <div className="mx-auto max-w-content px-5 py-16 sm:px-8 sm:py-20">
           <div className="mx-auto max-w-3xl">
             <p className="text-lg leading-relaxed text-navy-800">{article.intro}</p>
 

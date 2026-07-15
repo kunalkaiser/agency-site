@@ -1,15 +1,29 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { NAV_LINKS, SITE_NAME } from "@/lib/site";
 
 export default function Nav() {
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
+
+  function isCurrent(href: string) {
+    return pathname === href ? ("page" as const) : undefined;
+  }
 
   return (
-    <header className="sticky top-0 z-50 border-b border-navy-100 bg-sand-50/95 backdrop-blur">
-      <nav className="mx-auto flex max-w-content items-center justify-between px-5 py-4 sm:px-8">
+    <header
+      className="sticky top-0 z-50 border-b border-navy-100 bg-sand-50/95 backdrop-blur"
+      onKeyDown={(e) => {
+        if (e.key === "Escape") setOpen(false);
+      }}
+    >
+      <nav
+        aria-label="Main"
+        className="mx-auto flex max-w-content items-center justify-between px-5 py-4 sm:px-8"
+      >
         <Link href="/" className="font-serif text-lg font-semibold tracking-tight text-navy-900">
           {SITE_NAME}
         </Link>
@@ -19,14 +33,15 @@ export default function Nav() {
             <Link
               key={link.href}
               href={link.href}
-              className="text-sm text-navy-700 transition-colors hover:text-navy-950"
+              aria-current={isCurrent(link.href)}
+              className="text-sm text-navy-700 underline-offset-4 transition-colors hover:text-navy-950 hover:underline aria-[current=page]:font-medium aria-[current=page]:text-navy-950"
             >
               {link.label}
             </Link>
           ))}
           <Link
             href="/contact"
-            className="rounded-md bg-navy-900 px-4 py-2 text-sm font-medium text-sand-50 transition-colors hover:bg-navy-800"
+            className="rounded-md bg-navy-900 px-4 py-2 text-sm font-medium text-sand-50 transition-colors hover:bg-navy-800 active:bg-navy-950"
           >
             Book a Consult
           </Link>
@@ -34,7 +49,7 @@ export default function Nav() {
 
         <button
           type="button"
-          className="flex h-10 w-10 items-center justify-center rounded-md text-navy-900 lg:hidden"
+          className="flex h-10 w-10 items-center justify-center rounded-md text-navy-900 transition-colors hover:bg-sand-100 active:bg-sand-200 lg:hidden"
           aria-expanded={open}
           aria-controls="mobile-menu"
           aria-label={open ? "Close menu" : "Open menu"}
@@ -57,7 +72,8 @@ export default function Nav() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="rounded-md px-2 py-3 text-navy-800 hover:bg-sand-100"
+                aria-current={isCurrent(link.href)}
+                className="rounded-md px-2 py-3 text-navy-800 transition-colors hover:bg-sand-100 active:bg-sand-200 aria-[current=page]:font-medium aria-[current=page]:text-navy-950"
                 onClick={() => setOpen(false)}
               >
                 {link.label}
@@ -65,7 +81,7 @@ export default function Nav() {
             ))}
             <Link
               href="/contact"
-              className="mt-3 rounded-md bg-navy-900 px-4 py-3 text-center font-medium text-sand-50"
+              className="mt-3 rounded-md bg-navy-900 px-4 py-3 text-center font-medium text-sand-50 transition-colors hover:bg-navy-800 active:bg-navy-950"
               onClick={() => setOpen(false)}
             >
               Book a Consult

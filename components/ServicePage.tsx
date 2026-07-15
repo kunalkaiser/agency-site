@@ -13,7 +13,7 @@ function Section({
 }) {
   return (
     <section className={tinted ? "bg-sand-100" : undefined}>
-      <div className="mx-auto max-w-content px-5 py-14 sm:px-8 sm:py-16">
+      <div className="mx-auto max-w-content px-5 py-16 sm:px-8 sm:py-20">
         <h2 className="font-serif text-2xl font-semibold text-navy-900 sm:text-3xl">{title}</h2>
         <div className="mt-6 max-w-3xl">{children}</div>
       </div>
@@ -40,7 +40,7 @@ export default function ServicePage({ service }: { service: Service }) {
           <div className="mt-8">
             <Link
               href="/contact"
-              className="inline-block rounded-md bg-sand-100 px-6 py-3 font-medium text-navy-900 transition-colors hover:bg-white"
+              className="inline-block rounded-md bg-sand-100 px-6 py-3 font-medium text-navy-900 transition-colors hover:bg-white active:bg-sand-200"
             >
               Book a Consult
             </Link>

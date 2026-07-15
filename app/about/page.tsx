@@ -51,7 +51,7 @@ export default function AboutPage() {
       {/* Founder story */}
       <section>
         <div className="mx-auto max-w-content px-5 py-16 sm:px-8 sm:py-20">
-          <h2 className="font-serif text-3xl font-semibold text-navy-900">Founder story</h2>
+          <h2 className="font-serif text-2xl font-semibold text-navy-900 sm:text-3xl">Founder story</h2>
           <div className="mt-6 max-w-3xl space-y-5 leading-relaxed text-navy-800">
             <p>
               Placeholder copy — the founder&apos;s story goes here. A brief narrative covering the
@@ -70,7 +70,7 @@ export default function AboutPage() {
       {/* Experience & credentials */}
       <section className="bg-sand-100">
         <div className="mx-auto max-w-content px-5 py-16 sm:px-8 sm:py-20">
-          <h2 className="font-serif text-3xl font-semibold text-navy-900">
+          <h2 className="font-serif text-2xl font-semibold text-navy-900 sm:text-3xl">
             Experience &amp; credentials
           </h2>
           <ul className="mt-6 max-w-3xl space-y-3">
@@ -89,7 +89,7 @@ export default function AboutPage() {
       {/* Service philosophy */}
       <section>
         <div className="mx-auto max-w-content px-5 py-16 sm:px-8 sm:py-20">
-          <h2 className="font-serif text-3xl font-semibold text-navy-900">Service philosophy</h2>
+          <h2 className="font-serif text-2xl font-semibold text-navy-900 sm:text-3xl">Service philosophy</h2>
           <div className="mt-6 max-w-3xl space-y-5 leading-relaxed text-navy-800">
             <p>
               We start from the student, not the service. Before recommending anything, we take the
@@ -108,7 +108,7 @@ export default function AboutPage() {
       {/* Why we're different */}
       <section className="bg-sand-100">
         <div className="mx-auto max-w-content px-5 py-16 sm:px-8 sm:py-20">
-          <h2 className="font-serif text-3xl font-semibold text-navy-900">Why we&apos;re different</h2>
+          <h2 className="font-serif text-2xl font-semibold text-navy-900 sm:text-3xl">Why we&apos;re different</h2>
           <div className="mt-8 grid gap-8 md:grid-cols-3">
             {WHY_DIFFERENT.map((item) => (
               <div key={item.title}>

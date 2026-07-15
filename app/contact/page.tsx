@@ -46,7 +46,7 @@ export default function ContactPage() {
                   Schedule a consult at a time that works for you.
                 </p>
                 <div
-                  className="mt-5 flex h-64 items-center justify-center rounded-lg border border-navy-200 bg-white text-sm text-navy-400"
+                  className="mt-5 flex h-64 items-center justify-center rounded-lg border border-navy-200 bg-white text-sm text-navy-600"
                   role="img"
                   aria-label="Calendly scheduling widget (coming soon)"
                 >

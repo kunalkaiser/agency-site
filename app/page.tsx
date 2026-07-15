@@ -79,13 +79,13 @@ export default function HomePage() {
           <div className="mt-9 flex flex-col gap-3 sm:flex-row">
             <Link
               href="/contact"
-              className="rounded-md bg-sand-100 px-6 py-3 text-center font-medium text-navy-900 transition-colors hover:bg-white"
+              className="rounded-md bg-sand-100 px-6 py-3 text-center font-medium text-navy-900 transition-colors hover:bg-white active:bg-sand-200"
             >
               Book a Consult
             </Link>
             <Link
               href="/services"
-              className="rounded-md border border-sand-300/40 px-6 py-3 text-center font-medium text-sand-100 transition-colors hover:border-sand-200 hover:text-white"
+              className="rounded-md border border-sand-300/60 px-6 py-3 text-center font-medium text-sand-100 transition-colors hover:border-sand-200 hover:text-white active:border-sand-100"
             >
               Explore Services
             </Link>
@@ -96,15 +96,15 @@ export default function HomePage() {
       {/* Service cards */}
       <section>
         <div className="mx-auto max-w-content px-5 py-16 sm:px-8 sm:py-20">
-          <h2 className="font-serif text-3xl font-semibold text-navy-900">Our services</h2>
+          <h2 className="font-serif text-2xl font-semibold text-navy-900 sm:text-3xl">Our services</h2>
           <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {SERVICES.map((service) => (
               <Link
                 key={service.slug}
                 href={`/services/${service.slug}`}
-                className="group flex flex-col rounded-xl border border-navy-100 bg-white p-6 transition-shadow hover:shadow-lg"
+                className="group flex flex-col rounded-xl border border-navy-100 bg-white p-6 transition hover:border-navy-300 hover:shadow-lg"
               >
-                <p className="text-xs uppercase tracking-widest text-sand-600">
+                <p className="text-xs uppercase tracking-widest text-sand-700">
                   {service.outcomeGroup}
                 </p>
                 <h3 className="mt-2 font-serif text-xl font-semibold text-navy-900">
@@ -125,7 +125,7 @@ export default function HomePage() {
       {/* Why us */}
       <section className="bg-sand-100">
         <div className="mx-auto max-w-content px-5 py-16 sm:px-8 sm:py-20">
-          <h2 className="font-serif text-3xl font-semibold text-navy-900">Why families choose us</h2>
+          <h2 className="font-serif text-2xl font-semibold text-navy-900 sm:text-3xl">Why families choose us</h2>
           <div className="mt-8 grid gap-8 md:grid-cols-3">
             {WHY_US.map((item) => (
               <div key={item.title}>
@@ -140,7 +140,7 @@ export default function HomePage() {
       {/* Who we help */}
       <section>
         <div className="mx-auto max-w-content px-5 py-16 sm:px-8 sm:py-20">
-          <h2 className="font-serif text-3xl font-semibold text-navy-900">Who we help</h2>
+          <h2 className="font-serif text-2xl font-semibold text-navy-900 sm:text-3xl">Who we help</h2>
           <div className="mt-8 grid gap-5 md:grid-cols-3">
             {WHO_WE_HELP.map((item) => (
               <div key={item.title} className="rounded-xl border border-navy-100 bg-white p-7">
@@ -155,7 +155,7 @@ export default function HomePage() {
       {/* Process preview */}
       <section className="bg-sand-100">
         <div className="mx-auto max-w-content px-5 py-16 sm:px-8 sm:py-20">
-          <h2 className="font-serif text-3xl font-semibold text-navy-900">How it works</h2>
+          <h2 className="font-serif text-2xl font-semibold text-navy-900 sm:text-3xl">How it works</h2>
           <div className="mt-8 grid gap-8 md:grid-cols-3">
             {PROCESS_PREVIEW.map((item, i) => (
               <div key={item.step} className="flex gap-5">
@@ -196,7 +196,7 @@ export default function HomePage() {
         <div className="mx-auto max-w-content px-5 py-16 sm:px-8 sm:py-20">
           <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
             <div className="max-w-2xl">
-              <h2 className="font-serif text-3xl font-semibold text-navy-900">
+              <h2 className="font-serif text-2xl font-semibold text-navy-900 sm:text-3xl">
                 Free guides for parents, teachers, and students
               </h2>
               <p className="mt-4 leading-relaxed text-navy-700">
@@ -206,7 +206,7 @@ export default function HomePage() {
             </div>
             <Link
               href="/resources"
-              className="shrink-0 rounded-md border border-navy-300 px-6 py-3 font-medium text-navy-900 transition-colors hover:border-navy-500"
+              className="shrink-0 rounded-md border border-navy-300 px-6 py-3 font-medium text-navy-900 transition-colors hover:border-navy-500 active:bg-sand-100"
             >
               Browse Resources
             </Link>

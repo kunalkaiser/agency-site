@@ -18,22 +18,32 @@ export default function Footer() {
           </div>
           <nav className="flex flex-wrap gap-x-6 gap-y-3 text-sm" aria-label="Footer">
             {FOOTER_LINKS.map((link) => (
-              <a key={link.label} href={link.href} className="text-sand-200 hover:text-white">
+              <a
+                key={link.label}
+                href={link.href}
+                className="text-sand-200 underline-offset-4 transition-colors hover:text-white hover:underline"
+              >
                 {link.label}
               </a>
             ))}
-            <Link href="/contact" className="text-sand-200 hover:text-white">
+            <Link
+              href="/contact"
+              className="text-sand-200 underline-offset-4 transition-colors hover:text-white hover:underline"
+            >
               Contact
             </Link>
             <a
               href="https://www.linkedin.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-sand-200 hover:text-white"
+              className="text-sand-200 underline-offset-4 transition-colors hover:text-white hover:underline"
             >
               LinkedIn
             </a>
-            <a href="mailto:hello@example.com" className="text-sand-200 hover:text-white">
+            <a
+              href="mailto:hello@example.com"
+              className="text-sand-200 underline-offset-4 transition-colors hover:text-white hover:underline"
+            >
               Email
             </a>
           </nav>
