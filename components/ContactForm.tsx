@@ -3,8 +3,6 @@
 import { useState } from "react";
 import { SERVICES } from "@/lib/services";
 
-// Inlined at build time; NEXT_PUBLIC_ because the static site submits from the browser.
-const FORM_ENDPOINT = process.env.NEXT_PUBLIC_FORM_ENDPOINT;
 const FALLBACK_EMAIL = "hello@example.com";
 
 const inputClasses =
@@ -51,19 +49,18 @@ export default function ContactForm() {
     setErrors(fieldErrors);
     if (Object.keys(fieldErrors).length > 0) return;
 
-    if (!FORM_ENDPOINT) {
-      setStatus("error");
-      return;
-    }
-
     setStatus("submitting");
     try {
-      const res = await fetch(FORM_ENDPOINT, {
+      // Netlify Forms: POST url-encoded to any path on the site; form-name
+      // (from the hidden input) tells Netlify which registered form this is.
+      const body = new URLSearchParams();
+      data.forEach((value, key) => body.append(key, value.toString()));
+      const res = await fetch("/", {
         method: "POST",
-        body: data,
-        headers: { Accept: "application/json" },
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: body.toString(),
       });
-      if (!res.ok) throw new Error(`Form endpoint responded ${res.status}`);
+      if (!res.ok) throw new Error(`Form submission responded ${res.status}`);
       setStatus("success");
     } catch {
       setStatus("error");
@@ -95,7 +92,21 @@ export default function ContactForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} noValidate aria-label="Contact form">
+    <form
+      name="contact"
+      data-netlify="true"
+      data-netlify-honeypot="bot-field"
+      onSubmit={handleSubmit}
+      noValidate
+      aria-label="Contact form"
+    >
+      <input type="hidden" name="form-name" value="contact" />
+      <p className="hidden" aria-hidden="true">
+        <label>
+          Don&apos;t fill this out if you&apos;re human:{" "}
+          <input name="bot-field" tabIndex={-1} autoComplete="off" />
+        </label>
+      </p>
       <div className="grid gap-6 sm:grid-cols-2">
         <div>
           <label htmlFor="name" className="mb-2 block text-sm font-medium text-navy-900">
