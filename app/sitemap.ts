@@ -5,7 +5,17 @@ import { ARTICLES } from "@/app/resources/articles";
 
 export const dynamic = "force-static";
 
-const STATIC_ROUTES = ["", "/services", "/about", "/process", "/resources", "/contact"];
+const STATIC_ROUTES = [
+  "",
+  "/services",
+  "/about",
+  "/process",
+  "/resources",
+  "/contact",
+  "/privacy",
+  "/terms",
+  "/accessibility",
+];
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const routes = [

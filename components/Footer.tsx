@@ -2,9 +2,9 @@ import Link from "next/link";
 import { SERVICE_AREA, SITE_NAME } from "@/lib/site";
 
 const FOOTER_LINKS = [
-  { label: "Privacy", href: "#" },
-  { label: "Terms", href: "#" },
-  { label: "Accessibility", href: "#" },
+  { label: "Privacy", href: "/privacy" },
+  { label: "Terms", href: "/terms" },
+  { label: "Accessibility", href: "/accessibility" },
 ];
 
 export default function Footer() {
