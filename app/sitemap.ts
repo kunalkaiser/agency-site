@@ -13,6 +13,7 @@ const STATIC_ROUTES = [
   "/process",
   "/resources",
   "/resources/plan-builder",
+  "/resources/study-coach",
   "/contact",
   "/privacy",
   "/terms",
