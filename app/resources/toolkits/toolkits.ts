@@ -1,8 +1,12 @@
-// Guided Toolkit content. Each toolkit is a small decision tree: steps ask a
-// question with 2–4 tappable options; options point at another step or an
-// outcome. Content rules (see CLAUDE.md): educational parenting strategies in
-// plain language only — no clinical or diagnostic terms, no "ABA"/"behavior
-// analysis"/"therapy"/"treatment"/"intervention" framing.
+// Guided Toolkit content, structured as a conversational arc (Parent Coach
+// pattern): branch questions → short empathy bubbles → ONE named strategy
+// card → a personalization question and pick list → a tailored close.
+// Content rules (see CLAUDE.md): educational parenting strategies in plain
+// language only — no clinical or diagnostic terms, no "ABA"/"behavior
+// analysis"/"therapy"/"treatment"/"intervention" framing, no adversarial
+// school framing. Every coach bubble stays within the ~60-word pacing rule.
+
+import type { IlloName } from "@/components/CoachChat";
 
 export type ToolkitOption = {
   label: string;
@@ -13,17 +17,39 @@ export type ToolkitOption = {
 export type ToolkitStep = {
   id: string;
   question: string;
-  hint?: string;
   options: ToolkitOption[];
 };
 
+export type EmojiOption = { label: string; emoji: string };
+
 export type ToolkitOutcome = {
   id: string;
-  title: string;
-  intro: string;
-  /** 3–5 concrete strategy steps. */
-  steps: string[];
+  /** 2–3 short validating bubbles: what's really going on. Each ≤ ~60 words. */
+  empathy: string[];
+  /** The ONE strategy for this path, rendered as an in-chat card. */
+  strategy: {
+    name: string;
+    /** What it is, in 2 sentences. */
+    what: string;
+    /** 2–3 short label:benefit bullets. */
+    why: { label: string; benefit: string }[];
+  };
+  /** Tailored close; template contains "{pick}" replaced by the user's pick. */
+  close: {
+    kind: "say" | "try";
+    template: string;
+    encouragement: string;
+  };
   related?: { slug: string; title: string };
+};
+
+export type ToolkitPersonal = {
+  question: string;
+  /** 3–4 options; `ack` is the coach's echo line after the choice. */
+  options: (EmojiOption & { ack: string })[];
+  pickQuestion: string;
+  /** 4–5 pick options; the chosen label is echoed into the close template. */
+  picks: EmojiOption[];
 };
 
 export type Toolkit = {
@@ -31,8 +57,11 @@ export type Toolkit = {
   title: string;
   description: string;
   intro: string;
+  /** Spot illustration shown with the first empathy bubble. */
+  illo: IlloName;
   firstStep: string;
   steps: ToolkitStep[];
+  personal: ToolkitPersonal;
   outcomes: ToolkitOutcome[];
 };
 
@@ -43,7 +72,8 @@ export const TOOLKITS: Toolkit[] = [
     description:
       "A guided walk through smoother screen-time endings, matched to what actually happens at your house.",
     intro:
-      "Screens are genuinely hard to walk away from — for adults too. Answer two quick questions and get a short set of strategies matched to how endings usually go at your house.",
+      "Screens are genuinely hard to walk away from — for adults too. Answer two quick questions and get a strategy matched to how endings usually go at your house.",
+    illo: "timer",
     firstStep: "start",
     steps: [
       {
@@ -80,80 +110,155 @@ export const TOOLKITS: Toolkit[] = [
         ],
       },
     ],
+    personal: {
+      question: "Quick one so I can tailor this: what does your child light up about away from screens?",
+      options: [
+        { label: "Sports and being outside", emoji: "⚽", ack: "An outside kid — that's great raw material for this." },
+        { label: "Making and building things", emoji: "🎨", ack: "A maker — perfect. Makers switch activities better than they stop them." },
+        { label: "Books and stories", emoji: "📚", ack: "A story kid — lovely. Stories are the easiest landing pad there is." },
+        { label: "Time with you", emoji: "🤗", ack: "Then you're the landing pad — that makes this simpler than you'd think." },
+      ],
+      pickQuestion: "Pick tonight's bridge — the thing that comes right after the screen goes off:",
+      picks: [
+        { label: "a snack at the table", emoji: "🍎" },
+        { label: "ten minutes outside together", emoji: "⚽" },
+        { label: "drawing or building time", emoji: "🎨" },
+        { label: "a chapter read together", emoji: "📖" },
+        { label: "helping make dinner", emoji: "🍳" },
+      ],
+    },
     outcomes: [
       {
         id: "reaction-at-warning",
-        title: "Make the warning a routine, not a surprise",
-        intro:
-          "If the warning itself sets things off, it's landing as bad news each time. The goal is to make endings so predictable that the warning stops carrying the bad news.",
-        steps: [
-          "Set the ending before the screen goes on: “Two episodes, then we're done” agreed up front beats any warning given mid-show.",
-          "Use a visual timer or the device's own countdown so time does the telling — a clock winding down is easier to accept than a parent announcing it.",
-          "Keep the warning short and warm, then step away: “Ten more minutes, then it's snack time.” Hovering invites a debate.",
-          "Have a “bridge” ready — the next thing to move toward, not just away from: a snack, a job they like, ten minutes of your attention.",
-          "Keep the routine identical for a couple of weeks. Predictability, not persuasion, is what lowers the temperature.",
+        empathy: [
+          "If the warning itself sets things off, here's what's usually underneath: the warning has become the bad news. Every time it arrives, it announces a loss — so the fight starts there.",
+          "The good news is that's fixable. When endings become boringly predictable, the warning stops carrying bad news at all — it's just the clock talking.",
         ],
+        strategy: {
+          name: "The Routine Warning",
+          what: "Set the ending before the screen ever goes on, and let a visible timer do the telling. The warning becomes part of the furniture instead of a surprise attack.",
+          why: [
+            { label: "Agreed up front", benefit: "an ending they said yes to is half-accepted already" },
+            { label: "The timer is neutral", benefit: "kids argue with parents, not with clocks" },
+            { label: "Same every day", benefit: "predictability, not persuasion, lowers the temperature" },
+          ],
+        },
+        close: {
+          kind: "try",
+          template:
+            "Try tonight: agree the ending before the screen goes on, set a timer you both can see — and the moment it rings, head straight into {pick}.",
+          encouragement: "Expect two bumpy nights, then watch it get boring — boring is the win here.",
+        },
       },
       {
         id: "reaction-at-off",
-        title: "Soften the landing, not the limit",
-        intro:
-          "The limit is fine — it's the cliff-edge stop that hurts. These strategies keep the ending firm while making the moment of switch-off gentler.",
-        steps: [
-          "End at a natural stopping point: “when this episode ends” or “after this level,” not an arbitrary minute in the middle.",
-          "Let them do the switching off. Handing over that small piece of control changes the moment from something done to them into something they did.",
-          "Move toward a bridge activity you've named in advance — a snack on the table or a quick game with you gives the feelings somewhere to go.",
-          "Stay calm and brief if there are tears; the message is “this is sad and it's still over,” delivered kindly. Long explanations reopen the case.",
-          "Praise the endings that go well, specifically: “You turned it off at the timer — that was smooth.” What gets noticed gets repeated.",
+        empathy: [
+          "So the warning lands fine — it's the cliff edge that hurts. That's worth taking seriously: being yanked out of a story or a game mid-moment genuinely feels bad.",
+          "The limit isn't the problem, and you don't need to soften it. You just need a gentler landing on the other side of it.",
         ],
+        strategy: {
+          name: "The Soft Landing",
+          what: "End at a natural stopping point — end of the episode, end of the level — and let your child do the switching off themselves. Then move straight into something, not just away from something.",
+          why: [
+            { label: "Natural break", benefit: "stopping mid-story hurts; stopping at the end doesn't" },
+            { label: "Their hand on the button", benefit: "turning it off beats having it turned off on you" },
+            { label: "Somewhere to land", benefit: "feelings need a next thing to move toward" },
+          ],
+        },
+        close: {
+          kind: "try",
+          template:
+            "Try tonight: “when this episode ends, you turn it off — and then we're doing {pick}.” Their finger on the button, your landing pad ready.",
+          encouragement: "If tears come anyway, stay kind and brief — the storm gets shorter every consistent night.",
+        },
       },
       {
         id: "negotiation-give-in",
-        title: "Close the loopholes kindly",
-        intro:
-          "Every “okay, five more minutes” teaches that the posted ending is an opening offer. The fix isn't getting tougher — it's removing the negotiation slot entirely.",
-        steps: [
-          "Decide the limit when everyone is calm, write it where all can see it, and let the note be the authority: “The rule says 6:00 — I don't control it either.”",
-          "Build the five minutes in: if you're comfortable with 35, say 35 up front. Then the answer to “five more?” is honestly “that was included.”",
-          "Replace “okay, fine” with one consistent phrase: “I know — and screen time's done.” Say it once, warmly, and don't add new material.",
-          "If asking continues, keep the ending but move it earlier next time by exactly the minutes spent arguing. Explain that calmly beforehand, then follow through once.",
+        empathy: [
+          "Every “okay, five more minutes” quietly teaches one lesson: the posted ending is an opening offer. Kids are excellent economists — they'll keep bidding as long as bidding works.",
+          "This isn't about getting tougher. It's about removing the negotiation slot entirely, kindly.",
         ],
+        strategy: {
+          name: "The Posted Rule",
+          what: "Decide the limit when everyone's calm, write it where everyone can see it, and build the extra five minutes in from the start. The note becomes the authority, so you don't have to be.",
+          why: [
+            { label: "Written beats spoken", benefit: "you can point instead of re-arguing" },
+            { label: "Padding built in", benefit: "“five more?” gets an honest “that was included”" },
+            { label: "One calm phrase", benefit: "a single repeated line closes the market" },
+          ],
+        },
+        close: {
+          kind: "say",
+          template:
+            "Your one line, warm and once: “I know — and screen time's done. Come help me with {pick}.” Then the note on the wall does the rest.",
+          encouragement: "The bidding stops when it stops paying — usually inside a week.",
+        },
       },
       {
         id: "negotiation-hold",
-        title: "Let the routine do the arguing",
-        intro:
-          "You're doing the right thing — it's just costing too much. These strategies shift the enforcement from your energy onto the routine itself.",
-        steps: [
-          "Put the schedule in writing where everyone can see it, and refer to it instead of restating it: pointing at a chart is cheaper than a speech.",
-          "Use a timer they can see the whole time, so the ending approaches visibly instead of arriving suddenly from you.",
-          "Pre-empt the lobbying with one choice inside the limit: “6:00 or after dinner — you pick.” People argue less with schedules they helped set.",
-          "Thank them plainly on the days it goes smoothly. The exhausting stretch usually shortens once smooth endings get more attention than contested ones.",
+        empathy: [
+          "You're already doing the right thing — holding a fair line. It's just costing you a full negotiation session every single day, and that bill adds up.",
+          "The move now isn't a better argument. It's shifting the enforcement off your shoulders and onto the routine.",
         ],
+        strategy: {
+          name: "Let the Schedule Argue",
+          what: "Post the schedule, use a timer they can watch, and give one choice inside the limit — which slot, not whether. People argue far less with plans they helped set.",
+          why: [
+            { label: "Visible countdown", benefit: "the ending approaches instead of ambushing" },
+            { label: "A choice inside the line", benefit: "ownership without giving ground" },
+            { label: "Point, don't debate", benefit: "the chart absorbs the lobbying, not you" },
+          ],
+        },
+        close: {
+          kind: "try",
+          template:
+            "Try tonight: offer the choice — “before dinner or after?” — set the visible timer, and when it rings, straight into {pick}. You've said maybe ten words total.",
+          encouragement: "Notice the smooth nights out loud — attention feeds whatever it lands on.",
+        },
       },
       {
         id: "ignoring-midstream",
-        title: "Work with the stream, not against it",
-        intro:
-          "Mid-game and mid-episode endings genuinely feel like being yanked out of a story. Timing the ending to the content makes your words much easier to hear.",
-        steps: [
-          "Set endings at content boundaries — “after this episode,” “when this round ends” — and ask them to tell you what a good stopping point would be.",
-          "Give the warning within their world: pause the show or stand in their line of sight; a call from another room doesn't compete with a screen.",
-          "Ask for a response: “What did I just say?” gently confirms the message arrived without starting a fight.",
-          "Agree in advance what happens if the stopping point passes: the device goes on the shelf until tomorrow. Then let the agreement, not your volume, carry it out.",
+        empathy: [
+          "Mid-game and mid-episode endings genuinely feel like being pulled out of another world — the not-hearing-you is partly real. A shout from the kitchen simply loses to a screen.",
+          "So don't compete with the stream. Work with it.",
         ],
+        strategy: {
+          name: "Stop at the Seam",
+          what: "Set endings at content boundaries — “after this episode,” “when the round ends” — and deliver the warning inside their world: in their line of sight, close enough to touch. Then ask for a readback.",
+          why: [
+            { label: "Seams don't hurt", benefit: "stopping between chapters beats stopping mid-page" },
+            { label: "Eye-line delivery", benefit: "a warning they can see actually arrives" },
+            { label: "The readback", benefit: "“what did I just say?” confirms receipt, gently" },
+          ],
+        },
+        close: {
+          kind: "say",
+          template:
+            "Stand where they can see you and say: “When this round ends, screen's off and we're doing {pick}. What did I just say?” That readback is the whole trick.",
+          encouragement: "Two weeks of seam-endings and the ignoring mostly evaporates — it was never defiance, just distance.",
+        },
       },
       {
         id: "ignoring-habit",
-        title: "Reset what a reminder means",
-        intro:
-          "If several reminders is the norm, the first reminder has quietly stopped meaning anything. The goal is to make one calm reminder count again.",
-        steps: [
-          "Reset expectations at a calm moment, not during screen time: “From now on I'll say it once, then the screen goes off.”",
-          "Deliver the one reminder up close, in their line of sight, with a light touch on the shoulder — then follow through as stated, calmly.",
-          "Keep the follow-through boring and consistent: no lecture, no anger, just the agreed result. The consistency is the message.",
-          "Notice out loud when one reminder works: “First ask — nice.” It sounds small; over two weeks it does the heavy lifting.",
+        empathy: [
+          "When several reminders is the norm, something sneaky has happened: the first reminder has quietly stopped meaning anything. Everyone's learned the real deadline is the third ask.",
+          "You don't need more volume. You need the first ask to count again — and that's a reset you can do in one calm conversation.",
         ],
+        strategy: {
+          name: "One Ask, Then Action",
+          what: "At a calm moment, announce the new deal: one reminder, up close, then the screen goes off — no lecture, no anger. The consistency is the entire message.",
+          why: [
+            { label: "Announced in calm", benefit: "a rule set outside the moment feels fair inside it" },
+            { label: "Up close, once", benefit: "one real ask beats five ambient ones" },
+            { label: "Boring follow-through", benefit: "no drama means nothing to push against" },
+          ],
+        },
+        close: {
+          kind: "say",
+          template:
+            "The calm-moment announcement: “From now on I'll say it once, then the screen goes off — and we'll go do {pick}.” Then live it, boringly, for a week.",
+          encouragement: "Catch the first-ask wins out loud: “First ask — nice.” Small sentence, heavy lifting.",
+        },
       },
     ],
   },
@@ -163,7 +268,8 @@ export const TOOLKITS: Toolkit[] = [
     description:
       "A guided walk through calmer homework, matched to where it actually goes sideways: starting, focusing, or frustration.",
     intro:
-      "Most homework battles happen at one of three points: getting started, staying with it, or hitting frustration. Answer two quick questions to get strategies aimed at yours.",
+      "Most homework battles happen at one of three points: getting started, staying with it, or hitting frustration. Two quick questions and you'll get a strategy aimed at yours.",
+    illo: "calmcorner",
     firstStep: "start",
     steps: [
       {
@@ -200,83 +306,159 @@ export const TOOLKITS: Toolkit[] = [
         ],
       },
     ],
+    personal: {
+      question: "So I can tailor this: when does homework actually happen at your house?",
+      options: [
+        { label: "Right after school", emoji: "🎒", ack: "Right off the bus — okay, we'll make the entry ramp gentle." },
+        { label: "After dinner", emoji: "🌙", ack: "Evening shift — fed and rested helps; we'll guard against tired." },
+        { label: "Whenever we can squeeze it in", emoji: "🌀", ack: "The squeeze — then the anchor move below will matter most of all." },
+        { label: "Honestly, it's different every day", emoji: "🎲", ack: "Different every day — that's actually the first thing worth changing." },
+      ],
+      pickQuestion: "Pick one anchor to try this week:",
+      picks: [
+        { label: "same seat, same time, every day", emoji: "🪑" },
+        { label: "the five-minute start deal", emoji: "⏱️" },
+        { label: "phone parked in another room", emoji: "📵" },
+        { label: "first question done together", emoji: "🤝" },
+        { label: "a written list they cross off", emoji: "✅" },
+      ],
+    },
     outcomes: [
       {
         id: "start-delay",
-        title: "Shrink the start",
-        intro:
-          "Delay is usually about the size of the mountain, not laziness. Make starting so small it's hard to refuse, and let momentum do the rest.",
-        steps: [
-          "Anchor homework to the same time and place every day — after snack, at the kitchen table. Starting stops being a daily decision.",
-          "Use a five-minute launch: “Just do the first five minutes, then check in with me.” Almost everyone keeps going once started.",
-          "Have them lay out exactly what's due before starting — books open, list written. A visible, finite list is far less scary than a vague pile.",
-          "Put the good stuff after, not before: screens and friends wait until the list is done. The order matters more than the rule.",
+        empathy: [
+          "The snack, the bathroom, the suddenly-fascinating cat — that's rarely laziness. It's the size of the mountain: starting feels huge, so anything else feels urgent.",
+          "You don't need to make your child braver. You need to make the mountain smaller.",
         ],
+        strategy: {
+          name: "The Shrunken Start",
+          what: "Make the opening move so small it's hard to refuse — just the first five minutes, then a check-in. Momentum does the rest far more often than not.",
+          why: [
+            { label: "Five minutes only", benefit: "nobody negotiates hard against five minutes" },
+            { label: "Momentum is real", benefit: "started work tends to keep going on its own" },
+            { label: "Same time daily", benefit: "routine removes the daily decision to begin" },
+          ],
+        },
+        close: {
+          kind: "say",
+          template:
+            "The deal, said once: “Just the first five minutes, then check in with me.” Pair it with {pick} this week and starting stops being the fight.",
+          encouragement: "The stall was never about the whole assignment — only the first bite.",
+        },
         related: { slug: "weekly-executive-function-planner", title: "Weekly Executive Function Planner" },
       },
       {
         id: "start-unclear",
-        title: "Make the assignment visible",
-        intro:
-          "“I don't know what to do” is sometimes avoidance, but surprisingly often it's true. Building a reliable record of what's due removes the fog — and the excuse.",
-        steps: [
-          "Set up one place assignments live — a planner, a photo of the board, the class website — and make checking it the official first step of homework.",
-          "Start each session by having them tell you the assignment in their own words. If they can't, that's the real task: message a classmate or reread the instructions together.",
-          "Do the first problem or first sentence together, then hand it off. One worked example unsticks most “I don't get it”s.",
-          "If instructions are genuinely unclear more weeks than not, have your student ask the teacher — a short, polite question after class fixes this at the source.",
+        empathy: [
+          "“I don't know what to do” is sometimes a dodge — but surprisingly often it's the plain truth. Assignments live in five different places, and the fog is real.",
+          "Clear the fog and you remove both the problem and the excuse in one move.",
         ],
+        strategy: {
+          name: "One Source of Truth",
+          what: "Pick one place assignments live — planner, photo of the board, class site — and make checking it the official first step of homework. Then have them say the task back in their own words.",
+          why: [
+            { label: "One place to look", benefit: "no fog, no “I couldn't find it”" },
+            { label: "Say it back", benefit: "if they can't restate it, that's the real task found" },
+            { label: "First example together", benefit: "one worked problem unsticks most “I don't get it”s" },
+          ],
+        },
+        close: {
+          kind: "try",
+          template:
+            "Try this week: checking the one source is step one, saying the assignment back is step two — anchored by {pick}. Fog gone.",
+          encouragement: "If the instructions are genuinely unclear most weeks, a short polite question to the teacher fixes it at the source.",
+        },
         related: { slug: "weekly-executive-function-planner", title: "Weekly Executive Function Planner" },
       },
       {
         id: "focus-distractions",
-        title: "Fix the room, not the kid",
-        intro:
-          "Willpower loses to a buzzing phone almost every time — for adults too. Change the environment once instead of fighting the same fight nightly.",
-        steps: [
-          "Phones live in another room during homework — not face down, not in a pocket. Out of sight is the whole strategy.",
-          "Pick the least-trafficked workspot available and make it the homework spot every day, so the place itself says “work.”",
-          "Use headphones or quiet background noise if the household is loud; siblings get a parallel quiet activity during the same window.",
-          "Keep the desk boringly empty: the assignment, the tools it needs, nothing else. Clearing it is the 60-second setup step.",
+        empathy: [
+          "Here's the honest version: willpower loses to a buzzing phone almost every time — for adults too. Asking a kid to out-discipline a notification engine isn't a fair fight.",
+          "So don't fix the kid. Fix the room, once.",
         ],
+        strategy: {
+          name: "Fix the Room",
+          what: "Phones live in another room during homework — not face down, gone. One consistent workspot, a boringly clear desk, and siblings on a parallel quiet activity.",
+          why: [
+            { label: "Out of sight entirely", benefit: "a visible phone keeps part of the brain on call" },
+            { label: "Same spot daily", benefit: "the place itself starts to say “work”" },
+            { label: "Empty desk", benefit: "the 60-second clear-off is the whole setup" },
+          ],
+        },
+        close: {
+          kind: "try",
+          template:
+            "Try tonight: phone parked out of the room, desk cleared to just the assignment, and {pick} as the standing rule. Watch focus triple without a single lecture.",
+          encouragement: "Environment beats willpower — you're just putting physics on your kid's side.",
+        },
       },
       {
         id: "focus-drift",
-        title: "Work in short, visible sprints",
-        intro:
-          "Drifting in a quiet room usually means the work session is longer than the attention it's asking for. Shorter, timed stretches with real breaks keep the engine running.",
-        steps: [
-          "Break the session into 10–20 minute sprints with a visible timer, matched to what your student can genuinely do — then a real 5-minute break, up and away from the chair.",
-          "Give each sprint one concrete finish line: “these five problems,” “this paragraph.” Vague sessions invite vague attention.",
-          "Add movement between sprints — snack, stretch, quick walk. Bodies that move focus better when they sit back down.",
-          "Have them cross items off a written list as they go. Visible progress is quietly motivating, and the list shows the end approaching.",
+        empathy: [
+          "Drifting in a perfectly quiet room usually means one thing: the session is longer than the attention it's asking for. The tank empties, the mind wanders — that's fuel, not character.",
+          "Shorter, visible stretches keep the engine running the whole way.",
         ],
+        strategy: {
+          name: "Sprints with Finish Lines",
+          what: "Split homework into 10–20 minute sprints with a visible timer, each with one concrete finish line — these five problems, this paragraph. Real break between, up and moving.",
+          why: [
+            { label: "Matched to the tank", benefit: "sessions sized to real attention actually finish" },
+            { label: "Concrete finish line", benefit: "vague sessions invite vague attention" },
+            { label: "Moving breaks", benefit: "bodies that move refocus faster when they sit back down" },
+          ],
+        },
+        close: {
+          kind: "try",
+          template:
+            "Try tonight: one 15-minute sprint, one named finish line, one real break — with {pick} holding the frame. Crossing things off a list counts as fun; use it.",
+          encouragement: "Two clean sprints beat one foggy hour, every single time.",
+        },
         related: { slug: "weekly-executive-function-planner", title: "Weekly Executive Function Planner" },
       },
       {
         id: "frustration-hard",
-        title: "Make “hard” a starting signal",
-        intro:
-          "Some students read difficulty as a verdict — “I can't do this” — rather than a normal part of the work. These strategies build a routine for the hard moment itself.",
-        steps: [
-          "Agree on a first-move ritual for hard problems: read it twice, circle what's known, try one small step. A ritual gives the frustrated moment a script.",
-          "Praise the attempt specifically, not the talent: “You tried a second way — that's exactly what strong students do.”",
-          "Teach the skip rule: mark it, move on, come back at the end. One hard problem shouldn't take the whole session hostage.",
-          "Keep a “stuck note” habit: if it's still stuck after a real try, write the teacher one sentence about where it broke down. That's not giving up — that's how learning is supposed to work.",
+        empathy: [
+          "Some kids read difficulty as a verdict: hard means I'm not smart. So the moment something looks hard, the feelings arrive before the pencil does.",
+          "What they're missing isn't ability — it's a script for the hard moment. Scripts are teachable.",
         ],
+        strategy: {
+          name: "The Hard-Moment Script",
+          what: "Agree on a fixed first move for hard problems: read it twice, circle what you know, try one small step — then it's legal to skip and come back. The ritual replaces the panic.",
+          why: [
+            { label: "A script, not a feeling", benefit: "the frustrated moment gets a next move" },
+            { label: "Skipping is legal", benefit: "one hard problem can't take the night hostage" },
+            { label: "Praise the attempt", benefit: "“you tried a second way” builds the right muscle" },
+          ],
+        },
+        close: {
+          kind: "say",
+          template:
+            "When the wall appears: “Read it twice, circle what you know, try one step — then skip if you need to.” Run it alongside {pick} this week.",
+          encouragement: "A stuck note to the teacher after a real try isn't giving up — it's exactly how learning is supposed to work.",
+        },
         related: { slug: "tutoring-vs-school-services", title: "Tutoring vs. School Services: How to Decide" },
       },
       {
         id: "frustration-long",
-        title: "Right-size the sessions",
-        intro:
-          "Frustration that builds partway through is usually a fuel problem: the session outlasted the tank. Plan for it instead of pushing through it.",
-        steps: [
-          "Schedule a short break before the usual breaking point, not after — if things fall apart at 30 minutes, break at 20, every time.",
-          "Split big assignments across days when possible: two calm 25-minute sessions beat one stormy hour.",
-          "Start with a medium-difficulty task, not the hardest thing — early wins buy patience for what's harder later.",
-          "Watch the basics on tough weeks: late nights and skipped snacks show up at the homework table first.",
-          "If most nights end in tears no matter the setup, that's information, not failure — a short note to the teacher about how long assignments actually take is worth more than another hard night.",
+        empathy: [
+          "Frustration that builds partway through is usually a fuel gauge, not a character flaw — the session simply outlasted the tank. And tired plus surprised-by-length is a rough combination.",
+          "You can't make assignments shorter. You can plan the fuel.",
         ],
+        strategy: {
+          name: "Break Before the Break-Down",
+          what: "Schedule the break before the usual breaking point, not after — if things crack at thirty minutes, break at twenty, every time. Split big assignments across days when you can.",
+          why: [
+            { label: "Pre-emptive breaks", benefit: "you refuel before empty instead of after the sputter" },
+            { label: "Two short sessions", benefit: "calm twice beats stormy once" },
+            { label: "Medium-first ordering", benefit: "an early win buys patience for the hard part" },
+          ],
+        },
+        close: {
+          kind: "try",
+          template:
+            "Try this week: break at the twenty-minute mark on purpose, split the big stuff across two days, and keep {pick} as the frame.",
+          encouragement: "If most nights still end in tears, that's information for the teacher — one honest note about how long homework really takes is worth a month of hard nights.",
+        },
         related: { slug: "tutoring-vs-school-services", title: "Tutoring vs. School Services: How to Decide" },
       },
     ],
@@ -287,7 +469,8 @@ export const TOOLKITS: Toolkit[] = [
     description:
       "A guided walk through smoother mornings, matched to your bottleneck: waking up, getting ready, or getting out the door.",
     intro:
-      "Every rushed morning has one true bottleneck — the stage where the wheels actually come off. Answer two quick questions and get strategies aimed at yours.",
+      "Every rushed morning has one true bottleneck — the stage where the wheels actually come off. Two quick questions and you'll get a strategy aimed at yours.",
+    illo: "backpack",
     firstStep: "start",
     steps: [
       {
@@ -324,80 +507,156 @@ export const TOOLKITS: Toolkit[] = [
         ],
       },
     ],
+    personal: {
+      question: "So I can tailor this: who's running the morning shift at your house?",
+      options: [
+        { label: "Mostly just me", emoji: "🙋", ack: "Solo shift — then anything we move to the night before is a gift to morning-you." },
+        { label: "Two adults tag-teaming", emoji: "🤝", ack: "A tag team — great; we'll make sure you're both running the same play." },
+        { label: "An older sibling helps out", emoji: "🧒", ack: "A helper — perfect; kids often take a routine more seriously when a sibling holds it." },
+        { label: "It changes day to day", emoji: "🎲", ack: "Rotating cast — then the routine itself has to be the constant, and it can be." },
+      ],
+      pickQuestion: "Pick tonight's prep move — the one thing that happens before bed:",
+      picks: [
+        { label: "clothes laid out, down to the socks", emoji: "👕" },
+        { label: "bag packed and parked by the door", emoji: "🎒" },
+        { label: "breakfast decided and set up", emoji: "🥣" },
+        { label: "the leave-time posted where all can see", emoji: "⏰" },
+        { label: "a checklist taped to the mirror", emoji: "📝" },
+      ],
+    },
     outcomes: [
       {
         id: "waking-late-night",
-        title: "Win the morning the night before",
-        intro:
-          "A hard wake-up that starts with a late bedtime is a bedtime project, not a morning one. Move the evening and the morning follows.",
-        steps: [
-          "Pick a realistic lights-out time and walk it earlier in 15-minute steps each week — small moves stick where big ones bounce back.",
-          "Set a screens-off point 30–60 minutes before bed, for the whole household if you can. What happens at 9 p.m. decides what 7 a.m. feels like.",
-          "Build a short, repeatable wind-down — shower, pajamas, ten minutes of reading. Bodies learn the off-ramp with repetition.",
-          "Keep wake-up time the same every day, weekends within an hour. Consistent mornings are what make earlier nights take hold.",
+        empathy: [
+          "A brutal wake-up that starts with a late bedtime isn't really a morning problem — the morning is just where the bill arrives. What happens at 9 p.m. decides what 7 a.m. feels like.",
+          "So we'll fix tonight, not tomorrow.",
         ],
+        strategy: {
+          name: "Win It the Night Before",
+          what: "Walk lights-out earlier in 15-minute steps each week, with screens off 30–60 minutes before bed and a short, identical wind-down. Small moves stick where big ones bounce back.",
+          why: [
+            { label: "Fifteen-minute steps", benefit: "gentle enough that nobody fights it" },
+            { label: "Screens off first", benefit: "the glow is what's holding bedtime hostage" },
+            { label: "Same wake time daily", benefit: "consistent mornings make earlier nights take hold" },
+          ],
+        },
+        close: {
+          kind: "try",
+          template:
+            "Try tonight: screens off thirty minutes earlier than usual, the same short wind-down, and {pick} before lights out. That's the whole first move.",
+          encouragement: "Give it two weeks of small steps — the morning fixes itself from the other end.",
+        },
       },
       {
         id: "waking-slow-riser",
-        title: "Build a runway, not an ejector seat",
-        intro:
-          "Some people simply boot up slowly. Fighting it makes mornings worse; designing around it makes them calm.",
-        steps: [
-          "Wake them 15 minutes earlier than strictly needed and let the first stretch be undemanding — sitting up, lights on, nothing asked yet.",
-          "Use light aggressively: curtains open, room bright. Light is the strongest natural wake-up signal there is.",
-          "Attach a small pleasant anchor to getting up — warm breakfast, five minutes of music — so the bed has real competition.",
-          "Put the alarm across the room so standing up happens once, not five snoozes later.",
+        empathy: [
+          "Some people just boot up slowly — you probably know an adult or two like this. Fighting a slow riser makes mornings worse; designing around one makes them calm.",
+          "The goal isn't a faster kid. It's a longer runway.",
         ],
+        strategy: {
+          name: "The Runway",
+          what: "Wake them fifteen minutes earlier than strictly needed and let the first stretch be undemanding — lights on, curtains open, nothing asked yet. Put the alarm across the room so standing happens once.",
+          why: [
+            { label: "Bought time", benefit: "fifteen quiet minutes replace fifteen frantic ones" },
+            { label: "Light does the work", benefit: "a bright room is the strongest natural wake-up call" },
+            { label: "A pleasant anchor", benefit: "warm breakfast or music gives the bed real competition" },
+          ],
+        },
+        close: {
+          kind: "try",
+          template:
+            "Try tomorrow: alarm across the room, curtains straight open, fifteen unhurried minutes — set up by doing {pick} tonight.",
+          encouragement: "Slow risers don't speed up, but their mornings genuinely smooth out.",
+        },
       },
       {
         id: "ready-clothes",
-        title: "Move the wardrobe decision to the evening",
-        intro:
-          "Clothing friction is a decision problem happening at the worst possible hour. Relocate the decision and the morning shrinks.",
-        steps: [
-          "Choose tomorrow's outfit together the night before, down to socks, and lay it out where dressing happens.",
-          "Trim the choices: a small set of comfortable, pre-approved options beats a full closet of possibilities every morning.",
-          "Respect real comfort complaints — itchy seams and tight collars are honest objections; retiring one shirt is cheaper than daily standoffs.",
-          "Make it a race only if your child enjoys races: “dressed before the song ends” works wonders for some kids and backfires for others. You know yours.",
+        empathy: [
+          "Clothing friction is a decision problem happening at the worst possible hour, on a body that might genuinely find seams and collars annoying. Neither of those is defiance.",
+          "Move the decision to the evening and the morning shrinks.",
         ],
+        strategy: {
+          name: "The Evening Wardrobe",
+          what: "Choose tomorrow's outfit together the night before, down to the socks, from a small set of pre-approved comfortable options. Retire the genuinely itchy things without a fight.",
+          why: [
+            { label: "Decision relocated", benefit: "calm evening brains choose better than rushed morning ones" },
+            { label: "Fewer options", benefit: "a small menu beats a full closet every time" },
+            { label: "Comfort respected", benefit: "one retired itchy shirt buys weeks of peace" },
+          ],
+        },
+        close: {
+          kind: "try",
+          template:
+            "Try tonight: pick tomorrow's outfit together, socks included, and pair it with {pick}. The morning version of this conversation simply stops existing.",
+          encouragement: "If your kid loves a race, “dressed before the song ends” works wonders — you know yours.",
+        },
       },
       {
         id: "ready-reminders",
-        title: "Replace your voice with a checklist",
-        intro:
-          "When every step needs a prompt, the sequence lives in your head instead of theirs. Move it onto paper and let the list do the reminding.",
-        steps: [
-          "Make a short picture-or-word checklist of the morning steps, in order, posted where the routine happens — bathroom mirror, bedroom door.",
-          "Walk the list together for a week, then step back to one prompt: “Check your list,” instead of narrating each step.",
-          "Keep the order identical every day; sameness is what turns a list into a habit you no longer need.",
-          "Time one or two steps with a sand timer or song if dawdling is part of it — beating the timer replaces hearing the reminder.",
-          "Catch them mid-success: “You did the whole list without me saying anything” is the sentence that makes it permanent.",
+        empathy: [
+          "When every step needs a prompt, the morning sequence lives in your head instead of theirs — you've accidentally become the checklist. Exhausting for you, and it teaches them nothing about the order.",
+          "The fix: put the sequence on paper and let the paper nag.",
         ],
+        strategy: {
+          name: "The Mirror Checklist",
+          what: "Make a short picture-or-word checklist of the morning steps, in order, posted where the routine happens. Walk it together for a week, then step back to a single prompt: “check your list.”",
+          why: [
+            { label: "The list nags, not you", benefit: "one prompt replaces a dozen reminders" },
+            { label: "Same order daily", benefit: "sameness is what turns a list into a habit" },
+            { label: "Their achievement", benefit: "finishing the list without you becomes a win they own" },
+          ],
+        },
+        close: {
+          kind: "say",
+          template:
+            "Your entire morning script from now on: “Check your list.” Set it up tonight along with {pick} — then catch them mid-success tomorrow.",
+          encouragement: "“You did the whole list without me saying anything” is the sentence that makes it permanent.",
+        },
         related: { slug: "weekly-executive-function-planner", title: "Weekly Executive Function Planner" },
       },
       {
         id: "door-stuff",
-        title: "Build a launch pad",
-        intro:
-          "Lost shoes at 7:58 is a storage problem disguised as a kid problem. Give everything that leaves the house one home, right by the door.",
-        steps: [
-          "Set up a launch pad by the exit: a hook, a bin, a spot for shoes — one per person. Everything that goes to school lives there and nowhere else.",
-          "Pack the bag at night, every night, as part of the homework wrap-up — homework in, forms signed, water bottle filled.",
-          "Do a 60-second “pad check” before bed: bag, shoes, jacket on the pad. The morning search is over before it starts.",
-          "Let the natural result do some teaching when stakes are low — one forgotten library book teaches more than a month of reminders.",
+        empathy: [
+          "Lost shoes at 7:58 is a storage problem wearing a kid-problem costume. Things that live nowhere in particular get found at the worst possible moment — that's just how objects work.",
+          "Give everything that leaves the house one home, and the morning search dies.",
         ],
+        strategy: {
+          name: "The Launch Pad",
+          what: "Set up one spot by the exit — a hook, a bin, a square of floor — where everything school-bound lives, packed the night before. A 60-second “pad check” before bed seals it.",
+          why: [
+            { label: "One home per object", benefit: "nothing to find because nothing is lost" },
+            { label: "Packed at night", benefit: "morning carries zero decisions about stuff" },
+            { label: "The pad check", benefit: "sixty seconds at night kills eight minutes of panic" },
+          ],
+        },
+        close: {
+          kind: "try",
+          template:
+            "Try tonight: claim the launch-pad spot together, load it — and add {pick} while you're at it. Tomorrow, everything's just… there.",
+          encouragement: "Let one low-stakes forgotten item teach its own lesson sometime — it outperforms a month of reminders.",
+        },
       },
       {
         id: "door-time",
-        title: "Anchor to leave time, not arrival time",
-        intro:
-          "Families run late by planning backward from when school starts instead of forward from when the car must move. One time matters: leave time.",
-        steps: [
-          "Name the leave time out loud and post it: “The car leaves at 7:40.” Everything in the morning aims at that, not at the bell.",
-          "Set one alarm for ten minutes before leave time — the wrap-it-up signal — and one at leave time itself.",
-          "Build in a 10-minute buffer you don't tell anyone about. Buffers absorb the surprise sock crisis; schedules without them shatter.",
-          "Move any step that can move to the night before — bags, clothes, lunches — so the morning carries only what it must.",
+        empathy: [
+          "Families run late by planning backward from the school bell instead of forward from when the car has to move. “We're fine, we're fine, we're suddenly late” is exactly what that math feels like.",
+          "One number fixes it: leave time.",
         ],
+        strategy: {
+          name: "The Leave-Time Anchor",
+          what: "Name the leave time out loud, post it, and aim the whole morning at it — with one alarm ten minutes before as the wrap-it-up signal. Build in a quiet ten-minute buffer you tell no one about.",
+          why: [
+            { label: "One shared number", benefit: "everyone aims at the same target" },
+            { label: "The warning alarm", benefit: "“wrap it up” arrives from a clock, not a parent" },
+            { label: "The secret buffer", benefit: "absorbs the sock crisis without breaking the schedule" },
+          ],
+        },
+        close: {
+          kind: "say",
+          template:
+            "Tonight at dinner: “The car leaves at 7:40 — that's the number now.” Post it, set the wrap-up alarm, and do {pick} before bed.",
+          encouragement: "Schedules with buffers bend; schedules without them shatter. Yours now bends.",
+        },
       },
     ],
   },
@@ -407,7 +666,8 @@ export const TOOLKITS: Toolkit[] = [
     description:
       "A guided walk through the after-school crash — why kids hold it together all day and let it out at home, and what helps.",
     intro:
-      "Many kids spend the school day holding it together — following rules, staying quiet, being patient — and release it all in the first hour home, with the people they trust most. Answer two quick questions to get strategies matched to what you see.",
+      "Many kids spend the school day holding it together — and release it all in the first hour home, with the people they trust most. Two quick questions and you'll get a strategy matched to what you see.",
+    illo: "calmcorner",
     firstStep: "start",
     steps: [
       {
@@ -444,80 +704,156 @@ export const TOOLKITS: Toolkit[] = [
         ],
       },
     ],
+    personal: {
+      question: "So I can tailor this: what's the first thing they usually reach for after school?",
+      options: [
+        { label: "Food — always food", emoji: "🍎", ack: "A snack-first kid — honestly, half the storm most days is hunger wearing a costume." },
+        { label: "Quiet and their own space", emoji: "🤫", ack: "A recharger — alone time isn't rejection; it's how they refill." },
+        { label: "Movement — they need to GO", emoji: "⚽", ack: "A mover — six hours of sitting still has a bill, and it's paid in motion." },
+        { label: "You — they orbit you", emoji: "🤗", ack: "An orbiter — you're the safe place, which is exactly why you get the feelings." },
+      ],
+      pickQuestion: "Pick tomorrow's landing ritual — the same first stop, every day:",
+      picks: [
+        { label: "a snack already on the table", emoji: "🍎" },
+        { label: "thirty minutes, zero questions", emoji: "🤫" },
+        { label: "backyard or park before anything else", emoji: "⚽" },
+        { label: "a side-by-side activity with you", emoji: "🧩" },
+        { label: "the same warm greeting, then space", emoji: "👋" },
+      ],
+    },
     outcomes: [
       {
         id: "blowup-immediate",
-        title: "Build a soft landing",
-        intro:
-          "An immediate storm usually means the day's effort is arriving home with them. The first job isn't to fix it — it's to receive it gently and refuel.",
-        steps: [
-          "Meet them with food and a drink before anything else — hungry and tired is half the storm most days.",
-          "Hold all questions and requests for the first 30 minutes. Aim for a warm hello, a snack, and space.",
-          "Offer a predictable decompression slot — same spot, same options: quiet play, drawing, backyard, audiobook. Predictable beats negotiated.",
-          "Stay nearby but undemanding; folding laundry in the same room says “I'm here” better than “tell me what's wrong.”",
-          "If a wave comes anyway, keep it simple and kind: “You had a big day. I'm here.” Any conversation about how it went can wait for a calmer hour.",
+        empathy: [
+          "A storm that hits the second they walk in usually means one thing: they held it together all day — rules, patience, quiet — and you're the safe place where it's finally allowed out.",
+          "Backwards as it feels, the blow-up is a compliment. Your first job isn't to fix it; it's to receive it gently and refuel them.",
         ],
+        strategy: {
+          name: "The Soft Landing Hour",
+          what: "Meet them with food and a drink before anything else, and hold all questions and requests for the first thirty minutes. A predictable decompression slot — same spot, same options — does the rest.",
+          why: [
+            { label: "Fuel first", benefit: "hungry and tired is half the storm most days" },
+            { label: "No questions yet", benefit: "even kind questions are demands to an empty tank" },
+            { label: "Nearby, undemanding", benefit: "folding laundry in the room says “I'm here” best" },
+          ],
+        },
+        close: {
+          kind: "say",
+          template:
+            "If a wave comes anyway, keep it to eight words: “You had a big day. I'm here.” And tomorrow, the landing is {pick} — same time, no questions.",
+          encouragement: "Any talk about how it went can wait for a calmer hour — and it will actually go better there.",
+        },
       },
       {
         id: "blowup-demands",
-        title: "Move the asks later",
-        intro:
-          "If the blow-up arrives with the first request, the request is landing on an empty tank. Same expectations — different clock.",
-        steps: [
-          "Shift homework, chores, and practice out of the first hour home; a 4:30 start after food and rest beats a 3:30 start with tears.",
-          "Post the afternoon order — snack, break, then homework — so the routine makes the ask instead of you.",
-          "Give a heads-up before the switch: “Ten more minutes of break, then homework.” Transitions land better with a runway.",
-          "Offer one real choice inside the ask — which subject first, kitchen or desk — so cooperation keeps some ownership in it.",
+        empathy: [
+          "If the explosion arrives with the first request, the request itself isn't the problem — it's landing on an empty tank. Same ask at 4:30, after food and rest, often goes fine.",
+          "So keep the expectations. Move the clock.",
         ],
+        strategy: {
+          name: "Move the Asks Later",
+          what: "Shift homework, chores, and practice out of the first hour home, and post the afternoon order — snack, break, then homework — so the routine makes the ask instead of you.",
+          why: [
+            { label: "Same standards, new time", benefit: "a fed, rested kid can hear a request" },
+            { label: "The routine asks", benefit: "a posted order argues less than a parent does" },
+            { label: "A runway before the switch", benefit: "“ten more minutes of break” lands better than “now”" },
+          ],
+        },
+        close: {
+          kind: "say",
+          template:
+            "The heads-up that saves the afternoon: “Ten more minutes of break, then homework.” With {pick} as the standing first stop, the 3:30 fight mostly stops being scheduled.",
+          encouragement: "One real choice inside the ask — which subject first, kitchen or desk — keeps some ownership in it.",
+        },
         related: { slug: "weekly-executive-function-planner", title: "Weekly Executive Function Planner" },
       },
       {
         id: "withdrawn-fine",
-        title: "Connect sideways, not head-on",
-        intro:
-          "“Fine” isn't a wall — it's a kid with nothing left for conversation yet. Connection that doesn't require words usually gets words later.",
-        steps: [
-          "Swap “How was school?” for presence: sit nearby with a snack, no agenda. Silence together is still connection.",
-          "Use side-by-side settings — the car, a walk, cooking — where talk is optional. Most kids open up mid-activity, not mid-interview.",
-          "Try one small, specific opener much later: “What was the best thing at lunch?” Specific and low-stakes beats broad and probing.",
-          "Share first from your own day — one sentence, then let it be. Conversation is contagious; interrogation isn't.",
+        empathy: [
+          "“Fine” isn't a wall — it's a kid with nothing left for conversation yet. Six hours of school used up the words, and the interview format (“how was your day?”) asks for more of exactly what ran out.",
+          "Connection that doesn't require words usually gets words later.",
         ],
+        strategy: {
+          name: "Connect Sideways",
+          what: "Swap the head-on questions for presence: sit nearby with a snack, no agenda. Use side-by-side settings — the car, a walk, cooking — where talking is optional, and let one small specific question come much later.",
+          why: [
+            { label: "Presence over probing", benefit: "silence together is still connection" },
+            { label: "Side-by-side beats face-to-face", benefit: "most kids open up mid-activity, not mid-interview" },
+            { label: "Specific and tiny", benefit: "“best thing at lunch?” beats “how was school?”" },
+          ],
+        },
+        close: {
+          kind: "say",
+          template:
+            "Much later, once: “What was the best thing at lunch?” Until then, {pick} is the whole plan — and share one line from your own day first; conversation is contagious.",
+          encouragement: "The words come back on their schedule, not ours — and they come back faster to a parent who didn't chase them.",
+        },
       },
       {
         id: "withdrawn-irritated",
-        title: "Give the space before the talk",
-        intro:
-          "If questions tip into arguments, the questions are arriving before the recovery. Protect a no-questions zone and the arguments mostly stop finding fuel.",
-        steps: [
-          "Declare the first half hour home a question-free zone — greet, feed, and let them be. Watch how much conflict simply doesn't start.",
-          "Let them pick their own recovery: room, music, shooting hoops. Alone isn't rejection; it's how many people refill.",
-          "Pick one later window that's reliably calmer — dinner, dog walk, lights-out — and let that be where the day gets talked about.",
-          "If irritation spills into rudeness, name it once, briefly, and revisit it in calm: “That tone doesn't work — we'll talk after dinner.” Then actually let it go until then.",
+        empathy: [
+          "If questions tip into arguments, the questions are simply arriving before the recovery — you're knocking while the battery's still charging. Nobody's the villain in that scene.",
+          "Protect a no-questions zone and the arguments mostly stop finding fuel.",
         ],
+        strategy: {
+          name: "The Question-Free Zone",
+          what: "Declare the first half hour home question-free: greet, feed, and let them be, with their own choice of recovery. Then pick one reliably calmer window — dinner, the dog walk — and let that be where the day gets discussed.",
+          why: [
+            { label: "Space before talk", benefit: "recovery first makes conversation possible at all" },
+            { label: "Their recovery, their pick", benefit: "alone time isn't rejection; it's refilling" },
+            { label: "One calm window", benefit: "the day still gets talked about — just where it works" },
+          ],
+        },
+        close: {
+          kind: "say",
+          template:
+            "If irritation spills into rudeness, name it once and park it: “That tone doesn't work — we'll talk after dinner.” Then actually let it go until then, with {pick} as the daily buffer.",
+          encouragement: "You're not lowering the bar on respect — you're moving the conversation to where respect is possible.",
+        },
       },
       {
         id: "energy-collisions",
-        title: "Give the energy a job",
-        intro:
-          "A body that sat still and stayed quiet for six hours has real energy to spend. Spent on purpose, it stops being spent on the sofa and the siblings.",
-        steps: [
-          "Make active time the official first stop after school: park on the way home, backyard, bikes, a race to the corner — before homework, not as a reward after.",
-          "Send the energy at a target: kick a ball 50 times, obstacle course, jump rope contest. Aimed beats aimless.",
-          "Separate collision zones for that first hour — the wound-up kid and the sibling who wants quiet get different spaces, by design.",
-          "Watch what food does: a protein-ish snack steadies the hour in a way crackers alone don't.",
+        empathy: [
+          "A body that sat still and stayed quiet for six hours has real energy stored up — it's physics, not naughtiness. Unspent, it gets spent on the sofa, the walls, and the nearest sibling.",
+          "Spent on purpose, it stops being spent on the furniture.",
         ],
+        strategy: {
+          name: "Give the Energy a Job",
+          what: "Make active time the official first stop after school — before homework, not as a reward after — and aim it at a target: fifty kicks, an obstacle course, a race to the corner.",
+          why: [
+            { label: "First, not after", benefit: "movement as step one prevents the collisions entirely" },
+            { label: "Aimed beats aimless", benefit: "energy with a target doesn't ricochet" },
+            { label: "Separate the zones", benefit: "the wound-up kid and the quiet-seeking sibling get different spaces" },
+          ],
+        },
+        close: {
+          kind: "try",
+          template:
+            "Try tomorrow: {pick} is the official first stop — before the backpack even fully lands. Give the energy its job and watch the living room survive.",
+          encouragement: "A protein-ish snack alongside steadies the hour in a way crackers alone never do.",
+        },
       },
       {
         id: "energy-settling",
-        title: "Burn first, then land",
-        intro:
-          "Settling problems at 5 p.m. often trace back to energy that never got out at 3:30. Sequence the afternoon: big movement first, calmer steps after, same order daily.",
-        steps: [
-          "Schedule 30–45 minutes of real movement right after school — outside if at all possible — before anything that requires a chair.",
-          "Create a visible switch into calm: same snack spot, same table, maybe the same music. Bodies learn the transition faster than minds do.",
-          "Step the evening down gradually — active play, then dinner, then quiet play, then the bedtime routine — instead of asking for one big jump into calm.",
-          "Keep screens out of the wind-down hour; they hold the engine revving right when you're trying to land it.",
+        empathy: [
+          "Trouble settling at 5 p.m. usually traces straight back to energy that never got out at 3:30. The engine's still revving at dinner because nobody gave it a track earlier.",
+          "Sequence the afternoon — big movement first, calmer steps after — and the evening lands itself.",
         ],
+        strategy: {
+          name: "Burn First, Then Land",
+          what: "Schedule 30–45 minutes of real movement right after school, outside if possible, then step the evening down gradually: active play, dinner, quiet play, bed. Same order daily — bodies learn the staircase.",
+          why: [
+            { label: "Burn scheduled early", benefit: "settling problems get solved two hours before they start" },
+            { label: "A visible switch", benefit: "same snack spot and table teach the transition" },
+            { label: "Stairs, not a cliff", benefit: "nobody jumps straight from wild to calm — steps work" },
+          ],
+        },
+        close: {
+          kind: "try",
+          template:
+            "Try tomorrow: movement first with {pick} as the anchor, then the step-down — and keep screens out of the wind-down hour; they hold the engine revving right when you're landing it.",
+          encouragement: "Two weeks of the same staircase and bedtime stops being a standoff.",
+        },
       },
     ],
   },
@@ -527,7 +863,8 @@ export const TOOLKITS: Toolkit[] = [
     description:
       "A guided walk through talking about a disappointing report card without shame — matched to how your child reacted.",
     intro:
-      "A rough report card is one conversation, and how it goes shapes the whole next quarter. Answer two quick questions about how your child reacted and get an approach matched to it.",
+      "A rough report card is one conversation, and how it goes shapes the whole next quarter. Two quick questions about how your child reacted, and you'll get an approach matched to it.",
+    illo: "calmcorner",
     firstStep: "start",
     steps: [
       {
@@ -564,83 +901,157 @@ export const TOOLKITS: Toolkit[] = [
         ],
       },
     ],
+    personal: {
+      question: "So I can tailor this: when are calm conversations most likely at your house?",
+      options: [
+        { label: "In the car", emoji: "🚗", ack: "The car — no eye contact, nowhere to storm off to. Honestly the best conference room parents own." },
+        { label: "Over food", emoji: "🍕", ack: "Over food — full mouths, lower guards. Good instinct." },
+        { label: "At bedtime", emoji: "🌙", ack: "Bedtime — the day's armor is off. Keep it short and soft there." },
+        { label: "Doing something together", emoji: "🧩", ack: "Side by side — hands busy, hearts open. That's the one." },
+      ],
+      pickQuestion: "Pick your one opener — the only line you'll lead with:",
+      picks: [
+        { label: "“What felt hardest this quarter?”", emoji: "💬" },
+        { label: "“Walk me through that class.”", emoji: "🗺️" },
+        { label: "“What would you change first?”", emoji: "🔧" },
+        { label: "“How can I actually help?”", emoji: "🤝" },
+        { label: "a snack and silence first, words later", emoji: "🤫" },
+      ],
+    },
     outcomes: [
       {
         id: "rc-defensive-shame",
-        title: "Lower the stakes before you raise the subject",
-        intro:
-          "Defensiveness that guards embarrassment melts when the conversation stops feeling like a verdict. Your job in round one isn't to fix the grades — it's to make the topic safe to discuss.",
-        steps: [
-          "Wait a day. A report card read aloud at the kitchen counter in minute one goes badly for everyone; the same conversation after dinner tomorrow goes differently.",
-          "Open with curiosity, not the grade: “What felt hardest this quarter?” Questions about their experience get answers; questions about the number get walls.",
-          "Pick one subject to work on — the one they choose, ideally. A whole-report-card project feels like drowning; one subject feels like a plan.",
-          "Praise effort you actually saw, separately from outcomes: the studying that happened, the homework that got turned in. Effort is the lever they control.",
-          "Close with a next step, not a punishment: together, write one question to ask the teacher about where the points went.",
+        empathy: [
+          "Defensiveness that's guarding embarrassment is armor, not attitude. They already know the grades are bad — the excuses are how they keep from drowning in that.",
+          "Which means round one has one job: make the topic safe to touch. The grades can wait a day; the safety can't.",
         ],
+        strategy: {
+          name: "Curiosity Before Verdict",
+          what: "Wait a day, then open with a question about their experience instead of the number. Pick one subject — ideally their pick — and keep the whole first conversation to that.",
+          why: [
+            { label: "A day's buffer", benefit: "the same talk goes completely differently tomorrow" },
+            { label: "Experience, not evidence", benefit: "questions about them get answers; questions about grades get walls" },
+            { label: "One subject only", benefit: "a whole-card project feels like drowning; one subject feels like a plan" },
+          ],
+        },
+        close: {
+          kind: "say",
+          template:
+            "Tomorrow, in your calm spot, lead with {pick} — then stop talking and let the silence work. One subject, one next step, done.",
+          encouragement: "Praise the effort you actually saw this quarter, separately from any grade — effort is the lever they control.",
+        },
       },
       {
         id: "rc-defensive-blame",
-        title: "Follow the story to the facts",
-        intro:
-          "When a child genuinely believes the grade is unfair, arguing the point head-on entrenches it. Walking through the actual work together lets the facts do the talking — gently.",
-        steps: [
-          "Take the belief seriously first: “Walk me through what happens in that class.” You'll learn something real — and they'll stop bracing for a lecture.",
-          "Look at graded work together, side by side, with real curiosity. Patterns show up fast: missing assignments, one question type, points lost at the end.",
-          "Keep it to one subject. The goal is one clear picture, not a prosecution across five classes.",
-          "Email the teacher together asking about patterns — “Where does the grade mostly come from?” — so the answer arrives from the source, not from you.",
-          "Frame the quarter ahead around effort they control: turned-in work, corrected tests, one question asked per week in class.",
+        empathy: [
+          "When a kid genuinely believes the grade is unfair, arguing head-on just entrenches it — now you're the opposing counsel. And here's the thing: sometimes there's a real story in there worth hearing.",
+          "So don't debate the belief. Walk toward the facts together and let them do the talking.",
         ],
+        strategy: {
+          name: "Follow the Story to the Facts",
+          what: "Take the belief seriously first, then look at actual graded work side by side with real curiosity. Patterns show up fast — missing assignments, one question type, points lost at the end.",
+          why: [
+            { label: "Belief heard first", benefit: "a kid who feels heard stops bracing for the lecture" },
+            { label: "The work speaks", benefit: "patterns on paper argue better than parents do" },
+            { label: "Ask the source", benefit: "an email to the teacher about patterns settles it kindly" },
+          ],
+        },
+        close: {
+          kind: "say",
+          template:
+            "In your calm spot, start with {pick} — then pull out two or three actual assignments and just look together. Curiosity, not cross-examination.",
+          encouragement: "Frame next quarter around things they control: work turned in, tests corrected, one question asked per week.",
+        },
         related: { slug: "plan-builder", title: "Study Plan Builder" },
       },
       {
         id: "rc-discouraged-new",
-        title: "Name it as a stretch, not a self",
-        intro:
-          "One rough quarter can quietly become “I'm bad at school” if nobody offers a different story. Your job is to keep the setback sized as a setback.",
-        steps: [
-          "Say the frame out loud: “One rough quarter is information, not a verdict.” Kids borrow the story the calmest adult in the room is telling.",
-          "Ask what changed this quarter — harder material, new teacher, a busy season — and listen. New struggles usually have findable causes.",
-          "Pick the one subject where a visible win is most reachable and focus there. Nothing rebuilds a discouraged student like one grade moving.",
-          "Separate effort from outcome every week: notice the studying, the redone problems, the asked question — before any grade arrives to judge it.",
+        empathy: [
+          "One rough quarter can quietly become “I'm bad at school” if nobody offers a different story — kids borrow the narrative the calmest adult in the room is telling.",
+          "Your job is simple and important: keep the setback sized as a setback.",
         ],
+        strategy: {
+          name: "A Stretch, Not a Self",
+          what: "Say the frame out loud — one rough quarter is information, not a verdict — then ask what changed this quarter and actually listen. New struggles usually have findable causes.",
+          why: [
+            { label: "The frame matters", benefit: "the story they tell about this quarter shapes the next one" },
+            { label: "Causes are findable", benefit: "harder material, new teacher, busy season — something changed" },
+            { label: "One visible win", benefit: "nothing rebuilds a discouraged kid like one grade moving" },
+          ],
+        },
+        close: {
+          kind: "say",
+          template:
+            "The sentence to say plainly, then follow with {pick}: “One rough quarter is information, not a verdict.” Then pick the one subject where a win is most reachable.",
+          encouragement: "Notice effort weekly — the studying, the redone problems — before any grade shows up to judge it.",
+        },
       },
       {
         id: "rc-discouraged-long",
-        title: "Rebuild on a longer runway",
-        intro:
-          "A discouragement that's been building for a while deserves more than a pep talk. The plan is small wins on purpose, adults aligned, and honest thought about extra help.",
-        steps: [
-          "Start with their story, not your plan: “When did school start feeling this way?” The answer often relocates the real starting point.",
-          "Choose one subject and one small, near-term goal — this unit's quiz, not this year's grade. Small enough to win matters more than big enough to impress.",
-          "Set up a teacher follow-up in that one subject: share the goal, ask what they see, agree how you'll both know it's working.",
-          "Mark progress visibly at home — a redone test taped to the fridge outranks a lecture about potential.",
-          "If the pattern spans years and subjects, that's information: outside help that starts from where your child actually is can change the slope.",
+        empathy: [
+          "Discouragement that's been building for a while runs deeper than one report card, and it deserves more than a pep talk. Somewhere back there, school started feeling like a place they lose.",
+          "The plan is small wins on purpose, adults aligned, and honest thought about extra help.",
         ],
+        strategy: {
+          name: "The Longer Runway",
+          what: "Start with their story — when did school start feeling this way — then choose one subject and one small near-term goal: this unit's quiz, not this year's grade. Loop in that teacher so home and school pull together.",
+          why: [
+            { label: "Their story first", benefit: "the answer often relocates the real starting point" },
+            { label: "Small enough to win", benefit: "reachable beats impressive for rebuilding belief" },
+            { label: "Adults aligned", benefit: "a teacher who knows the goal can feed the win" },
+          ],
+        },
+        close: {
+          kind: "say",
+          template:
+            "In your calm spot, open with {pick} — then listen longer than feels natural. One subject, one small goal, one teacher in the loop.",
+          encouragement: "If the pattern spans years and subjects, that's information, not failure — help that starts from where your child actually is can change the slope.",
+        },
         related: { slug: "tutoring-vs-school-services", title: "Tutoring vs. School Services: How to Decide" },
       },
       {
         id: "rc-flat-avoids",
-        title: "Make the conversation smaller than the avoidance",
-        intro:
-          "Leaving the room is rarely indifference — it's usually a conversation that feels too big to have. Shrink it until it fits.",
-        steps: [
-          "Move it sideways: the car, a walk, cooking together. Face-to-face across a table reads as a tribunal; side-by-side reads as company.",
-          "Ask exactly one question and stop: “What felt hardest this quarter?” Twenty questions is why the room empties.",
-          "Let silence do some work. A pause that feels long to you often ends with them filling it.",
-          "Agree on one subject and one step, then genuinely drop the rest for now. Follow-through on “that's all I wanted to talk about” buys next quarter's conversation.",
+        empathy: [
+          "Leaving the room is rarely indifference — it's usually a conversation that feels too big to have. The avoidance is the size of the thing, not the absence of caring.",
+          "So shrink the conversation until it fits in a pocket.",
         ],
+        strategy: {
+          name: "One Question, Then Quiet",
+          what: "Move the conversation sideways — car, walk, kitchen — ask exactly one question, and stop. Let silence do some of the work; a pause that feels long to you often ends with them filling it.",
+          why: [
+            { label: "Sideways, not across", benefit: "side-by-side reads as company; across a table reads as tribunal" },
+            { label: "One question only", benefit: "twenty questions is why the room empties" },
+            { label: "Real follow-through", benefit: "keeping “that's all I wanted” buys the next conversation" },
+          ],
+        },
+        close: {
+          kind: "say",
+          template:
+            "In your calm spot: {pick} — and then genuinely nothing else about grades that day. One subject, one step, conversation earned for next time.",
+          encouragement: "Small and finished beats big and fled, every time.",
+        },
       },
       {
         id: "rc-flat-dismisses",
-        title: "Connect grades to their goals, not yours",
-        intro:
-          "“Grades don't matter” is usually armor, and sometimes a test of whether you'll lecture. Skip the lecture; connect the dots to something they already want.",
-        steps: [
-          "Ask about their goals first — the team, the game design idea, the car, the college a cousin went to. Listen longer than feels natural.",
-          "Draw the line from one goal back to one subject, once, without a speech: eligibility rules, a program's requirements, a skill the goal needs.",
-          "Keep expectations concrete and small: work turned in, one subject's grade moving. Debating whether grades matter in the abstract is a game nobody wins.",
-          "Watch effort like a hawk and name it when you see it — dismissiveness often fades when trying quietly starts paying.",
+        empathy: [
+          "“Grades don't matter” is usually armor — and sometimes a test of whether you'll launch the lecture they've already heard. Debating whether grades matter in the abstract is a game nobody wins.",
+          "Skip the debate. Connect one grade to something they already want.",
         ],
+        strategy: {
+          name: "Their Goals, Not Yours",
+          what: "Ask about their actual goals first — the team, the game-design idea, the car — and listen longer than feels natural. Then draw one line from one goal back to one subject, once, without a speech.",
+          why: [
+            { label: "Their fuel", benefit: "eligibility rules and program requirements argue better than parents" },
+            { label: "One line, no speech", benefit: "a single connection lands; a lecture bounces" },
+            { label: "Watch for quiet effort", benefit: "dismissiveness fades when trying quietly starts paying" },
+          ],
+        },
+        close: {
+          kind: "say",
+          template:
+            "In your calm spot, skip grades entirely and open with {pick} aimed at their world — the team, the plan, the thing. The line back to one subject comes later, and only once.",
+          encouragement: "Keep expectations concrete and small: work turned in, one subject moving. The abstract debate never needed winning.",
+        },
       },
     ],
   },
@@ -650,7 +1061,8 @@ export const TOOLKITS: Toolkit[] = [
     description:
       "A guided walk through getting real value from your conference — matched to the situation you're walking in with.",
     intro:
-      "Conference slots are short and they go fast. Two quick questions, and you'll walk in with the right questions, the right materials, and a plan for what happens after.",
+      "Conference slots are short and they go fast. Two quick questions, and you'll walk in with the right opener, the right materials, and a plan for what happens after.",
+    illo: "backpack",
     firstStep: "start",
     steps: [
       {
@@ -687,81 +1099,156 @@ export const TOOLKITS: Toolkit[] = [
         ],
       },
     ],
+    personal: {
+      question: "So I can pace this right: how much time do you actually get?",
+      options: [
+        { label: "Ten minutes or less", emoji: "⏱️", ack: "A speed round — then your opener has to earn its keep immediately." },
+        { label: "Fifteen to twenty minutes", emoji: "⏳", ack: "A real slot — enough for one good thread followed properly." },
+        { label: "A full sit-down", emoji: "🪑", ack: "Luxury! Still worth leading with your best question — depth beats coverage." },
+        { label: "Not scheduled yet", emoji: "📅", ack: "Book it this week — slots vanish. The prep below works for any length." },
+      ],
+      pickQuestion: "Pick the one question you'll open with:",
+      picks: [
+        { label: "“What do you see most days — what's the pattern?”", emoji: "🔍" },
+        { label: "“What's one thing we could do at home that would actually help?”", emoji: "🏠" },
+        { label: "“When did you first notice the change?”", emoji: "📅" },
+        { label: "“What would you try first, in our shoes?”", emoji: "💡" },
+        { label: "“Where do you see them a year from now?”", emoji: "🌟" },
+      ],
+    },
     outcomes: [
       {
         id: "ptc-fine-depth",
-        title: "Ask the questions grades can't answer",
-        intro:
-          "When things are fine, the conference is your one chance to see the student the teacher sees. Come with questions that a report card can't answer.",
-        steps: [
-          "Bring three questions, written down: “What does she do when something is hard?” “Who does he work well with?” “Where do you see them a year from now?”",
-          "Ask about patterns, not moments: “What do you see most days?” beats any single anecdote in both directions.",
-          "Ask the teacher what they'd work on next if it were their own child — teachers almost always have an answer, and it's almost always useful.",
-          "Agree on one channel for follow-up — email, the app, a note home — and thank them specifically for something you've noticed this year.",
+        empathy: [
+          "When things are fine, the conference risks being ten pleasant minutes of nothing. But you're sitting across from the one person who watches your child navigate a whole world you never see.",
+          "Come with questions a report card can't answer, and this becomes the best ten minutes of the semester.",
         ],
+        strategy: {
+          name: "Ask What Grades Can't Tell You",
+          what: "Bring three written questions about the student, not the scores: what do they do when something's hard, who do they work well with, where could they stretch. Ask about patterns, not moments.",
+          why: [
+            { label: "Written questions", benefit: "the clock can't erase what's on paper" },
+            { label: "Patterns over anecdotes", benefit: "“most days” beats any single story in both directions" },
+            { label: "The teacher's eye", benefit: "they'd know what to work on if it were their own kid — ask" },
+          ],
+        },
+        close: {
+          kind: "say",
+          template:
+            "Walk in, thank them for something specific you've noticed this year, then open with {pick}. Write down what they say — it signals you mean it.",
+          encouragement: "Agree on one channel for follow-up before you leave, and this meeting keeps paying for months.",
+        },
       },
       {
         id: "ptc-fine-next",
-        title: "Leave with one thing, not ten",
-        intro:
-          "“What should we work on?” gets vague answers unless you shape it. Aim the meeting at leaving with exactly one concrete next thing.",
-        steps: [
-          "Ask it concretely: “What's one thing we could do at home that would actually help?” The word one does real work in that sentence.",
-          "Ask where the ceiling is: “Where could they stretch that school doesn't have time for?” — a good source of enrichment that doesn't duplicate class.",
-          "Write the answer down in the meeting. It signals seriousness, and it's the difference between a plan and a pleasant chat.",
-          "Agree on one follow-up channel and one check-in point — “I'll email you at midterm about how it's going.”",
+        empathy: [
+          "“What should we work on?” usually gets a vague, kind answer — not because teachers don't know, but because the question is too big for the slot.",
+          "Shape it, and you'll leave with something you can actually do on Tuesday.",
         ],
+        strategy: {
+          name: "Leave With One Thing",
+          what: "Aim the whole meeting at leaving with exactly one concrete next thing — the word “one” does real work. Then ask where your child could stretch that school doesn't have time for.",
+          why: [
+            { label: "One beats ten", benefit: "a single named action survives the drive home; a list doesn't" },
+            { label: "The stretch question", benefit: "enrichment that doesn't duplicate class comes from here" },
+            { label: "A check-in date", benefit: "“I'll email at midterm” turns a chat into a plan" },
+          ],
+        },
+        close: {
+          kind: "say",
+          template:
+            "Your opener: {pick}. When they answer, write it down, pick the one thing, and name your check-in date out loud before you stand up.",
+          encouragement: "One thing, actually done, beats five things nodded at — every semester.",
+        },
       },
       {
         id: "ptc-slip-theory",
-        title: "Test your theory — don't open with it",
-        intro:
-          "A theory is useful; leading with it isn't. Teachers give better information when they describe first and respond to theories second.",
-        steps: [
-          "Open wide: “We've noticed the grade slipping — what are you seeing?” Let them paint the picture before you show them yours.",
-          "Bring two or three recent work samples, including one that went well. Comparing a good week to a bad one often locates the change.",
-          "Then offer the theory as a question: “We wondered if it's the homework load — does that match what you see?”",
-          "Ask about patterns, not incidents: which assignments, which point in the class period, which kind of question.",
-          "Leave with one agreed step each — one thing home tries, one thing the teacher tries — and one channel to compare notes in three weeks.",
+        empathy: [
+          "Having a theory is useful — leading with it isn't. Open with your explanation and the teacher spends the slot reacting to you instead of describing what they actually see.",
+          "Hold the theory back a few minutes and it becomes twice as useful.",
         ],
+        strategy: {
+          name: "Describe First, Theory Second",
+          what: "Open wide — “what are you seeing?” — and let them paint the picture before you show yours. Then offer the theory as a question, with two or three work samples on the table, including one good week.",
+          why: [
+            { label: "Their picture first", benefit: "unprimed observations are the honest ones" },
+            { label: "Theory as a question", benefit: "“does that match what you see?” invites truth, not defense" },
+            { label: "Good week included", benefit: "comparing a good week to a bad one locates the change" },
+          ],
+        },
+        close: {
+          kind: "say",
+          template:
+            "Open with {pick}, listen all the way out, then: “We wondered if it's ___ — does that match?” Leave with one step each — one thing home tries, one thing school tries.",
+          encouragement: "Compare notes in three weeks on one agreed channel — slipping grades respond to loops, not one-off meetings.",
+        },
       },
       {
         id: "ptc-slip-mystery",
-        title: "Go in as a detective, not a defendant",
-        intro:
-          "Not knowing why is a fine place to start — the conference is exactly the right tool for it. Structure the questions and the picture assembles fast.",
-        steps: [
-          "Ask the timeline question first: “When did you first notice the change?” Slipping that started in November has a different story than slipping since day one.",
-          "Ask for the shape of the loss: missing work, low test scores, or fading participation — each points somewhere different.",
-          "Bring work samples from before and after the slide if you have them; the difference is often visible on the page.",
-          "Resist solving it in the room. Collect, thank, and agree on one follow-up channel — then decide at home, with your child in the conversation.",
+        empathy: [
+          "Not knowing why is actually a fine place to start — you're walking in as a detective, not a defendant, and the conference is exactly the right tool for the job.",
+          "Structure the questions and the picture assembles fast.",
         ],
+        strategy: {
+          name: "The Detective's Three",
+          what: "Ask the timeline first — when did you notice the change — then the shape of the loss: missing work, low tests, or fading participation. Each answer points somewhere different. Resist solving it in the room.",
+          why: [
+            { label: "Timeline first", benefit: "slipping-since-November tells a different story than since-day-one" },
+            { label: "Shape of the loss", benefit: "missing work, low tests, and quiet participation have different fixes" },
+            { label: "Collect, don't conclude", benefit: "deciding at home, with your child in it, beats deciding in ten minutes" },
+          ],
+        },
+        close: {
+          kind: "say",
+          template:
+            "Open with {pick}, then follow the thread: “Is it missing work, tests, or participation?” Thank them, take it home, and decide with your child in the conversation.",
+          encouragement: "You'll walk out with the why half-found — which is the whole meeting's job done.",
+        },
         related: { slug: "toolkits/report-card-conversations", title: "Report Card Conversations" },
       },
       {
         id: "ptc-concern-known",
-        title: "Move from concern to plan",
-        intro:
-          "If the teacher likely already knows, the win isn't raising it — it's converting a shared awareness into a shared plan with dates on it.",
-        steps: [
-          "Name it plainly and skip the wind-up: “I want to talk about the reading. What are you seeing?” Shared concerns don't need diplomatic paragraphs.",
-          "Ask what's been tried in class already and how it's gone — you're joining something in progress, not starting it.",
-          "Agree on one step at school and one at home, small enough to actually happen this month.",
-          "Set the check-in before you leave: who reaches out, on which channel, on what date. Plans without dates dissolve.",
+        empathy: [
+          "If the teacher likely already knows, then raising it isn't the win — you'd be announcing the weather to a meteorologist. The win is converting shared awareness into a shared plan with dates on it.",
+          "Skip the diplomatic wind-up entirely.",
         ],
+        strategy: {
+          name: "From Concern to Calendar",
+          what: "Name it plainly, ask what's been tried in class and how it went, then agree on one step at school and one at home — small enough to actually happen this month, with a check-in date set before you leave.",
+          why: [
+            { label: "Plain naming", benefit: "shared concerns don't need paragraphs of runway" },
+            { label: "Join, don't start", benefit: "asking what's been tried respects the work in progress" },
+            { label: "Dates or it dissolves", benefit: "who reaches out, which channel, what day — say it aloud" },
+          ],
+        },
+        close: {
+          kind: "say",
+          template:
+            "Skip the wind-up: “I want to talk about the reading — what are you seeing?” Then {pick} as your follow-up, and a date on the calendar before you stand.",
+          encouragement: "Plans without dates are wishes — yours has one now.",
+        },
       },
       {
         id: "ptc-concern-new",
-        title: "Deliver news like a partner",
-        intro:
-          "Bringing a teacher something they haven't seen works best when it lands as information, not accusation. You're handing them a puzzle piece from home.",
-        steps: [
-          "Frame it as what you see at home: “Homework takes two hours and ends in tears” travels better than “the workload is unreasonable.”",
-          "Bring evidence, gently: the work sample, the time log for one week. Concrete beats characterized.",
-          "Ask genuinely what they see at school — sometimes the same child looks different in the room, and that mismatch is itself the finding.",
-          "Ask “what would you try first?” before proposing your own fix; you'll get their best thinking instead of their defense.",
-          "Agree on one follow-up channel and a two-week check-in — new information deserves a short feedback loop.",
+        empathy: [
+          "Bringing a teacher something they haven't seen is delicate — the same sentence can land as information or as accusation, and the difference decides the whole year's partnership.",
+          "You're not filing a complaint. You're handing them a puzzle piece from home.",
         ],
+        strategy: {
+          name: "The Puzzle Piece",
+          what: "Frame it as what you see at home — “homework takes two hours and ends in tears” — with a work sample or a week's time log as gentle evidence. Then ask genuinely what they see at school.",
+          why: [
+            { label: "Home data, not verdicts", benefit: "“what we see” travels; “what you're doing wrong” doesn't" },
+            { label: "Concrete evidence", benefit: "one time log beats ten adjectives" },
+            { label: "The mismatch matters", benefit: "the same kid looking different at school is itself the finding" },
+          ],
+        },
+        close: {
+          kind: "say",
+          template:
+            "Deliver the piece, then hand over the pen: {pick} — and let their answer shape the plan. Two-week check-in, one channel, agreed before you leave.",
+          encouragement: "“What would you try first?” gets you their best thinking instead of their defense.",
+        },
       },
     ],
   },
@@ -772,6 +1259,7 @@ export const TOOLKITS: Toolkit[] = [
       "A guided walk through helping before, during, and after a big test — matched to your child's usual pattern.",
     intro:
       "Most test trouble follows one of a few patterns, and the help looks different for each. Two quick questions and you'll get a before-morning-after playbook matched to yours.",
+    illo: "timer",
     firstStep: "start",
     steps: [
       {
@@ -808,83 +1296,157 @@ export const TOOLKITS: Toolkit[] = [
         ],
       },
     ],
+    personal: {
+      question: "So I can pace this: when's the next big test?",
+      options: [
+        { label: "This week", emoji: "😬", ack: "This week — okay, we go straight to the night-before and morning moves." },
+        { label: "A couple of weeks out", emoji: "📅", ack: "Two weeks — enough runway to practice the routine before it counts." },
+        { label: "Over a month away", emoji: "🌱", ack: "A month-plus — perfect; rehearsed routines beat invented-on-the-day ones." },
+        { label: "It's a big one — state test or SAT", emoji: "🎓", ack: "A big-stakes one — same moves, plus the tools below are built for exactly this." },
+      ],
+      pickQuestion: "Pick tonight's move:",
+      picks: [
+        { label: "pack the bag together", emoji: "🎒" },
+        { label: "set the review-ends-at-dinner rule", emoji: "🍽️" },
+        { label: "practice the 30-second skip rule", emoji: "⏭️" },
+        { label: "write the morning script on a sticky note", emoji: "📝" },
+        { label: "plan the normal-dinner debrief", emoji: "🍕" },
+      ],
+    },
     outcomes: [
       {
         id: "td-nerves-night",
-        title: "Win the night before",
-        intro:
-          "Night-before nerves feed on open loops — unpacked bags, unfinished review, unknown logistics. Close the loops and the evening gets quieter on its own.",
-        steps: [
-          "Make a night-before routine and keep it identical for every test: bag packed, materials ready, clothes out, then done. Sameness is the message that this is handled.",
-          "End review by dinner. Late-night studying trades real points (sleep) for imaginary ones — say that out loud and mean it.",
-          "Swap reassurance for logistics. “You'll do great” invites debate; “Your bag's ready, breakfast is set” closes topics.",
-          "Send the morning script the night before: “You've done the work — go run the plan.” Knowing what tomorrow's send-off sounds like is itself calming.",
-          "Keep your own calm honest — kids read the room. If you're pacing, the routine isn't done: finish the checklist together and sit down.",
+        empathy: [
+          "Night-before nerves feed on open loops — the unpacked bag, the unfinished review, the unknowns about tomorrow. Every open loop is another tab the mind keeps refreshing at 10 p.m.",
+          "Close the loops and the evening gets quieter on its own. No pep talk required.",
         ],
+        strategy: {
+          name: "Close Every Loop",
+          what: "Run an identical night-before routine for every test: bag packed, materials ready, review ends by dinner, early night. Swap reassurance for logistics — “your bag's ready” closes topics that “you'll do great” reopens.",
+          why: [
+            { label: "Sameness is the message", benefit: "an identical routine says “this is handled”" },
+            { label: "Review ends at dinner", benefit: "late cramming trades real points (sleep) for imaginary ones" },
+            { label: "Logistics over reassurance", benefit: "closed topics can't be re-worried" },
+          ],
+        },
+        close: {
+          kind: "try",
+          template:
+            "Try it tonight: {pick}, then the same wind-down as any school night. Send tomorrow's script ahead: “You've done the work — go run the plan.”",
+          encouragement: "Your calm is contagious — finish the checklist together and then genuinely sit down.",
+        },
       },
       {
         id: "td-nerves-room",
-        title: "Give them a script for the freeze",
-        intro:
-          "Freezing mid-test needs a plan that lives inside the room, where you aren't. Practice it at home until it's automatic.",
-        steps: [
-          "Teach one reset: slow breath, drop the shoulders, reread the current question only. Practice it during homework so test day isn't its debut.",
-          "Agree on the skip rule ahead of time: stuck for 30 seconds → mark it, move on, come back. Permission to skip, granted by a parent in advance, is surprisingly powerful.",
-          "Rehearse the first minute: read the directions, do the easiest question first, get one thing right before the hard part. Momentum beats dread.",
-          "On test morning, keep breakfast normal and the script short: “You've done the work — go run the plan.” No new advice at the door.",
-          "Afterward, debrief the strategy, not the score: “Did the reset help?” builds a tool they'll carry into every test after this one.",
+        empathy: [
+          "Freezing mid-test needs a plan that lives inside the room — where you aren't. Anything that works has to be small enough to carry in and automatic enough to fire under pressure.",
+          "That means practicing it at home, on ordinary homework, before it ever matters.",
         ],
+        strategy: {
+          name: "The Pocket Reset",
+          what: "Teach one reset — slow breath, drop the shoulders, reread just the current question — plus the skip rule: stuck for thirty seconds, mark it, move on. Rehearse both during homework so test day isn't their debut.",
+          why: [
+            { label: "Small enough to carry", benefit: "a three-step reset survives pressure; a strategy list doesn't" },
+            { label: "Permission to skip", benefit: "granted by a parent in advance, it's surprisingly powerful" },
+            { label: "Easiest question first", benefit: "one early win beats dread better than any pep talk" },
+          ],
+        },
+        close: {
+          kind: "try",
+          template:
+            "Try tonight: {pick}, and rehearse the reset once during regular homework — breath, shoulders, reread. At the door tomorrow: eight words, no new advice.",
+          encouragement: "Afterward, debrief the strategy, not the score: “Did the reset help?” builds a tool they keep forever.",
+        },
       },
       {
         id: "td-underprep-plan",
-        title: "Make the plan the easy part",
-        intro:
-          "Some students put off studying because nobody ever showed them what a study plan looks like. Build one together once — then hand the tool over.",
-        steps: [
-          "Count backward from test day together: what's left, how many evenings, what fits where. Ten minutes with a calendar removes most of the mystery.",
-          "Split material into small named chunks — “unit 3 vocabulary,” “chapter 5 problems” — and assign each a day. Vague plans (“study science”) don't get started.",
-          "Front-load the hardest topic while the runway is long, and keep the night before for light review only.",
-          "Build the plan with a free tool once so they see the shape — then next test, they build it themselves and you just admire it.",
+        empathy: [
+          "Some kids put off studying because nobody ever showed them what a study plan actually looks like — “go study” is like “go cook” to someone who's never seen a recipe.",
+          "Build one together once, and you're handing over a tool, not a lecture.",
         ],
+        strategy: {
+          name: "Backwards From Test Day",
+          what: "Count back from the test together: what's left, how many evenings, what fits where. Split the material into small named chunks — “unit 3 vocab,” “chapter 5 problems” — and give each a day.",
+          why: [
+            { label: "The calendar does the math", benefit: "ten minutes of counting removes the mystery" },
+            { label: "Named chunks start", benefit: "“study science” doesn't; “unit 3 vocab” does" },
+            { label: "Hardest first, lightest last", benefit: "the night before becomes review, not rescue" },
+          ],
+        },
+        close: {
+          kind: "try",
+          template:
+            "Try tonight: fifteen minutes with a calendar, chunks on paper, then {pick}. Next test, they build it and you just admire it.",
+          encouragement: "The free tools below do exactly this walk-through if you'd like the guided version.",
+        },
         related: { slug: "sat-schedule", title: "SAT Schedule Builder" },
       },
       {
         id: "td-underprep-delay",
-        title: "Shrink the start, protect the streak",
-        intro:
-          "A plan that never starts isn't a planning problem — it's a starting problem. Make day one so small it's hard to refuse, and guard the chain of days.",
-        steps: [
-          "Set a daily 15-minute study anchor at the same time each day — after snack, before anything fun. The clock starts it, so nobody has to negotiate it.",
-          "Use the five-minute deal: “Just the first five minutes, then decide.” Almost everyone keeps going once the notebook is open.",
-          "Track the streak visibly — an X on the calendar per day studied. Streaks recruit stubbornness to your side.",
-          "Put the phone in another room for the 15 minutes; the shortest session loses to a buzzing screen.",
-          "For a topic they're stuck on, a guided free tool can turn “I don't know where to start” into a two-week plan in five minutes.",
+        empathy: [
+          "A plan that never starts isn't a planning problem — it's a starting problem. The plan sits there, perfectly reasonable, while the first fifteen minutes never quite arrive.",
+          "So make day one laughably small, and guard the streak like treasure.",
         ],
+        strategy: {
+          name: "The Streak",
+          what: "Set a daily fifteen-minute study anchor at the same time each day, opened with the five-minute deal: just five, then decide. Track the chain visibly — an X per day — and let stubbornness switch sides.",
+          why: [
+            { label: "The clock starts it", benefit: "same-time-daily removes the negotiation" },
+            { label: "Five-minute deal", benefit: "almost everyone keeps going once the notebook is open" },
+            { label: "Visible chain", benefit: "by week two, the streak itself is the motivation" },
+          ],
+        },
+        close: {
+          kind: "say",
+          template:
+            "The deal, once: “Just the first five minutes, then decide.” Start tonight with {pick}, phone in another room, X on the calendar after.",
+          encouragement: "For a stuck topic, the free Study Coach below turns “I don't know where to start” into a two-week plan in five minutes.",
+        },
         related: { slug: "study-coach", title: "Study Coach" },
       },
       {
         id: "td-careless-rush",
-        title: "Make checking a scheduled step",
-        intro:
-          "Rushing isn't a character flaw; it's a habit of treating “done” as the finish line. Move the finish line to “checked.”",
-        steps: [
-          "During homework, budget the last tenth of the time for checking — every time. Checking practiced at home shows up on tests uninvited.",
-          "Build a three-line personal checklist from their actual mistakes: reread the question, check signs or spelling, look at the last problem again.",
-          "Practice pacing with a timer on ordinary assignments: finishing with five minutes to spare, on purpose, is a trainable skill.",
-          "Debrief after the test without interrogation: “How did the pacing feel?” — then let it go until the graded copy comes back with its lessons attached.",
+        empathy: [
+          "Rushing isn't a character flaw — it's a habit of treating “done” as the finish line. The last answer gets written and the pencil drops, points still sitting on the table.",
+          "Move the finish line to “checked” and the points come home.",
         ],
+        strategy: {
+          name: "Checking Is a Step",
+          what: "During homework, budget the last tenth of the time for checking — every time, as a scheduled step, not a thing done if there's time. Build a three-line checklist from their actual mistakes.",
+          why: [
+            { label: "Practiced at home", benefit: "checking rehearsed on homework shows up at tests uninvited" },
+            { label: "Their own checklist", benefit: "three lines from their real mistakes beat ten generic rules" },
+            { label: "Paced on purpose", benefit: "finishing with five minutes to spare is a trainable skill" },
+          ],
+        },
+        close: {
+          kind: "try",
+          template:
+            "Try tonight: {pick}, and on the next homework, stop with 10% of the time left and run the checklist. That's the whole rep.",
+          encouragement: "Debrief after tests without interrogation — “how did the pacing feel?” — then let the graded copy teach.",
+        },
       },
       {
         id: "td-careless-misread",
-        title: "Slow down the first read, not the whole test",
-        intro:
-          "Misread questions lose points at the very first step, which is also the cheapest place to fix them. The whole strategy is: own the question before answering it.",
-        steps: [
-          "Teach question-first reading: underline what's actually being asked — not the whole problem, just the ask — before starting any work.",
-          "Practice the restate habit on homework: say the question in their own words first. If they can't, that's the discovery, made cheaply.",
-          "Keep an error log of misread questions and read it together weekly — the same traps (“choose the FALSE statement,” units, “both parts”) repeat forever.",
-          "After the test, debrief gently and specifically: “Any questions that turned out to be asking something different?” Naming the trap is half of never falling for it again.",
+        empathy: [
+          "Misread questions lose points at the very first step — which, silver lining, is also the cheapest place to fix them. The whole game is owning the question before answering it.",
+          "And the same traps repeat forever: the FALSE that read as true, the units, the second part of a two-part ask.",
         ],
+        strategy: {
+          name: "Own the Question First",
+          what: "Teach question-first reading: underline what's actually being asked before starting any work, and practice restating it in their own words on homework. Keep a little log of misread traps and reread it weekly.",
+          why: [
+            { label: "Underline the ask", benefit: "the answer can't drift from a question that's pinned down" },
+            { label: "The restate test", benefit: "if they can't say it back, that's the discovery — made cheaply" },
+            { label: "Traps repeat", benefit: "naming a trap once is half of never falling for it again" },
+          ],
+        },
+        close: {
+          kind: "try",
+          template:
+            "Try tonight: {pick}, then one homework problem with the underline-and-restate move, just to feel it. The log starts with the next miss.",
+          encouragement: "After the test, one gentle question: “Any questions that turned out to be asking something different?” Naming it is the fix.",
+        },
       },
     ],
   },
@@ -895,6 +1457,7 @@ export const TOOLKITS: Toolkit[] = [
       "A guided walk through a summer that keeps learning alive without wrecking the break — matched to your honest goal.",
     intro:
       "Summers work best when the goal is named out loud — keeping fresh, catching up, and getting ahead are three different summers. Two quick questions and you'll get the version that fits yours.",
+    illo: "booknook",
     firstStep: "start",
     steps: [
       {
@@ -931,83 +1494,158 @@ export const TOOLKITS: Toolkit[] = [
         ],
       },
     ],
+    personal: {
+      question: "So I can fit this to real life: what does a typical summer weekday look like?",
+      options: [
+        { label: "Camp or a program most days", emoji: "🏕️", ack: "Camp days — then the anchor lives in the morning or the evening edge, and stays tiny." },
+        { label: "Home with a parent", emoji: "🏠", ack: "Home base — you've got the most flexibility and the most negotiating, so the routine matters double." },
+        { label: "A mix of sitters and family", emoji: "🧩", ack: "The patchwork — then the anchor has to be simple enough that any adult can hold it." },
+        { label: "Older kid, mostly self-directed", emoji: "🎧", ack: "Self-directed — then they should co-design this, or it simply won't happen." },
+      ],
+      pickQuestion: "Pick this week's 20-minute anchor:",
+      picks: [
+        { label: "after-breakfast reading", emoji: "📚" },
+        { label: "a real-world math job (recipes, budgets)", emoji: "🧮" },
+        { label: "project time on their thing", emoji: "🔨" },
+        { label: "a library run and free pick", emoji: "🏛️" },
+        { label: "their choice, posted on the fridge", emoji: "📌" },
+      ],
+    },
     outcomes: [
       {
         id: "sl-fresh-fight",
-        title: "Make it small, samely, and not yours",
-        intro:
-          "Summer fights are usually about size and surprise. A tiny fixed anchor, owned by the routine instead of by you, removes both.",
-        steps: [
-          "Set a 20-minute daily anchor at the same time — right after breakfast works best — and let the clock be the one who starts it.",
-          "Let them choose the content inside the container: reading, math practice, a language app. The time is non-negotiable; the menu is theirs.",
-          "Never extend a session that went well. Twenty minutes means twenty — trust is what makes tomorrow's twenty happen without a fight.",
-          "Fold learning into real life where no one can call it school: recipe math, trip budgets, reading the game's rulebook aloud.",
+        empathy: [
+          "Summer fights about practice are usually about two things: size and surprise. Twenty minutes that appears at random feels like an ambush; an hour feels like school in disguise.",
+          "Make it tiny, make it same-time, and make the clock the messenger — the fight loses its fuel.",
         ],
+        strategy: {
+          name: "The Tiny Fixed Anchor",
+          what: "One 20-minute block, same time daily — right after breakfast works best — where the time is non-negotiable but the menu is theirs: reading, math practice, a project. Never extend a session that went well.",
+          why: [
+            { label: "The clock starts it", benefit: "routines don't negotiate; parents get dragged into it" },
+            { label: "Their menu", benefit: "choice inside the container buys cooperation" },
+            { label: "Twenty means twenty", benefit: "trust in the end time is what makes tomorrow easy" },
+          ],
+        },
+        close: {
+          kind: "try",
+          template:
+            "Try this week: the anchor is {pick}, same time every day, and when the timer ends, it ends — even mid-sentence, even going well.",
+          encouragement: "Fold the rest into real life where nobody can call it school — recipe math, trip budgets, the game rulebook read aloud.",
+        },
       },
       {
         id: "sl-fresh-drift",
-        title: "Attach it to something that already happens",
-        intro:
-          "Plans that rely on remembering die by July. Plans attached to an existing daily event survive, because breakfast never forgets to happen.",
-        steps: [
-          "Anchor 20 minutes to a fixed daily event — after breakfast, before screens unlock. The sequence does the remembering.",
-          "Make it visible: a paper calendar with an X per day. In week three the chain itself becomes the reason to keep going.",
-          "Stack the environment: books in the car and bathroom, puzzle on the porch table. Availability quietly beats intention.",
-          "Give reading full autonomy — graphic novels, sports bios, reread series all count. Summer reading has one job: staying voluntary.",
+        empathy: [
+          "Plans that rely on remembering die quietly by mid-July — not from resistance, just from summer. Nobody fought it; it just never happened, again.",
+          "The fix isn't more resolve. It's attaching the plan to something that already happens every single day.",
         ],
+        strategy: {
+          name: "Piggyback the Habit",
+          what: "Anchor twenty minutes to a fixed daily event — after breakfast, before screens unlock — so the sequence does the remembering. Track it with a paper chain of X's where everyone can see it.",
+          why: [
+            { label: "Breakfast never forgets", benefit: "attached habits inherit the reliability of their host" },
+            { label: "The visible chain", benefit: "by week three the streak itself is the reason" },
+            { label: "Environment stacked", benefit: "books in the car and bathroom quietly beat intentions" },
+          ],
+        },
+        close: {
+          kind: "try",
+          template:
+            "Try this week: {pick}, glued to breakfast, X on the calendar after. That's the entire system — the sequence remembers so nobody has to.",
+          encouragement: "Give reading full autonomy inside it — graphic novels, sports bios, rereads all count. Voluntary is the whole game.",
+        },
         related: { slug: "toolkits/reading-at-home", title: "Reading at Home" },
       },
       {
         id: "sl-catchup-clear",
-        title: "Run a short, honest campaign",
-        intro:
-          "Known gaps deserve a real plan — and a boundary, so catch-up doesn't quietly eat the whole summer. Aim for focused weekday minutes and a finish line.",
-        steps: [
-          "Turn last year's grades into a schedule with the free Plan Builder — subjects in, weekly plan out — so the summer plan is a document, not a mood.",
-          "Cap it: 30–45 focused minutes on weekdays, mornings if you can, weekends off. Catch-up sustained beats catch-up heroic.",
-          "Work the earliest gap first — this year's confusion usually stands on last year's shaky topic.",
-          "Set a mid-summer checkpoint: a practice quiz or a redone old test. If it's working, ease off; if not, adjust while there's still runway.",
-          "Protect actual summer on purpose — the pool, the cousins, the boredom. A rested student in September outperforms a resentful one.",
+        empathy: [
+          "Known gaps are actually the good version of this problem — you can aim at them. The risk now is the opposite one: catch-up quietly eating the whole summer and returning a resentful kid in September.",
+          "So run a real campaign, with real edges.",
         ],
+        strategy: {
+          name: "The Bounded Campaign",
+          what: "Turn the gaps into a schedule — 30–45 focused weekday minutes, mornings if you can, weekends off — starting with the earliest gap, since this year's confusion usually stands on last year's shaky topic.",
+          why: [
+            { label: "Capped on purpose", benefit: "sustained beats heroic across ten weeks" },
+            { label: "Earliest gap first", benefit: "fixing the foundation fixes floors above it" },
+            { label: "A mid-summer checkpoint", benefit: "one practice quiz in late July steers the second half" },
+          ],
+        },
+        close: {
+          kind: "try",
+          template:
+            "Try this week: the campaign runs weekday mornings, {pick} holds the routine, and weekends are genuinely, loudly off.",
+          encouragement: "The free Plan Builder below turns the actual grades into the weekly schedule in a few minutes.",
+        },
         related: { slug: "plan-builder", title: "Study Plan Builder" },
       },
       {
         id: "sl-catchup-fuzzy",
-        title: "Find the real gaps before you plan",
-        intro:
-          "“Behind” is a feeling until you check. Spend the first week finding the real gaps — it's the highest-value week of the summer.",
-        steps: [
-          "Gather the evidence you already have: final report card, teacher comments, the last few tests. Circle anything that repeats.",
-          "Do a light skills check with free practice by grade level — twenty minutes per subject tells you more than a month of guessing.",
-          "Ask your child where it got hard — kids usually know, with startling precision, the exact chapter where a subject went dark.",
-          "Then run a focused plan on the two or three real gaps, 30–40 weekday minutes, weekends off — and let the rest of summer be summer.",
+        empathy: [
+          "“Behind” is a feeling until you check — and summers get spent on the feeling all the time: a workbook of everything, covering nothing twice.",
+          "Spend the first week finding the real gaps. It's the highest-value week of the whole summer.",
         ],
+        strategy: {
+          name: "Look Before You Launch",
+          what: "Gather the evidence you already have — final report card, teacher comments, the last few tests — and circle what repeats. Then ask your child where it got hard; kids usually know the exact chapter.",
+          why: [
+            { label: "The evidence exists", benefit: "June's paperwork already names most of the gaps" },
+            { label: "Kids know", benefit: "“where did it get hard?” has startlingly precise answers" },
+            { label: "A light skills check", benefit: "twenty minutes of grade-level practice beats a month of guessing" },
+          ],
+        },
+        close: {
+          kind: "try",
+          template:
+            "Try this week: one evening with the report card and a highlighter, one conversation, and {pick} as the daily rhythm while you look.",
+          encouragement: "Then aim at the two or three real gaps and let the rest of summer be summer — the Plan Builder below does the scheduling.",
+        },
         related: { slug: "plan-builder", title: "Study Plan Builder" },
       },
       {
         id: "sl-ahead-theirs",
-        title: "Feed the hunger without formalizing it",
-        intro:
-          "A kid who wants to get ahead needs fuel and room, not a syllabus. Your job is supply lines and an audience — not management.",
-        steps: [
-          "Ask what they want to build, master, or find out — then resource it: library trips, one good kit or course, a corner of the table that doesn't get cleared.",
-          "Shape it into one enrichment project with something to show in August: a model, a story collection, a coded game, a garden. Artifacts sustain momentum.",
-          "Add a 20-minute daily anchor for the skill behind the interest — the math under the coding, the reading behind the history obsession.",
-          "Stay the audience, not the manager: ask to be shown, not to inspect. The project stays theirs or it stops.",
+        empathy: [
+          "A kid who wants to get ahead is a gift — and the fastest way to break it is to formalize it into assignments. Hunger needs fuel and room, not a syllabus.",
+          "Your job is supply lines and an audience. Not management.",
         ],
+        strategy: {
+          name: "Fuel, Don't Manage",
+          what: "Ask what they want to build, master, or find out — then resource it: library runs, one good kit or course, a corner of the table that doesn't get cleared. Shape it toward one showable thing by August.",
+          why: [
+            { label: "An artifact sustains", benefit: "a model, a game, a garden — something to show keeps momentum" },
+            { label: "The skill underneath", benefit: "twenty daily minutes on the math under the coding compounds" },
+            { label: "Audience, not inspector", benefit: "ask to be shown, never to check — it stays theirs" },
+          ],
+        },
+        close: {
+          kind: "try",
+          template:
+            "Try this week: name the August artifact together, then protect {pick} as the daily fuel line. Then get out of the way, admiringly.",
+          encouragement: "Being taken seriously about their own project is the most motivating thing you can give a hungry kid.",
+        },
       },
       {
         id: "sl-ahead-mine",
-        title: "Buy progress without selling the summer",
-        intro:
-          "When getting ahead is the parent's goal, the design has to be honest about that — light enough to keep goodwill, real enough to matter in September.",
-        steps: [
-          "Name the deal plainly: 20–30 focused minutes on weekdays, and the rest of the day is genuinely theirs. Clear edges prevent daily renegotiation.",
-          "Preview, don't race ahead: skimming next year's first chapters builds September confidence without burning the material.",
-          "Trade choice for buy-in: they pick which subject and when the minutes happen; you hold only the that-it-happens.",
-          "Watch for the burnout tells — dread, bargaining, dawdling that outlasts the session — and cut the load in half for a week rather than push through.",
-          "Put the payoff where they can feel it: “You'll walk into algebra already knowing the first month.” Getting ahead should taste like an advantage, not a punishment.",
+        empathy: [
+          "When getting ahead is the parent's goal, honesty is the design requirement — kids smell a stealth curriculum instantly, and resentment compounds faster than learning does.",
+          "Name the deal plainly, keep it light, and put the payoff where they can feel it.",
         ],
+        strategy: {
+          name: "The Honest Deal",
+          what: "Twenty to thirty focused weekday minutes, and the rest of the day is genuinely theirs — they pick the subject and the time slot; you hold only the that-it-happens. Preview next year rather than racing through it.",
+          why: [
+            { label: "Clear edges", benefit: "a named deal prevents daily renegotiation" },
+            { label: "Preview, don't finish", benefit: "knowing September's first month builds confidence without burning material" },
+            { label: "Choice for buy-in", benefit: "their subject, their slot — your only rule is that it happens" },
+          ],
+        },
+        close: {
+          kind: "say",
+          template:
+            "The deal, said once: “Twenty minutes on weekdays — you pick what and when — and the payoff is walking into algebra already knowing the first month.” Then {pick} makes it real.",
+          encouragement: "Watch for the burnout tells — dread, bargaining, dawdling that outlasts the session — and halve the load for a week rather than push through.",
+        },
       },
     ],
   },
@@ -1017,7 +1655,8 @@ export const TOOLKITS: Toolkit[] = [
     description:
       "A guided walk through growing a reader at any age — matched to elementary, middle, or high school.",
     intro:
-      "The goal at every age is the same — a kid who reads because they want to — but the moves change as they grow. One quick question about age, one about where things stand, and you'll get strategies that fit.",
+      "The goal at every age is the same — a kid who reads because they want to — but the moves change as they grow. Two quick questions and you'll get strategies that fit.",
+    illo: "booknook",
     firstStep: "start",
     steps: [
       {
@@ -1054,81 +1693,155 @@ export const TOOLKITS: Toolkit[] = [
         ],
       },
     ],
+    personal: {
+      question: "So I can pick the right bait: what's their current obsession?",
+      options: [
+        { label: "Sports", emoji: "⚽", ack: "A sports kid — perfect; sports writing is a whole secret library." },
+        { label: "Games and screens", emoji: "🎮", ack: "A gamer — good news: game guides, manga, and LitRPG are all reading." },
+        { label: "Animals and nature", emoji: "🐾", ack: "An animal kid — nonfiction shelves were built for this one." },
+        { label: "Making and building", emoji: "🔨", ack: "A maker — how-to books and maker magazines count completely." },
+      ],
+      pickQuestion: "Pick the first book bait to try this week:",
+      picks: [
+        { label: "a sports bio or almanac", emoji: "⚽" },
+        { label: "a game guide or manga", emoji: "🎮" },
+        { label: "animal nonfiction with great photos", emoji: "🐾" },
+        { label: "a graphic novel", emoji: "📖" },
+        { label: "an audiobook for the car", emoji: "🎧" },
+      ],
+    },
     outcomes: [
       {
         id: "ra-elem-readaloud",
-        title: "Keep reading aloud — and build a bridge",
-        intro:
-          "Loving read-alouds is a strength, not a stall. Keep the ritual (it's doing more than you think) and build a low-pressure bridge to solo reading beside it.",
-        steps: [
-          "Don't retire the read-aloud — there is no “too old.” Listening comprehension runs years ahead of decoding, and the couch ritual is where the love lives.",
-          "Trade pages inside the ritual: you read a page, they read a paragraph — then gradually rebalance. The bridge is gentle and shared.",
-          "Start a series together aloud and let the next book “accidentally” be available for solo attempts. Needing to know what happens is the strongest engine there is.",
-          "Let their solo choices be easy — below-level books, comics, rereads all count. Solo reading should feel like coasting downhill.",
-          "Ask story questions, never quiz questions: “Would you have done what she did?” keeps books a conversation, not a test.",
+        empathy: [
+          "First, the reframe: loving read-alouds is a strength, not a stall. Listening comprehension runs years ahead of decoding, and the couch ritual is where the love of stories actually lives.",
+          "So don't retire it — there is no “too old.” Build a gentle bridge beside it instead.",
         ],
+        strategy: {
+          name: "The Page-Trade Bridge",
+          what: "Keep the read-aloud, but trade pages inside it — you read a page, they read a paragraph — and rebalance gradually. Start a series together aloud, then leave the next book “accidentally” available.",
+          why: [
+            { label: "The ritual stays", benefit: "the bridge is shared, so it never feels like losing something" },
+            { label: "Series momentum", benefit: "needing to know what happens is the strongest engine there is" },
+            { label: "Easy solo wins", benefit: "below-level books and rereads make alone-reading feel like coasting" },
+          ],
+        },
+        close: {
+          kind: "try",
+          template:
+            "Try this week: trade pages tonight, and plant {pick} somewhere findable. Ask story questions, never quiz questions.",
+          encouragement: "“Would you have done what she did?” keeps books a conversation, not a test.",
+        },
       },
       {
         id: "ra-elem-avoids",
-        title: "Lower the bar until they trip over it",
-        intro:
-          "A young book-avoider usually finds books effortful, boring, or both. Attack both: easier entry points, higher-interest topics, zero pressure.",
-        steps: [
-          "Follow the obsession, wherever it is: dinosaurs, gaming guides, joke books, graphic novels. The topic recruits; the format doesn't matter.",
-          "Keep reading aloud daily anyway — comprehension and pleasure keep growing through the ears while the eyes catch up.",
-          "Salt the house with easy wins: comics in the car, a joke book at breakfast. Three found minutes beat a scheduled twenty that ends in tears.",
-          "Make the library trip theirs: their card, their picks, no vetoes on level or topic. Ownership converts avoiders.",
-          "If avoidance looks like real struggle — guessing at words, exhaustion after a page — ask the teacher what they see. Effort problems and skill problems need different help.",
+        empathy: [
+          "A young book-avoider usually finds books effortful, boring, or both — and every forced session confirms the theory. The way back in is never through the front door.",
+          "Attack both problems at once: easier entry, higher interest, zero pressure.",
         ],
+        strategy: {
+          name: "Follow the Obsession",
+          what: "Whatever they love — dinosaurs, gaming, jokes — meet it in print, in whatever format: comics, guides, joke books. Keep reading aloud daily regardless, and salt the house with easy wins.",
+          why: [
+            { label: "Topic recruits", benefit: "the format never matters; the obsession does" },
+            { label: "Ears keep growing", benefit: "daily read-alouds build comprehension while the eyes catch up" },
+            { label: "Found minutes", benefit: "three minutes with a joke book at breakfast beats twenty forced ones" },
+          ],
+        },
+        close: {
+          kind: "try",
+          template:
+            "Try this week: {pick} left where they'll trip over it, a library card of their own, and no vetoes on what they pick with it.",
+          encouragement: "If avoiding looks like real struggle — guessing at words, exhaustion after a page — ask the teacher what they see; effort problems and skill problems need different help.",
+        },
       },
       {
         id: "ra-mid-screens",
-        title: "Compete on convenience, not virtue",
-        intro:
-          "Screens win because they're instant and everywhere. Books win middle schoolers back by matching the convenience and borrowing the interests.",
-        steps: [
-          "Put books where the phone lives: on the bed, in the backpack, in the car. The competition is fought at arm's length.",
-          "Go where the algorithm points: if they watch basketball highlights, sports bios; anime, manga. The screen already told you what they love.",
-          "Audiobooks count, fully — commutes and chores become reading time with zero friction.",
-          "Carve one screen-free reading pocket a day — 20 minutes before lights-out is the classic — and read your own book in it. Modeled beats mandated.",
-          "Feed series momentum: when one lands, have the sequel already waiting. Dead time between books is where screens win the rematch.",
+        empathy: [
+          "Screens win because they're instant and everywhere — it's a convenience war, not a character one. Lecturing about the value of books loses to a device that's already in their hand.",
+          "So compete on convenience, and let the algorithm tell you what they love.",
         ],
+        strategy: {
+          name: "Match the Convenience",
+          what: "Put books where the phone lives — bed, backpack, car — and source them from what the screen already revealed: highlights watcher gets sports bios, anime kid gets manga. Audiobooks count completely.",
+          why: [
+            { label: "Arm's-length war", benefit: "the book that's there beats the book that's better" },
+            { label: "The algorithm scouted", benefit: "their feed is a reading-interest report, free" },
+            { label: "Sequel ready", benefit: "dead time between books is where screens win the rematch" },
+          ],
+        },
+        close: {
+          kind: "try",
+          template:
+            "Try this week: {pick} placed exactly where the phone usually sits, plus one screen-free 20 minutes before lights-out — with your own book open too.",
+          encouragement: "Modeled beats mandated at this age, every time.",
+        },
       },
       {
         id: "ra-mid-boring",
-        title: "They haven't met the right book yet",
-        intro:
-          "“Books are boring” almost always means “the books adults keep handing me are boring.” The fix is range, choice, and a little cunning.",
-        steps: [
-          "Blow the doors off what counts: graphic novels, horror, sports pages, world-record books, song lyrics, recipe blogs. Reading is reading.",
-          "Use the five-book flight: bring home a wild variety, ask them to read ten pages of each, keep whatever survives. Choice plus a taste beats assignment.",
-          "Mine their people: the cousin's favorite, the coach's recommendation, what friends are passing around. Peer sourcing beats parent sourcing at this age.",
-          "Talk about your own reading at dinner — the plot twist, the fact you can't stop thinking about. Curiosity is contagious; assignments aren't.",
+        empathy: [
+          "“Books are boring” almost always translates to “the books adults keep handing me are boring” — a complaint about the menu, not the restaurant.",
+          "The fix is range, real choice, and a little cunning.",
         ],
+        strategy: {
+          name: "The Five-Book Flight",
+          what: "Bring home a wild variety — graphic novels, horror, sports pages, world records, anything — and ask for ten pages of each. Keep whatever survives; return the rest without comment.",
+          why: [
+            { label: "A taste, not a commitment", benefit: "ten pages is a fair trial nobody dreads" },
+            { label: "Blown-open menu", benefit: "reading is reading — lyrics, recipes, and manga all count" },
+            { label: "Peer-sourced picks", benefit: "the cousin's favorite outrates the parent's classic" },
+          ],
+        },
+        close: {
+          kind: "try",
+          template:
+            "Try this week: build the flight with {pick} as one of the five, run the ten-page trials, and let the survivors stay.",
+          encouragement: "Talk about your own reading at dinner — the twist you didn't see coming. Curiosity is contagious; assignments aren't.",
+        },
       },
       {
         id: "ra-high-anything",
-        title: "Meet them where their life already is",
-        intro:
-          "A high schooler who doesn't read for pleasure isn't a lost cause — they're busy, tired, and unconvinced. Win on relevance and respect.",
-        steps: [
-          "Connect books to what they already care about: the sport, the show, the career interest. A pro athlete's memoir has started more reading lives than most classics.",
-          "Respect the format: audiobooks in the car they drive, long-form articles, essay collections — short, real, and finishable all count.",
-          "Ask for their take, not their attention: “Someone said this book is overrated — settle it for me.” Teenagers will read to have an opinion.",
-          "Keep books visible and free of assignments at home. School owns required reading; home should own the voluntary kind.",
+        empathy: [
+          "A high schooler who doesn't read for pleasure isn't a lost cause — they're busy, tired, and unconvinced. Respect all three and you're most of the way in.",
+          "Win on relevance, and hand them formats that fit an actual teenage life.",
         ],
+        strategy: {
+          name: "Meet Their Actual Life",
+          what: "Connect books to what they already care about — the sport, the show, the career interest — in formats that finish: audiobooks in the car, long-form articles, essay collections. Home stays assignment-free.",
+          why: [
+            { label: "Relevance converts", benefit: "a pro athlete's memoir has started more reading lives than most classics" },
+            { label: "Finishable formats", benefit: "short and real beats long and noble for a tired teenager" },
+            { label: "Opinion bait", benefit: "teenagers will absolutely read to settle an argument" },
+          ],
+        },
+        close: {
+          kind: "say",
+          template:
+            "The opener that works: “Someone said this is overrated — settle it for me,” handed over with {pick}. Then genuinely drop it.",
+          encouragement: "School owns required reading; keep home the voluntary kind, and it has a chance.",
+        },
       },
       {
         id: "ra-high-deepen",
-        title: "Treat them like the reader they are",
-        intro:
-          "A high schooler who already reads needs peers, ideas, and next doors to walk through — not monitoring. Think fellow reader, not supervisor.",
-        steps: [
-          "Read what they read, sometimes — one shared book a semester turns dinner into a book club without calling it one.",
-          "Open the adult shelves: journalism, memoir, philosophy, the novels people argue about. Being handed a grown-up book is a compliment they notice.",
-          "Talk ideas, not comprehension: “Was the ending earned?” “Who was right?” The conversation is the deepening.",
-          "Point them at the pipeline: the author's other books, the essay that inspired the novel, the movie adaptation to judge against the book.",
+        empathy: [
+          "A high schooler who already reads doesn't need monitoring — they need peers, ideas, and next doors to walk through. Think fellow reader, not supervisor.",
+          "The deepening happens in conversation, not in oversight.",
         ],
+        strategy: {
+          name: "The Fellow Reader",
+          what: "Read what they read sometimes — one shared book a semester turns dinner into a book club without calling it one — and open the adult shelves: journalism, memoir, the novels people argue about.",
+          why: [
+            { label: "Shared text, real talk", benefit: "“was the ending earned?” is where the deepening lives" },
+            { label: "The compliment of adult books", benefit: "being handed a grown-up book is a promotion they notice" },
+            { label: "The pipeline", benefit: "the author's other books and the essay behind the novel keep doors opening" },
+          ],
+        },
+        close: {
+          kind: "try",
+          template:
+            "Try this week: pick the shared book together — {pick} is a fine place to start — and ask one idea question when you're both partway in.",
+          encouragement: "“Who was right?” at the dinner table does more than any reading log ever did.",
+        },
       },
     ],
   },

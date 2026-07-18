@@ -9,6 +9,69 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 
 export type IconName = "spark" | "compass" | "flag" | "book" | "chat";
 
+export type IlloName = "timer" | "booknook" | "backpack" | "calmcorner";
+
+/** Original flat spot illustrations in the site palette — decorative only. */
+export function SpotIllustration({ name }: { name: IlloName }) {
+  const frame = {
+    width: 96,
+    height: 64,
+    viewBox: "0 0 96 64",
+    fill: "none",
+    "aria-hidden": true as const,
+    className: "mb-2",
+  };
+  switch (name) {
+    case "timer":
+      return (
+        <svg {...frame}>
+          <rect x="8" y="52" width="80" height="4" rx="2" fill="#d4c7b1" />
+          <circle cx="48" cy="30" r="20" fill="#f3efe7" stroke="#1b2c40" strokeWidth="2.5" />
+          <rect x="44" y="4" width="8" height="5" rx="1.5" fill="#1b2c40" />
+          <path d="M48 30 L48 18" stroke="#1b2c40" strokeWidth="2.5" strokeLinecap="round" />
+          <path d="M48 30 L57 34" stroke="#a08463" strokeWidth="2.5" strokeLinecap="round" />
+          <circle cx="48" cy="30" r="2.5" fill="#1b2c40" />
+          <path d="M70 12 l4 -4" stroke="#1b2c40" strokeWidth="2.5" strokeLinecap="round" />
+        </svg>
+      );
+    case "booknook":
+      return (
+        <svg {...frame}>
+          <rect x="8" y="52" width="80" height="4" rx="2" fill="#d4c7b1" />
+          <rect x="14" y="24" width="26" height="28" rx="3" fill="#293f58" />
+          <rect x="18" y="30" width="18" height="3" rx="1.5" fill="#f3efe7" />
+          <rect x="18" y="37" width="18" height="3" rx="1.5" fill="#f3efe7" />
+          <path d="M52 52 V22 q0-4 4-4 h6 q4 0 4 4 v30" fill="#f3efe7" stroke="#1b2c40" strokeWidth="2.5" />
+          <path d="M66 52 V28 q0-3 3-3 h5 q3 0 3 3 v24" fill="#af9673" />
+          <circle cx="47" cy="14" r="5" fill="#d4c7b1" />
+        </svg>
+      );
+    case "backpack":
+      return (
+        <svg {...frame}>
+          <rect x="8" y="52" width="80" height="4" rx="2" fill="#d4c7b1" />
+          <rect x="58" y="10" width="26" height="42" rx="2" fill="#e6ded0" stroke="#1b2c40" strokeWidth="2.5" />
+          <circle cx="64" cy="32" r="2" fill="#1b2c40" />
+          <path d="M18 52 V30 q0-8 10-8 t10 8 v22 Z" fill="#293f58" stroke="#1b2c40" strokeWidth="2.5" />
+          <rect x="22" y="38" width="12" height="10" rx="2" fill="#af9673" />
+          <path d="M24 22 q4 -6 8 0" stroke="#1b2c40" strokeWidth="2.5" fill="none" />
+        </svg>
+      );
+    case "calmcorner":
+      return (
+        <svg {...frame}>
+          <rect x="8" y="52" width="80" height="4" rx="2" fill="#d4c7b1" />
+          <path d="M14 52 q0-14 14-14 t14 14 Z" fill="#293f58" />
+          <circle cx="28" cy="30" r="6" fill="#f3efe7" stroke="#1b2c40" strokeWidth="2.5" />
+          <rect x="56" y="18" width="4" height="34" rx="2" fill="#a08463" />
+          <path d="M58 18 q-10 -2 -8 -12 q10 2 8 12 Z" fill="#47729c" />
+          <path d="M58 26 q10 -2 8 -12 q-10 2 -8 12 Z" fill="#688fb4" />
+          <circle cx="78" cy="14" r="4" fill="#d4c7b1" />
+        </svg>
+      );
+  }
+}
+
 /** Small inline SVG accents used in coach bubbles at section transitions. */
 export function ChatIcon({ name }: { name: IconName }) {
   const common = {
@@ -60,7 +123,7 @@ export function ChatIcon({ name }: { name: IconName }) {
   }
 }
 
-export type CoachItem = string | { text?: string; node?: ReactNode; icon?: IconName };
+export type CoachItem = string | { text?: string; node?: ReactNode; icon?: IconName; illo?: IlloName };
 
 export type ChatMessage = {
   id: number;
@@ -68,9 +131,37 @@ export type ChatMessage = {
   text?: string;
   node?: ReactNode;
   icon?: IconName;
+  illo?: IlloName;
 };
 
 const TYPING_MS = 650;
+
+/**
+ * Pacing rule: no single coach turn may exceed ~60 words. Longer text is
+ * split at sentence boundaries into sequential bubbles (each arriving with
+ * its own typing pause). Rich-node turns carry at most one card each by
+ * construction, so they pass through untouched.
+ */
+export const MAX_TURN_WORDS = 60;
+
+export function splitForPacing(text: string): string[] {
+  const words = text.split(/\s+/).filter(Boolean).length;
+  if (words <= MAX_TURN_WORDS) return [text];
+  const sentences = text.match(/[^.!?…]+[.!?…]+["”']?\s*|[^.!?…]+$/g) ?? [text];
+  const chunks: string[] = [];
+  let current = "";
+  for (const sentence of sentences) {
+    const candidate = (current + sentence).trim();
+    if (current && candidate.split(/\s+/).length > MAX_TURN_WORDS) {
+      chunks.push(current.trim());
+      current = sentence;
+    } else {
+      current = candidate + " ";
+    }
+  }
+  if (current.trim()) chunks.push(current.trim());
+  return chunks;
+}
 
 export function useCoachChat<S>(opts: { capture: () => S; restore: (s: S) => void }) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -89,7 +180,14 @@ export function useCoachChat<S>(opts: { capture: () => S; restore: (s: S) => voi
       const item = pending[0];
       setMessages((m) => [
         ...m,
-        { id: nextId.current++, role: "coach", text: item.text, node: item.node, icon: item.icon },
+        {
+          id: nextId.current++,
+          role: "coach",
+          text: item.text,
+          node: item.node,
+          icon: item.icon,
+          illo: item.illo,
+        },
       ]);
       setPending((p) => p.slice(1));
     }, TYPING_MS);
@@ -101,7 +199,17 @@ export function useCoachChat<S>(opts: { capture: () => S; restore: (s: S) => voi
   }
 
   function coach(...items: CoachItem[]) {
-    setPending((p) => [...p, ...items.map((i) => (typeof i === "string" ? { text: i } : i))]);
+    const paced = items.flatMap((i) => {
+      const item = typeof i === "string" ? { text: i } : i;
+      if (!item.text || item.node) return [item];
+      // Enforce the ~60-word pacing rule: long turns become sequential bubbles;
+      // any icon/illustration stays with the first bubble of the split.
+      const parts = splitForPacing(item.text);
+      return parts.map((text, idx) =>
+        idx === 0 ? { ...item, text } : { text }
+      );
+    });
+    setPending((p) => [...p, ...paced]);
   }
 
   function snapshot() {
@@ -151,20 +259,23 @@ export function ChatTranscript({
           <div key={m.id}>{m.node}</div>
         ) : (
           <div key={m.id} className={m.role === "coach" ? "flex" : "flex justify-end"}>
-            <p
+            <div
               className={
                 m.role === "coach"
                   ? "max-w-[85%] rounded-2xl rounded-bl-sm bg-sand-100 px-4 py-2.5 leading-relaxed text-navy-900"
                   : "max-w-[85%] rounded-2xl rounded-br-sm bg-navy-900 px-4 py-2.5 leading-relaxed text-sand-50"
               }
             >
-              {m.icon && (
-                <span className="mr-2 inline-block align-[-3px] text-navy-700">
-                  <ChatIcon name={m.icon} />
-                </span>
-              )}
-              {m.text}
-            </p>
+              {m.illo && <SpotIllustration name={m.illo} />}
+              <p>
+                {m.icon && (
+                  <span className="mr-2 inline-block align-[-3px] text-navy-700">
+                    <ChatIcon name={m.icon} />
+                  </span>
+                )}
+                {m.text}
+              </p>
+            </div>
           </div>
         )
       )}
