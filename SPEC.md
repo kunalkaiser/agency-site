@@ -64,6 +64,9 @@ Fully client-side tool — no backend, no AI calls, no storage, no login; all st
 ### Contact
 Short intro, form (name, email, phone, role type, service of interest, message, preferred contact), service area, response window "within 2 business days".
 
+## Legal pages (/privacy, /terms, /accessibility)
+Comprehensive ORIGINAL drafts, attorney-review-gated: every page carries the banner "Template draft — pending attorney review; not yet legal advice or a binding final version." Terms covers acceptance/changes; eligibility (parents/educators/students; under-18 tool use with parent/guardian awareness; no accounts, no personal-info entry outside the two adult-intended forms); educational-purpose/no-professional-advice; per-offering notices (browser-only tools that store nothing; scripted Study Coach; as-is templates; third-party links); services governed by separate engagement agreements with no client relationship from site use; IP + personal/classroom license; acceptable use; as-is warranty + liability limitation flagged DRAFT FOR ATTORNEY; dispute resolution intentionally left as an ATTORNEY-TO-COMPLETE placeholder (no arbitration drafted); NY governing-law placeholder; contact. Privacy states only code-verified practices (no accounts; the two Netlify Forms and their exact fields; no cookies; env-gated cookieless analytics that may be off; client-side tools transmit nothing; children's privacy; third-party links). Accessibility: WCAG 2.1 AA commitment, honest known limitations, feedback channel. All legal-page facts must stay accurate to the codebase whenever forms/analytics/tools change.
+
 ## Rules
 Placeholder copy where content not specified. No adversarial references to any school district. No "ABA"/"behavior analysis" service claims.
 Positioning is virtual-nationwide, with two exceptions: SETSS is NYC-specific by nature (NYC DOE program), and IEP Advocacy excludes engagements involving the NYC DOE.

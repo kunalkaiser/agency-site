@@ -27,8 +27,8 @@ export default function LegalPage({ title, lastUpdated, sections }: Props) {
               role="note"
               className="rounded-md border border-sand-400 bg-sand-100 px-5 py-4 font-medium text-navy-900"
             >
-              Template — pending attorney review. This page is placeholder policy content and has
-              not yet been reviewed by counsel.
+              Template draft — pending attorney review; not yet legal advice or a binding final
+              version.
             </p>
 
             {sections.map((section) => (

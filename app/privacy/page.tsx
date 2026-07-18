@@ -4,7 +4,8 @@ import { SITE_NAME, og } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
-  description: "How TrueCourse Education Group collects, uses, and protects your information.",
+  description:
+    "What this site actually collects (very little), how the two forms work, and why the free tools transmit nothing. Draft pending attorney review.",
   openGraph: og("/privacy"),
 };
 
@@ -15,52 +16,65 @@ export default function PrivacyPage() {
       lastUpdated="July 2026"
       sections={[
         {
-          heading: "What we collect",
+          heading: "The short version",
           paragraphs: [
-            `${SITE_NAME} collects only the information you choose to share with us. When you submit our contact form, we receive the details you enter: your name, email address, phone number (optional), your role, the service you're interested in, your message, and your preferred contact method.`,
-            "Our website is a static informational site. We do not require accounts, and we do not collect payment information through this website.",
+            `This is a static website with no accounts and no logins. The only personal information ${SITE_NAME} receives through it is what you choose to type into two optional forms — the contact form and the newsletter signup. The free tools run entirely in your browser and send us nothing. We set no cookies. That's genuinely most of the policy; the details follow.`,
           ],
         },
         {
-          heading: "How we use your information",
-          list: [
-            "To respond to your inquiry and discuss the services you asked about.",
-            "To schedule and prepare for consultations you request.",
-            "To send resources or updates you have explicitly signed up for.",
-          ],
+          heading: "No accounts, no profiles",
           paragraphs: [
-            "We do not sell, rent, or trade your personal information, and we do not use it for third-party advertising.",
+            "You cannot create an account on this site, and we do not build profiles of visitors. Reading articles, running the free tools, and printing templates require no information from you at all.",
           ],
         },
         {
-          heading: "Service providers",
+          heading: "The two forms, and what they collect",
           paragraphs: [
-            "Contact form submissions are delivered to us by a third-party form-processing service, and consultations may be scheduled through a third-party scheduling service. These providers process your information only to deliver those functions on our behalf. We encourage you to review their privacy policies; provider names are available on request.",
+            "The contact form collects what you enter: your name, email address, phone number (optional), your role, the service you're interested in, your message, and your preferred contact method. We use it for exactly one thing — responding to you about your inquiry.",
+            "The newsletter form collects your email address only. We use it to send the newsletter — about one email a month when there's a new free tool or guide — and every issue includes an unsubscribe link. Unsubscribe any time and we stop.",
+            "Both forms are delivered to us by Netlify, the service that hosts this site; submissions are processed and stored by Netlify on our behalf and read by us. We do not sell, rent, or trade your information, and we do not use it for advertising.",
           ],
         },
         {
-          heading: "Students and children",
+          heading: "Cookies",
           paragraphs: [
-            "Our services involve students, and we take that responsibility seriously. This website is intended for use by parents, guardians, educators, and students with appropriate consent. We do not knowingly collect personal information online from children under 13; if you believe a child has submitted information to us, contact us and we will delete it.",
-            "Information about students shared with us in the course of providing services is used solely to deliver those services and is not disclosed except as agreed with the family or required by law.",
+            "We set no cookies. There is no cookie banner on this site because there is nothing for it to announce.",
           ],
         },
         {
-          heading: "Retention and security",
+          heading: "Analytics",
           paragraphs: [
-            "We keep inquiry information only as long as needed to respond and to maintain a record of our engagement with you, after which it is deleted. We use reasonable administrative and technical safeguards to protect the information we hold, though no method of transmission or storage is completely secure.",
+            "The site is built to support privacy-preserving analytics (Cloudflare Web Analytics), which counts page views in aggregate without cookies, without persistent identifiers, and without tracking you across other sites. As of the date above, this may be switched off entirely — the site works identically either way. If enabled, it tells us things like “the study coach page was viewed 200 times this week,” and nothing about you personally.",
           ],
         },
         {
-          heading: "Your choices",
+          heading: "The free tools send us nothing",
           paragraphs: [
-            "You may contact us at any time to ask what information we hold about you, request a correction, or request deletion. Email newsletters, if you subscribe, always include an unsubscribe option.",
+            "The interactive tools — the Study Coach, Study Plan Builder, SAT Schedule Builder, guided toolkits, and service-fit chooser — run entirely in your web browser. Grades, scores, topics, and anything else you type or tap stay on your device, are never transmitted to us or anyone else, and disappear when you close the tab. We could not read them if we wanted to.",
           ],
         },
         {
-          heading: "Questions",
+          heading: "Children's privacy",
           paragraphs: [
-            "Questions about this policy can be sent to hello@example.com. If we update this policy, we will revise the date at the top of this page.",
+            "Outside the two forms described above — which are intended for adults — this site collects no personal information from anyone, including children. Students of any age can use the free tools without providing any information at all. We do not knowingly collect personal information from children under 13; if you believe a child has submitted a form, contact us and we will delete the submission.",
+          ],
+        },
+        {
+          heading: "Third-party links",
+          paragraphs: [
+            "Our tools and articles link to outside educational resources. Once you follow a link, that site's own privacy policy applies — we don't control what third parties collect, and this policy doesn't cover them.",
+          ],
+        },
+        {
+          heading: "Your choices, and how to reach us",
+          paragraphs: [
+            "You can ask us at any time what information we hold from your form submissions, or ask us to correct or delete it — reach us through the contact page on this site. Newsletter emails always include an unsubscribe link.",
+          ],
+        },
+        {
+          heading: "Changes to this policy",
+          paragraphs: [
+            "If our actual practices change — for example, if analytics is switched on, or a new form is added — we will update this policy to match and revise the date at the top. This policy describes what the site really does, and we intend to keep it that way.",
           ],
         },
       ]}
