@@ -108,6 +108,24 @@ export default function ResourcesPage() {
             </h2>
             <p className="mt-3 max-w-2xl text-navy-700">{section.intro}</p>
             <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {section.audience === "Teachers" && (
+                <Link
+                  href="/resources/classroom"
+                  className="group flex flex-col rounded-xl border-2 border-navy-900 bg-navy-950 p-6 transition hover:shadow-lg"
+                >
+                  <p className="text-xs uppercase tracking-widest text-sand-300">Strategy guide</p>
+                  <h3 className="mt-2 font-serif text-lg font-semibold text-sand-50">
+                    Classroom Strategy Finder
+                  </h3>
+                  <p className="mt-3 flex-1 text-sm leading-relaxed text-sand-200">
+                    Click what you're seeing — twelve situations, each with strategies to try this
+                    week.
+                  </p>
+                  <span className="mt-5 text-sm font-medium text-sand-100 group-hover:underline">
+                    Find your situation →
+                  </span>
+                </Link>
+              )}
               {getArticlesFor(section.audience).map((article) => (
                 <Link
                   key={article.slug}

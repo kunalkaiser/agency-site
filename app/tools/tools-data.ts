@@ -1,6 +1,7 @@
 import { ARTICLES } from "@/app/resources/articles";
 import { TOOLKITS } from "@/app/resources/toolkits/toolkits";
 import { TEMPLATES } from "@/app/resources/templates/templates";
+import { SITUATIONS } from "@/app/resources/classroom/classroom";
 
 export type Audience = "Parents" | "Teachers" | "Students";
 
@@ -54,6 +55,21 @@ export const TOOL_CARDS: ToolCard[] = [
     tag: "Guided toolkit",
     audiences: ["Parents"] as Audience[],
     valueProp: toolkit.description,
+  })),
+  {
+    title: "Classroom Strategy Finder",
+    href: "/resources/classroom",
+    tag: "Strategy guide",
+    audiences: ["Teachers"] as Audience[],
+    valueProp:
+      "Click what you're seeing — twelve classroom situations, each with strategies to try this week.",
+  },
+  ...SITUATIONS.map((situation) => ({
+    title: situation.title,
+    href: `/resources/classroom/${situation.slug}`,
+    tag: "Strategy guide",
+    audiences: ["Teachers"] as Audience[],
+    valueProp: situation.description,
   })),
   ...TEMPLATES.map((template) => ({
     title: template.title,

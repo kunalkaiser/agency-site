@@ -4,6 +4,7 @@ import { VISIBLE_SERVICES } from "@/lib/services";
 import { ARTICLES } from "@/app/resources/articles";
 import { TOOLKITS } from "@/app/resources/toolkits/toolkits";
 import { TEMPLATES } from "@/app/resources/templates/templates";
+import { SITUATIONS } from "@/app/resources/classroom/classroom";
 
 export const dynamic = "force-static";
 
@@ -18,6 +19,7 @@ const STATIC_ROUTES = [
   "/resources/sat-schedule",
   "/resources/study-coach",
   "/resources/which-support",
+  "/resources/classroom",
   "/contact",
   "/privacy",
   "/terms",
@@ -31,6 +33,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...ARTICLES.map((a) => `/resources/${a.slug}`),
     ...TOOLKITS.map((t) => `/resources/toolkits/${t.slug}`),
     ...TEMPLATES.map((t) => `/resources/templates/${t.slug}`),
+    ...SITUATIONS.map((s) => `/resources/classroom/${s.slug}`),
   ];
   return routes.map((route) => ({
     url: `${SITE_URL}${route}`,
