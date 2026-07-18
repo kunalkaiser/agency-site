@@ -1,4 +1,5 @@
 import Link from "next/link";
+import NewsletterForm from "@/components/NewsletterForm";
 import { SERVICE_AREA, SITE_NAME } from "@/lib/site";
 
 const FOOTER_LINKS = [
@@ -48,6 +49,15 @@ export default function Footer() {
             </a>
           </nav>
         </div>
+        <div className="mt-10 border-t border-navy-800 pt-8">
+          <p className="text-sm text-sand-200">
+            One new free tool or guide each month — no spam, unsubscribe anytime.
+          </p>
+          <div className="mt-3 max-w-md">
+            <NewsletterForm slim />
+          </div>
+        </div>
+
         <p className="mt-10 text-xs text-sand-400">
           © {new Date().getFullYear()} {SITE_NAME}. All rights reserved.
         </p>

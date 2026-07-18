@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import CtaSection from "@/components/CtaSection";
-import { SITE_NAME } from "@/lib/site";
+import { SITE_NAME, og } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "About",
   description:
     "The mission, founder, and philosophy behind TrueCourse Education Group — PhD-led virtual education services for families nationwide.",
+  openGraph: og("/about"),
 };
 
 const CREDENTIALS = [

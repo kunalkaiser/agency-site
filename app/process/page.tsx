@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
+import { og } from "@/lib/site";
 import CtaSection from "@/components/CtaSection";
 
 export const metadata: Metadata = {
   title: "Process",
   description:
     "Our 7-step process, from first inquiry through ongoing support — clear, measured, and built around your student.",
+  openGraph: og("/process"),
 };
 
 const STEPS = [

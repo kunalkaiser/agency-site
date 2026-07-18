@@ -5,7 +5,13 @@ Next.js (App Router) + Tailwind. Static export. No backend, no database.
 Contact form uses Netlify Forms (form name "contact"; url-encoded POST to "/"). Calendly embed placeholder on Contact.
 
 ## Global
-Top nav: Home | Services | About | Process | Resources | Contact + "Book a Consult" button.
+Top nav: Home | Services | About | Process | Resources | Free Tools | Contact + "Book a Consult" button.
+Newsletter capture: Netlify Forms (name="newsletter", honeypot, email only), pitch "One new free tool or guide each month — no spam, unsubscribe anytime." — on /tools, Resources, and a slim footer block sitewide. Same static-HTML registration technique as the contact form.
+Analytics: pluggable slot in the root layout renders a beacon script only when NEXT_PUBLIC_ANALYTICS_SRC and NEXT_PUBLIC_ANALYTICS_TOKEN are set (Cloudflare Web Analytics format — cookieless, no consent banner needed at this tier).
+OG conventions: public/og.png is the branded social card (1200×630, navy/warm, no external assets); every route sets openGraph via the og() helper in lib/site.ts so og:url is correct per page; titles/descriptions are unique value props per tool/toolkit/article.
+
+### Free Tools hub (/tools)
+Single directory of every free tool and interactive resource — Study Coach, Plan Builder, the four guided toolkits, all articles, and the ZenEd external card — with client-side audience filter tabs (All / Parents / Teachers / Students) and one-line value props per card. Resources page keeps its sections but its featured card routes through /tools.
 Footer: Privacy, Terms, Accessibility, Contact, LinkedIn, Email, service area line "Virtual services for families nationwide".
 Design: premium, calm, institutional. Generous whitespace, strong typography, navy/warm-neutral palette. No stock-photo clichés.
 

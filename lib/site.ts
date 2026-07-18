@@ -9,5 +9,21 @@ export const NAV_LINKS = [
   { label: "About", href: "/about" },
   { label: "Process", href: "/process" },
   { label: "Resources", href: "/resources" },
+  { label: "Free Tools", href: "/tools" },
   { label: "Contact", href: "/contact" },
 ] as const;
+
+/**
+ * Complete openGraph object for a route. Next.js does NOT deep-merge child
+ * openGraph metadata with the layout's, so every page that wants a correct
+ * og:url must pass the full object — use this helper.
+ */
+export function og(path: string) {
+  return {
+    siteName: SITE_NAME,
+    type: "website" as const,
+    locale: "en_US",
+    url: path,
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: SITE_NAME }],
+  };
+}

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ADVOCACY_VISIBLE, VISIBLE_SERVICES } from "@/lib/services";
 import CtaSection from "@/components/CtaSection";
-import { SITE_NAME } from "@/lib/site";
+import { SITE_NAME, og } from "@/lib/site";
 
 export const metadata: Metadata = {
   // The layout's title.template doesn't apply to its own segment, so spell it out.
@@ -10,6 +10,7 @@ export const metadata: Metadata = {
   description: ADVOCACY_VISIBLE
     ? "Strategic education and behavioral support for students, families, and schools. Virtual tutoring, college counseling, special education support, and advocacy for families nationwide."
     : "Strategic education and behavioral support for students, families, and schools. Virtual tutoring, college counseling, and special education support for families nationwide.",
+  openGraph: og("/"),
 };
 
 const WHY_US = [

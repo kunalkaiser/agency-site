@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import GuidedToolkit from "@/components/GuidedToolkit";
 import CtaSection from "@/components/CtaSection";
+import { og } from "@/lib/site";
 import { TOOLKITS, getToolkit } from "../toolkits";
 
 export const dynamicParams = false;
@@ -19,7 +20,11 @@ export async function generateMetadata({
   const { slug } = await params;
   const toolkit = getToolkit(slug);
   if (!toolkit) return {};
-  return { title: toolkit.title, description: toolkit.description };
+  return {
+    title: toolkit.title,
+    description: toolkit.description,
+    openGraph: og(`/resources/toolkits/${toolkit.slug}`),
+  };
 }
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {

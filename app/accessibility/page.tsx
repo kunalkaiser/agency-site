@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import LegalPage from "@/components/LegalPage";
-import { SITE_NAME } from "@/lib/site";
+import { SITE_NAME, og } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Accessibility",
   description: "TrueCourse Education Group's website accessibility commitment and feedback channel.",
+  openGraph: og("/accessibility"),
 };
 
 export default function AccessibilityPage() {

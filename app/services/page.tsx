@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { og } from "@/lib/site";
 import Link from "next/link";
 import { ADVOCACY_VISIBLE, VISIBLE_SERVICES } from "@/lib/services";
 import CtaSection from "@/components/CtaSection";
@@ -8,6 +9,7 @@ export const metadata: Metadata = {
   description: ADVOCACY_VISIBLE
     ? "Virtual tutoring, college counseling, SETSS, and IEP advocacy for students and families nationwide."
     : "Virtual tutoring, college counseling, and SETSS for students and families nationwide.",
+  openGraph: og("/services"),
 };
 
 export default function ServicesPage() {

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { og } from "@/lib/site";
 import Link from "next/link";
 import PlanBuilder from "@/components/PlanBuilder";
 import CtaSection from "@/components/CtaSection";
@@ -7,6 +8,7 @@ export const metadata: Metadata = {
   title: "Study Plan Builder",
   description:
     "A free tool that turns your current grades — in any format — into a structured weekly, monthly, or quarterly study plan. Runs entirely in your browser.",
+  openGraph: og("/resources/plan-builder"),
 };
 
 export default function PlanBuilderPage() {

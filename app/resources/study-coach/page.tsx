@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { og } from "@/lib/site";
 import Link from "next/link";
 import StudyCoach from "@/components/StudyCoach";
 import CtaSection from "@/components/CtaSection";
@@ -7,6 +8,7 @@ export const metadata: Metadata = {
   title: "Study Coach",
   description:
     "A free chat-style study coach: tap through subject, topic, and what's going wrong, and get a focused two-week plan with linked free resources. Runs entirely in your browser.",
+  openGraph: og("/resources/study-coach"),
 };
 
 export default function StudyCoachPage() {

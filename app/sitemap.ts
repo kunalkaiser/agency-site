@@ -9,6 +9,7 @@ export const dynamic = "force-static";
 const STATIC_ROUTES = [
   "",
   "/services",
+  "/tools",
   "/about",
   "/process",
   "/resources",

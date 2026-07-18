@@ -5,6 +5,16 @@ import Footer from "@/components/Footer";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 import { ADVOCACY_VISIBLE } from "@/lib/services";
 
+// Pluggable analytics slot: renders a beacon script only when both env vars
+// are set at build time (Cloudflare Web Analytics format — cookieless, so no
+// consent banner is needed at this tier). No env vars → no script, no request.
+function AnalyticsSlot() {
+  const src = process.env.NEXT_PUBLIC_ANALYTICS_SRC;
+  const token = process.env.NEXT_PUBLIC_ANALYTICS_TOKEN;
+  if (!src || !token) return null;
+  return <script defer src={src} data-cf-beacon={JSON.stringify({ token })} />;
+}
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
@@ -40,6 +50,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {children}
         </main>
         <Footer />
+        <AnalyticsSlot />
       </body>
     </html>
   );

@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import ContactForm from "@/components/ContactForm";
-import { SERVICE_AREA } from "@/lib/site";
+import { SERVICE_AREA, og } from "@/lib/site";
 import { ADVOCACY_VISIBLE } from "@/lib/services";
 
 export const metadata: Metadata = {
   title: "Contact",
   description:
     "Book a consult or send us a message. Virtual services for families nationwide — we respond within 2 business days.",
+  openGraph: og("/contact"),
 };
 
 export default function ContactPage() {

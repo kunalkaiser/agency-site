@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import ArticlePage from "@/components/ArticlePage";
+import { og } from "@/lib/site";
 import { ARTICLES } from "../articles";
 
 export const dynamicParams = false;
@@ -17,7 +18,11 @@ export async function generateMetadata({
   const { slug } = await params;
   const article = ARTICLES.find((a) => a.slug === slug);
   if (!article) return {};
-  return { title: article.title, description: article.description };
+  return {
+    title: article.title,
+    description: article.description,
+    openGraph: og(`/resources/${article.slug}`),
+  };
 }
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {

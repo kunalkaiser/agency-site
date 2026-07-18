@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import LegalPage from "@/components/LegalPage";
-import { SITE_NAME } from "@/lib/site";
+import { SITE_NAME, og } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
   description: "How TrueCourse Education Group collects, uses, and protects your information.",
+  openGraph: og("/privacy"),
 };
 
 export default function PrivacyPage() {

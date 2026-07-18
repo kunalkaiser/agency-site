@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import LegalPage from "@/components/LegalPage";
-import { SITE_NAME } from "@/lib/site";
+import { SITE_NAME, og } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Terms of Use",
   description: "Terms governing use of the TrueCourse Education Group website.",
+  openGraph: og("/terms"),
 };
 
 export default function TermsPage() {
