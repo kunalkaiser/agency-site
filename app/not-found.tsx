@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { SITE_NAME } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: `Page not found | ${SITE_NAME}`,
+  // The layout's title template appends the site name.
+  title: "Page not found",
   description: "The page you're looking for doesn't exist or has moved.",
 };
 

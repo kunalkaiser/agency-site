@@ -53,10 +53,10 @@ export default function ResourcesPage() {
               Study Coach
             </h2>
             <p className="mt-3 max-w-3xl leading-relaxed text-sand-200">
-              Falling behind in something? Tap through a short guided conversation — subject,
-              topic, what's going wrong, how much time you have — and get a focused two-week plan
-              with free resources for your exact topic. Runs entirely in your browser; nothing is
-              saved or sent anywhere.
+              Stuck on one topic? Tap through a guided plan. A short conversation — subject, topic,
+              what's going wrong, how much time you have — ends in a focused two-week plan with
+              free resources for that exact topic. Runs entirely in your browser; nothing is saved
+              or sent anywhere.
             </p>
             <span className="mt-6 text-sm font-medium text-sand-100 group-hover:underline">
               Start the conversation →
@@ -73,8 +73,9 @@ export default function ResourcesPage() {
                 Study Plan Builder
               </h2>
               <p className="mt-3 flex-1 leading-relaxed text-navy-700">
-                Enter your grades in any format — percentages, letters, or the NY scale — and get a
-                structured weekly, monthly, or quarterly study plan. Includes a NY Regents mode.
+                Turn all your grades into a weekly schedule. Enter every subject in any format —
+                percentages, letters, or the NY scale — and get a structured weekly, monthly, or
+                quarterly plan. Includes a NY Regents mode.
               </p>
               <span className="mt-6 text-sm font-medium text-navy-800 group-hover:underline">
                 Build your plan →
