@@ -21,5 +21,5 @@ Source of truth for structure/content: SPEC.md — read it before any change. Ne
 - Auto-deploys on push to main (github.com/kunalkaiser/agency-site, public);
   Netlify runs `npm run build` and publishes `out/`
 - Form submissions land in Netlify dashboard → Forms
-- SITE_URL in lib/site.ts is still the placeholder https://example.com —
-  update it (sitemap/robots/OG URLs) when a custom domain is attached
+- SITE_URL in lib/site.ts is the Netlify URL (https://agency-site-tcg.netlify.app) —
+  swap it (sitemap/robots/OG URLs) when the custom domain is attached
