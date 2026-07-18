@@ -1,5 +1,6 @@
 import { ARTICLES } from "@/app/resources/articles";
 import { TOOLKITS } from "@/app/resources/toolkits/toolkits";
+import { TEMPLATES } from "@/app/resources/templates/templates";
 
 export type Audience = "Parents" | "Teachers" | "Students";
 
@@ -53,6 +54,13 @@ export const TOOL_CARDS: ToolCard[] = [
     tag: "Guided toolkit",
     audiences: ["Parents"] as Audience[],
     valueProp: toolkit.description,
+  })),
+  ...TEMPLATES.map((template) => ({
+    title: template.title,
+    href: `/resources/templates/${template.slug}`,
+    tag: "Printable template",
+    audiences: ["Teachers"] as Audience[],
+    valueProp: template.description,
   })),
   ...ARTICLES.map((article) => ({
     title: article.title,

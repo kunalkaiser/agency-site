@@ -18,7 +18,11 @@
   }
 }
 
-/* Print-friendly output (used by the Study Plan Builder's printable plan) */
+/* Print-friendly output (plan builders, toolkits, printable templates) */
+@page {
+  size: letter;
+  margin: 12mm;
+}
 @media print {
   header,
   footer {

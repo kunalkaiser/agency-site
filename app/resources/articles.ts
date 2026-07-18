@@ -13,6 +13,8 @@ export type Article = {
   description: string;
   intro: string;
   sections: ArticleSection[];
+  /** Optional companion links (hrefs are site-relative). */
+  related?: { label: string; href: string }[];
 };
 
 export const ARTICLES: Article[] = [
@@ -206,6 +208,10 @@ export const ARTICLES: Article[] = [
     type: "Reference",
     description:
       "How to build a collection sheet that survives a real classroom and produces numbers you can stand behind.",
+    related: [
+      { label: "Weekly Data Tracker (printable template)", href: "/resources/templates/weekly-data-tracker" },
+      { label: "Goal Progress Snapshot (printable template)", href: "/resources/templates/goal-progress-snapshot" },
+    ],
     intro:
       "Good service decisions run on data, but data collection fails when it's designed for an ideal classroom instead of a real one. This guide covers how to build a collection sheet you will actually use — one that takes seconds to mark, survives a chaotic Tuesday, and produces numbers you can stand behind at a meeting.",
     sections: [
@@ -268,6 +274,10 @@ export const ARTICLES: Article[] = [
     type: "Reference",
     description:
       "The anatomy of a measurable goal, the common failure points, and a 30-second checklist.",
+    related: [
+      { label: "Goal Progress Snapshot (printable template)", href: "/resources/templates/goal-progress-snapshot" },
+      { label: "Accommodation Quick Reference (printable template)", href: "/resources/templates/accommodation-quick-reference" },
+    ],
     intro:
       "A measurable goal is one that two people could evaluate independently and reach the same verdict. Most goals fail measurability not from carelessness but from missing pieces — a criterion with no baseline, a verb no one can observe, a skill no one specified how to check. This reference covers the anatomy, the common failure points, and a checklist to run before anything is finalized.",
     sections: [

@@ -51,6 +51,26 @@ export default function ArticlePage({ article }: { article: Article }) {
               </section>
             ))}
 
+            {article.related && article.related.length > 0 && (
+              <div className="mt-12 rounded-xl border border-navy-100 bg-sand-100 p-6">
+                <h2 className="font-serif text-lg font-semibold text-navy-900">
+                  Printable companions
+                </h2>
+                <ul className="mt-3 space-y-2">
+                  {article.related.map((r) => (
+                    <li key={r.href}>
+                      <Link
+                        href={r.href}
+                        className="font-medium text-navy-800 underline underline-offset-4 hover:text-navy-950"
+                      >
+                        {r.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
             <p className="mt-14 border-t border-navy-100 pt-6 text-sm text-navy-600">
               This resource is provided for general educational purposes only and is not legal
               advice; special education procedures and terminology vary by state and district.
