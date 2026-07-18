@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import CtaSection from "@/components/CtaSection";
 import { getArticlesFor, type Article } from "./articles";
+import { TOOLKITS } from "./toolkits/toolkits";
 
 export const metadata: Metadata = {
   title: "Resources",
@@ -80,6 +81,39 @@ export default function ResourcesPage() {
                 Visit ZenEd ↗
               </span>
             </a>
+          </div>
+        </div>
+      </section>
+
+      {/* Interactive toolkits */}
+      <section>
+        <div className="mx-auto max-w-content px-5 py-16 sm:px-8 sm:py-20">
+          <h2 className="font-serif text-2xl font-semibold text-navy-900 sm:text-3xl">
+            Interactive Toolkits
+          </h2>
+          <p className="mt-3 max-w-2xl text-navy-700">
+            Answer two quick questions about what's happening at your house and get a short,
+            concrete set of strategies matched to it. Runs entirely in your browser.
+          </p>
+          <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {TOOLKITS.map((toolkit) => (
+              <Link
+                key={toolkit.slug}
+                href={`/resources/toolkits/${toolkit.slug}`}
+                className="group flex flex-col rounded-xl border border-navy-100 bg-white p-6 transition hover:border-navy-300 hover:shadow-lg"
+              >
+                <p className="text-xs uppercase tracking-widest text-sand-700">Guided toolkit</p>
+                <h3 className="mt-2 font-serif text-lg font-semibold text-navy-900">
+                  {toolkit.title}
+                </h3>
+                <p className="mt-3 flex-1 text-sm leading-relaxed text-navy-700">
+                  {toolkit.description}
+                </p>
+                <span className="mt-5 text-sm font-medium text-navy-800 group-hover:underline">
+                  Start →
+                </span>
+              </Link>
+            ))}
           </div>
         </div>
       </section>

@@ -11,6 +11,7 @@ Source of truth for structure/content: SPEC.md — read it before any change. Ne
 - No adversarial references to any school district.
 - Contact form uses Netlify Forms (form name "contact", attributes in components/ContactForm.tsx; submits url-encoded POST to "/"). No env vars required. Never hardcode secrets or endpoints.
 - No new dependencies unless explicitly instructed.
+- Guided Toolkits (/resources/toolkits/[slug]) use the reusable decision-tree component components/GuidedToolkit.tsx with content-as-data in app/resources/toolkits/toolkits.ts. Client state only — no backend, no AI calls, no form submission. Toolkit copy is educational parenting strategy language only: no clinical/diagnostic terms and no "ABA"/"behavior analysis"/"therapy"/"treatment"/"intervention" framing; every outcome screen carries the articles' one-line educational disclaimer and a consult CTA.
 - Study Plan Builder (/resources/plan-builder) is fully client-side: no backend, no AI calls, no storage, no network calls — keep it that way. Engine is pure/deterministic in lib/planBuilder.ts with strategy content in lib/strategyBlocks.ts. Copy is study-skills language only (no clinical/diagnostic/therapy terms, no "AI" claims). Resources page cross-links ZenEd (https://kunalkaiser.github.io/zened/), our free companion Regents site.
 - Every change ends with `npm run build` passing with zero errors.
 
