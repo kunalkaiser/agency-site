@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { SERVICES } from "@/lib/services";
+import { VISIBLE_SERVICES } from "@/lib/services";
 
 const FALLBACK_EMAIL = "hello@example.com";
 
@@ -178,7 +178,7 @@ export default function ContactForm() {
             <option value="" disabled>
               Select one
             </option>
-            {SERVICES.map((s) => (
+            {VISIBLE_SERVICES.map((s) => (
               <option key={s.slug}>{s.name}</option>
             ))}
             <option>Not sure yet</option>

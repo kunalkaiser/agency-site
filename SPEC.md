@@ -22,6 +22,7 @@ Intro + 4 cards linking to service pages, grouped by outcome.
 
 ### 3–6. Service pages (shared template)
 Tutoring | College Counseling | SETSS (NYC-specific by nature: a NYC DOE program available to NYC students through DOE authorization — state this explicitly on page) | IEP Advocacy (virtual, nationwide; does not accept engagements involving the NYC DOE — state this explicitly on page).
+IEP Advocacy is currently flag-hidden (`hidden: true` in lib/services.ts) pending re-enable: excluded from listings, prose, contact form, and sitemap; its route 404s. Page component and content are intact — flipping the flag restores it fully.
 Template sections: Who it's for → Problem it solves → What's included → How it works → Expected outcomes → Timeline → Pricing approach (no numbers) → FAQ (3 questions) → CTA.
 
 ### 7. About

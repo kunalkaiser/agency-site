@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { SERVICES } from "@/lib/services";
+import { ADVOCACY_VISIBLE, VISIBLE_SERVICES } from "@/lib/services";
 import CtaSection from "@/components/CtaSection";
 
 export const metadata: Metadata = {
   title: "Services",
-  description:
-    "Virtual tutoring, college counseling, SETSS, and IEP advocacy for students and families nationwide.",
+  description: ADVOCACY_VISIBLE
+    ? "Virtual tutoring, college counseling, SETSS, and IEP advocacy for students and families nationwide."
+    : "Virtual tutoring, college counseling, and SETSS for students and families nationwide.",
 };
 
 export default function ServicesPage() {
@@ -26,7 +27,7 @@ export default function ServicesPage() {
       <section>
         <div className="mx-auto max-w-content px-5 py-16 sm:px-8 sm:py-20">
           <div className="grid gap-6 md:grid-cols-2">
-            {SERVICES.map((service) => (
+            {VISIBLE_SERVICES.map((service) => (
               <Link
                 key={service.slug}
                 href={`/services/${service.slug}`}

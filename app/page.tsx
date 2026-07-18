@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { SERVICES } from "@/lib/services";
+import { ADVOCACY_VISIBLE, VISIBLE_SERVICES } from "@/lib/services";
 import CtaSection from "@/components/CtaSection";
 import { SITE_NAME } from "@/lib/site";
 
 export const metadata: Metadata = {
   // The layout's title.template doesn't apply to its own segment, so spell it out.
   title: `Home | ${SITE_NAME}`,
-  description:
-    "Strategic education and behavioral support for students, families, and schools. Virtual tutoring, college counseling, special education support, and advocacy for families nationwide.",
+  description: ADVOCACY_VISIBLE
+    ? "Strategic education and behavioral support for students, families, and schools. Virtual tutoring, college counseling, special education support, and advocacy for families nationwide."
+    : "Strategic education and behavioral support for students, families, and schools. Virtual tutoring, college counseling, and special education support for families nationwide.",
 };
 
 const WHY_US = [
@@ -18,7 +19,9 @@ const WHY_US = [
   },
   {
     title: "One plan, one team",
-    body: "Tutoring, counseling, specialized support, and advocacy under one roof — so your student's plan is coherent, not pieced together.",
+    body: ADVOCACY_VISIBLE
+      ? "Tutoring, counseling, specialized support, and advocacy under one roof — so your student's plan is coherent, not pieced together."
+      : "Tutoring, counseling, and specialized support under one roof — so your student's plan is coherent, not pieced together.",
   },
   {
     title: "Calm, collaborative approach",
@@ -29,7 +32,9 @@ const WHY_US = [
 const WHO_WE_HELP = [
   {
     title: "Parents",
-    body: "Guidance, advocacy support, and qualified providers so you can make confident decisions for your child.",
+    body: ADVOCACY_VISIBLE
+      ? "Guidance, advocacy support, and qualified providers so you can make confident decisions for your child."
+      : "Guidance and qualified providers so you can make confident decisions for your child.",
   },
   {
     title: "Students",
@@ -73,8 +78,10 @@ export default function HomePage() {
             Strategic education and behavioral support for students, families, and schools.
           </h1>
           <p className="mt-6 max-w-2xl text-lg text-sand-200">
-            Virtual tutoring, college counseling, special education support, and advocacy for
-            families nationwide — one team, one coherent plan for your student.
+            {ADVOCACY_VISIBLE
+              ? "Virtual tutoring, college counseling, special education support, and advocacy for families nationwide"
+              : "Virtual tutoring, college counseling, and special education support for families nationwide"}{" "}
+            — one team, one coherent plan for your student.
           </p>
           <div className="mt-9 flex flex-col gap-3 sm:flex-row">
             <Link
@@ -97,8 +104,12 @@ export default function HomePage() {
       <section>
         <div className="mx-auto max-w-content px-5 py-16 sm:px-8 sm:py-20">
           <h2 className="font-serif text-2xl font-semibold text-navy-900 sm:text-3xl">Our services</h2>
-          <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {SERVICES.map((service) => (
+          <div
+            className={`mt-8 grid gap-5 sm:grid-cols-2 ${
+              VISIBLE_SERVICES.length >= 4 ? "lg:grid-cols-4" : "lg:grid-cols-3"
+            }`}
+          >
+            {VISIBLE_SERVICES.map((service) => (
               <Link
                 key={service.slug}
                 href={`/services/${service.slug}`}

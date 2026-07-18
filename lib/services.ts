@@ -7,6 +7,9 @@ export type Service = {
   outcomeGroup: string;
   shortDescription: string;
   areaNote?: string;
+  /** Hidden services keep their data and page component but are excluded
+   *  from listings, sitemap, and prose, and their route 404s. */
+  hidden?: boolean;
   whoItsFor: string[];
   problemItSolves: string;
   whatsIncluded: string[];
@@ -187,6 +190,7 @@ export const SERVICES: Service[] = [
     name: "IEP Advocacy",
     cardTitle: "IEP Advocacy",
     outcomeGroup: "Family advocacy",
+    hidden: true, // Temporarily off the public site — flip to re-enable.
     shortDescription:
       "Expert virtual guidance through the IEP process so families nationwide can participate with confidence.",
     areaNote:
@@ -239,6 +243,11 @@ export const SERVICES: Service[] = [
     ],
   },
 ];
+
+export const VISIBLE_SERVICES = SERVICES.filter((s) => !s.hidden);
+
+// True when IEP Advocacy is publicly offered — gates prose that mentions it.
+export const ADVOCACY_VISIBLE = VISIBLE_SERVICES.some((s) => s.slug === "iep-advocacy");
 
 export function getService(slug: string): Service {
   const service = SERVICES.find((s) => s.slug === slug);

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import ContactForm from "@/components/ContactForm";
 import { SERVICE_AREA } from "@/lib/site";
+import { ADVOCACY_VISIBLE } from "@/lib/services";
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -34,9 +35,10 @@ export default function ContactPage() {
               <div className="rounded-xl border border-navy-100 bg-white p-7">
                 <h2 className="font-serif text-xl font-semibold text-navy-900">Service area</h2>
                 <p className="mt-3 text-navy-700">
-                  {SERVICE_AREA}. SETSS is a New York City DOE program available to NYC students;
-                  IEP Advocacy is offered virtually nationwide, excluding matters involving the
-                  NYC DOE.
+                  {SERVICE_AREA}. SETSS is a New York City DOE program available to NYC students
+                  {ADVOCACY_VISIBLE
+                    ? "; IEP Advocacy is offered virtually nationwide, excluding matters involving the NYC DOE."
+                    : "."}
                 </p>
               </div>
               <div className="mt-6 rounded-xl border border-dashed border-navy-300 bg-sand-100 p-7">

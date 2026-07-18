@@ -3,6 +3,7 @@ import "./globals.css";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
+import { ADVOCACY_VISIBLE } from "@/lib/services";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -10,8 +11,9 @@ export const metadata: Metadata = {
     default: `${SITE_NAME} — Strategic Education & Behavioral Support`,
     template: `%s | ${SITE_NAME}`,
   },
-  description:
-    "Strategic education and behavioral support for students, families, and schools. Virtual tutoring, college counseling, special education support, and advocacy for families nationwide.",
+  description: ADVOCACY_VISIBLE
+    ? "Strategic education and behavioral support for students, families, and schools. Virtual tutoring, college counseling, special education support, and advocacy for families nationwide."
+    : "Strategic education and behavioral support for students, families, and schools. Virtual tutoring, college counseling, and special education support for families nationwide.",
   openGraph: {
     siteName: SITE_NAME,
     type: "website",
