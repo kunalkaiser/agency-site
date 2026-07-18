@@ -56,9 +56,9 @@ export default function ResourcesPage() {
               Every free tool, in one place
             </h2>
             <p className="mt-3 max-w-3xl leading-relaxed text-sand-200">
-              The Study Coach, the Study Plan Builder, four guided parent toolkits, all of our
-              guides, and ZenEd — our free Regents companion site — in a single directory you can
-              filter by parents, teachers, or students.
+              The Study Coach, the SAT Schedule Builder, the Study Plan Builder, four guided parent
+              toolkits, all of our guides, and ZenEd — our free Regents companion site — in a single
+              directory you can filter by parents, teachers, or students.
             </p>
             <span className="mt-6 text-sm font-medium text-sand-100 group-hover:underline">
               Browse all free tools →

@@ -31,6 +31,14 @@ export const TOOL_CARDS: ToolCard[] = [
     valueProp:
       "Turn all your grades — any format — into a weekly, monthly, or quarterly study schedule.",
   },
+  {
+    title: "SAT Schedule Builder",
+    href: "/resources/sat-schedule",
+    tag: "Interactive tool",
+    audiences: ["Students"],
+    valueProp:
+      "Turn your test date, score, and weakest area into a day-by-day Digital SAT prep schedule with practice-test days built in.",
+  },
   ...TOOLKITS.map((toolkit) => ({
     title: toolkit.title,
     href: `/resources/toolkits/${toolkit.slug}`,
