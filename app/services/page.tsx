@@ -6,7 +6,7 @@ import CtaSection from "@/components/CtaSection";
 export const metadata: Metadata = {
   title: "Services",
   description:
-    "Tutoring, college counseling, SETSS, and IEP advocacy for students and families in NYC & Westchester.",
+    "Virtual tutoring, college counseling, SETSS, and IEP advocacy for students and families nationwide.",
 };
 
 export default function ServicesPage() {

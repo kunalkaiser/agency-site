@@ -1,5 +1,5 @@
 export const SITE_NAME = "TrueCourse Education Group";
-export const SERVICE_AREA = "Serving NYC & Westchester";
+export const SERVICE_AREA = "Virtual services for families nationwide";
 // Placeholder until the production domain exists — update before launch.
 export const SITE_URL = "https://example.com";
 

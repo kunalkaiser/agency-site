@@ -35,7 +35,7 @@ export const SERVICES: Service[] = [
     whatsIncluded: [
       "An initial academic assessment that shows us — and you — precisely where to focus.",
       "A written learning plan with clear goals and milestones.",
-      "Consistent weekly one-on-one sessions, in person or remote, with a carefully matched tutor.",
+      "Consistent weekly one-on-one virtual sessions with a carefully matched tutor.",
       "Progress notes to your family at every milestone, in plain English.",
       "Coordination with classroom teachers whenever you'd like us to.",
     ],
@@ -61,9 +61,9 @@ export const SERVICES: Service[] = [
           "Core academics across K–12 — reading, writing, mathematics, and science — along with study skills and standardized test preparation. If a need falls outside our range, we'll say so and help you find the right person.",
       },
       {
-        question: "Are sessions in person or remote?",
+        question: "Where do sessions take place?",
         answer:
-          "Both. Families in NYC and Westchester can choose in-person sessions where available; remote sessions are offered throughout our service area — same tutors, same plan, same standards.",
+          "Sessions are virtual, which means families anywhere in the country get the same tutors, the same plan, and the same standards — without commutes or scheduling gymnastics.",
       },
       {
         question: "How are tutors matched to students?",
@@ -133,8 +133,10 @@ export const SERVICES: Service[] = [
     outcomeGroup: "Specialized support",
     shortDescription:
       "Special Education Teacher Support Services delivered by experienced special educators.",
+    areaNote:
+      "SETSS is a New York City DOE program, available to NYC students through DOE authorization — this service is NYC-specific by nature.",
     whoItsFor: [
-      "Students whose IEPs recommend SETSS support.",
+      "NYC students whose IEPs recommend SETSS support.",
       "Families who want a qualified, dependable provider for mandated services — and clear communication while they're delivered.",
       "Students who benefit from specialized instruction alongside their general education program.",
     ],
@@ -166,7 +168,7 @@ export const SERVICES: Service[] = [
       {
         question: "What is SETSS?",
         answer:
-          "Special Education Teacher Support Services — specialized instruction from a certified special education teacher, provided to students with IEPs, individually or in small groups.",
+          "Special Education Teacher Support Services — a New York City DOE program providing specialized instruction from a certified special education teacher to students with IEPs, individually or in small groups. It is available to NYC students through DOE authorization.",
       },
       {
         question: "Who provides the sessions?",
@@ -186,11 +188,11 @@ export const SERVICES: Service[] = [
     cardTitle: "IEP Advocacy",
     outcomeGroup: "Family advocacy",
     shortDescription:
-      "Expert guidance through the IEP process so families can participate with confidence. Westchester only.",
+      "Expert virtual guidance through the IEP process so families nationwide can participate with confidence.",
     areaNote:
-      "IEP Advocacy is offered in Westchester County only.",
+      "IEP Advocacy is offered virtually to families nationwide. We do not accept advocacy engagements involving the New York City Department of Education.",
     whoItsFor: [
-      "Westchester families going through the IEP or evaluation process for the first time.",
+      "Families going through the IEP or evaluation process for the first time.",
       "Parents who want an experienced partner beside them when preparing for IEP meetings.",
       "Families who aren't sure the current plan reflects who their child actually is.",
     ],
@@ -220,9 +222,9 @@ export const SERVICES: Service[] = [
       "Advocacy is offered as focused engagements around specific meetings or as ongoing support through the school year. After the initial records review, we'll recommend the scope that fits — and tell you honestly if you don't need us.",
     faqs: [
       {
-        question: "Is this service available in NYC?",
+        question: "Where is IEP Advocacy available?",
         answer:
-          "No — IEP Advocacy is offered in Westchester County only. Our tutoring, college counseling, and SETSS services are available across NYC and Westchester.",
+          "Advocacy is delivered virtually, so we work with families nationwide. One exception: We do not accept advocacy engagements involving the New York City Department of Education.",
       },
       {
         question: "Will you attend IEP meetings with us?",

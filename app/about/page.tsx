@@ -5,14 +5,16 @@ import { SITE_NAME } from "@/lib/site";
 export const metadata: Metadata = {
   title: "About",
   description:
-    "The mission, founder, and philosophy behind TrueCourse Education Group — PhD-led education services for NYC & Westchester families.",
+    "The mission, founder, and philosophy behind TrueCourse Education Group — PhD-led virtual education services for families nationwide.",
 };
 
 const CREDENTIALS = [
-  "PhD in [field] — placeholder for final credential details.",
-  "Years of experience in special education settings — placeholder bullet.",
-  "Research background in [area] — placeholder bullet.",
-  "Additional certifications and affiliations — placeholder bullet.",
+  "PhD in Molecular Biomedical Technology.",
+  "Master's degree in special education.",
+  "Practicing special education teacher in public schools.",
+  "Adjunct faculty at Mercy University.",
+  "10+ years of experience across research and management consulting.",
+  "Published researcher, with peer-reviewed publications and patents.",
 ];
 
 const WHY_DIFFERENT = [
@@ -42,8 +44,8 @@ export default function AboutPage() {
           <p className="mt-6 max-w-2xl text-lg leading-relaxed text-sand-200">
             Our mission is simple: every student deserves a course through school that fits who they
             are — and every family deserves a partner who can help chart it. We bring expert,
-            research-grounded support to students, families, and schools across NYC and Westchester,
-            delivered calmly, explained plainly, and measured honestly.
+            research-grounded support to students, families, and schools nationwide through virtual
+            services, delivered calmly, explained plainly, and measured honestly.
           </p>
         </div>
       </section>
@@ -54,14 +56,20 @@ export default function AboutPage() {
           <h2 className="font-serif text-2xl font-semibold text-navy-900 sm:text-3xl">Founder story</h2>
           <div className="mt-6 max-w-3xl space-y-5 leading-relaxed text-navy-800">
             <p>
-              Placeholder copy — the founder&apos;s story goes here. A brief narrative covering the
-              path into education: early classroom experience, the questions that led to doctoral
-              study, and the pattern noticed along the way — that families were navigating
-              consequential school decisions without a knowledgeable guide.
+              Our founder&apos;s path runs through both the laboratory and the classroom. Trained as
+              a scientist — with a PhD in Molecular Biomedical Technology and more than a decade of
+              experience across research and management consulting — our founder was drawn to the
+              work at the heart of this practice: earning a master&apos;s degree in special
+              education and teaching special education in public schools, a role that continues
+              today. That work is joined by an adjunct faculty appointment at Mercy University and
+              a research record that includes peer-reviewed publications and patents.
             </p>
             <p>
-              Placeholder copy — second paragraph. Why {SITE_NAME} was founded, what it set out to
-              do differently, and the students and families it exists to serve.
+              {SITE_NAME} grew out of what that combination of training makes plain: consequential
+              school decisions deserve the same rigor as any research question, and families
+              navigating them deserve a knowledgeable guide. This is a founder-led practice — every
+              family works directly with the founder, from the first conversation to the last
+              review.
             </p>
           </div>
         </div>

@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   // The layout's title.template doesn't apply to its own segment, so spell it out.
   title: `Home | ${SITE_NAME}`,
   description:
-    "Strategic education and behavioral support for students, families, and schools. A NYC & Westchester agency offering tutoring, college counseling, special education support, and advocacy.",
+    "Strategic education and behavioral support for students, families, and schools. Virtual tutoring, college counseling, special education support, and advocacy for families nationwide.",
 };
 
 const WHY_US = [
@@ -60,7 +60,7 @@ const CREDENTIALS = [
   "PhD-led practice",
   "Special education expertise",
   "Research-informed methods",
-  "NYC & Westchester",
+  "Virtual · Nationwide",
 ];
 
 export default function HomePage() {
@@ -73,8 +73,8 @@ export default function HomePage() {
             Strategic education and behavioral support for students, families, and schools.
           </h1>
           <p className="mt-6 max-w-2xl text-lg text-sand-200">
-            A NYC &amp; Westchester agency offering tutoring, college counseling, special education
-            support, and advocacy — one team, one coherent plan for your student.
+            Virtual tutoring, college counseling, special education support, and advocacy for
+            families nationwide — one team, one coherent plan for your student.
           </p>
           <div className="mt-9 flex flex-col gap-3 sm:flex-row">
             <Link

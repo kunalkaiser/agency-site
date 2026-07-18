@@ -6,7 +6,7 @@ Source of truth for structure/content: SPEC.md — read it before any change. Ne
 ## Rules
 - All four service pages render through the single shared ServicePageTemplate. Never fork per-page layouts.
 - No "ABA" or "behavior analysis" service claims anywhere on the site.
-- IEP advocacy content is Westchester-only — keep that stated on its page.
+- Positioning is virtual-nationwide ("Virtual services for families nationwide"), with two exceptions kept stated on their pages: SETSS is NYC-specific by nature (a NYC DOE program available to NYC students through DOE authorization), and IEP advocacy is virtual-nationwide but does not accept engagements involving the NYC DOE.
 - No adversarial references to any school district.
 - Contact form uses Netlify Forms (form name "contact", attributes in components/ContactForm.tsx; submits url-encoded POST to "/"). No env vars required. Never hardcode secrets or endpoints.
 - No new dependencies unless explicitly instructed.

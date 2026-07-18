@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     template: `%s | ${SITE_NAME}`,
   },
   description:
-    "Strategic education and behavioral support for students, families, and schools. Tutoring, college counseling, special education support, and advocacy serving NYC & Westchester.",
+    "Strategic education and behavioral support for students, families, and schools. Virtual tutoring, college counseling, special education support, and advocacy for families nationwide.",
   openGraph: {
     siteName: SITE_NAME,
     type: "website",

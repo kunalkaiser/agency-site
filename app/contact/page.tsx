@@ -5,7 +5,7 @@ import { SERVICE_AREA } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Contact",
   description:
-    "Book a consult or send us a message. Serving NYC & Westchester — we respond within 2 business days.",
+    "Book a consult or send us a message. Virtual services for families nationwide — we respond within 2 business days.",
 };
 
 export default function ContactPage() {
@@ -34,8 +34,9 @@ export default function ContactPage() {
               <div className="rounded-xl border border-navy-100 bg-white p-7">
                 <h2 className="font-serif text-xl font-semibold text-navy-900">Service area</h2>
                 <p className="mt-3 text-navy-700">
-                  {SERVICE_AREA}. Remote services are available throughout our service area; IEP
-                  Advocacy is offered in Westchester only.
+                  {SERVICE_AREA}. SETSS is a New York City DOE program available to NYC students;
+                  IEP Advocacy is offered virtually nationwide, excluding matters involving the
+                  NYC DOE.
                 </p>
               </div>
               <div className="mt-6 rounded-xl border border-dashed border-navy-300 bg-sand-100 p-7">
