@@ -39,6 +39,14 @@ export const TOOL_CARDS: ToolCard[] = [
     valueProp:
       "Turn your test date, score, and weakest area into a day-by-day Digital SAT prep schedule with practice-test days built in.",
   },
+  {
+    title: "Which Support Fits?",
+    href: "/resources/which-support",
+    tag: "Guided chooser",
+    audiences: ["Parents", "Teachers", "Students"],
+    valueProp:
+      "Answer two or three questions and get pointed at the one service — or free tool — that fits, honestly.",
+  },
   ...TOOLKITS.map((toolkit) => ({
     title: toolkit.title,
     href: `/resources/toolkits/${toolkit.slug}`,

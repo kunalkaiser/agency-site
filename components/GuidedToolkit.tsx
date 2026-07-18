@@ -43,6 +43,56 @@ const EMOJI_RULES: [RegExp, string][] = [
   [/siblings, furniture/i, "💥"],
   [/trouble settling/i, "🌀"],
   [/tiny/i, "🌋"],
+  // report-card-conversations
+  [/defensive — excuses/i, "🛡️"],
+  [/discouraged/i, "😔"],
+  [/a shrug/i, "🤷"],
+  [/can't face it/i, "🙈"],
+  [/isn't their fault/i, "👉"],
+  [/one rough stretch/i, "📉"],
+  [/building for a while/i, "🕰️"],
+  [/changes the subject/i, "💨"],
+  [/grades don't matter/i, "😐"],
+  // parent-teacher-conference-prep
+  [/things seem fine/i, "🙂"],
+  [/grades are slipping/i, "📉"],
+  [/specific concern/i, "❗"],
+  [/beyond grades/i, "🔍"],
+  [/work on next/i, "🧭"],
+  [/i have a theory/i, "💡"],
+  [/need to find out/i, "🕵️"],
+  [/probably already knows/i, "🤝"],
+  [/news to them/i, "📣"],
+  // test-day-support
+  [/nerves —/i, "😬"],
+  [/underprepared/i, "⏳"],
+  [/careless —/i, "✏️"],
+  [/night before/i, "🌙"],
+  [/in the room/i, "🧊"],
+  [/plan the studying/i, "🗓️"],
+  [/put it off/i, "🐢"],
+  [/rushing to finish/i, "🏃"],
+  [/misreading/i, "👀"],
+  // summer-learning-without-burnout
+  [/keep skills fresh/i, "🌿"],
+  [/catch up/i, "🪜"],
+  [/get ahead/i, "🚀"],
+  [/daily fight/i, "🥊"],
+  [/never happens/i, "🌫️"],
+  [/very — we know/i, "🎯"],
+  [/fuzzy/i, "❓"],
+  [/they're hungry/i, "🔥"],
+  [/wasted summer/i, "🙋"],
+  // reading-at-home
+  [/elementary school/i, "🎒"],
+  [/middle school/i, "🚲"],
+  [/high school/i, "🎓"],
+  [/resists reading alone/i, "🛋️"],
+  [/avoids books/i, "🙈"],
+  [/screens won/i, "📱"],
+  [/books are boring/i, "🥱"],
+  [/reading anything at all/i, "📖"],
+  [/deepen what they already do/i, "📚"],
 ];
 
 function emojiFor(label: string): string {
@@ -69,6 +119,16 @@ const SAY_THIS: Record<string, string> = {
   "blowup-demands": "Ten more minutes of break, then homework.",
   "withdrawn-fine": "What was the best thing at lunch?",
   "withdrawn-irritated": "That tone doesn't work — we'll talk after dinner.",
+  "rc-defensive-shame": "What felt hardest this quarter?",
+  "rc-defensive-blame": "Walk me through what happens in that class.",
+  "rc-discouraged-new": "One rough quarter is information, not a verdict.",
+  "ptc-fine-next": "What's one thing we could do at home that would actually help?",
+  "ptc-slip-theory": "We've noticed the grade slipping — what are you seeing?",
+  "td-nerves-night": "You've done the work — go run the plan.",
+  "td-underprep-delay": "Just the first five minutes, then decide.",
+  "sl-ahead-mine": "You'll walk into algebra already knowing the first month.",
+  "ra-elem-readaloud": "Would you have done what she did?",
+  "ra-high-anything": "Someone said this book is overrated — settle it for me.",
 };
 
 type FlowState = { stepId: string; outcomeId: string | null };
@@ -196,7 +256,7 @@ export default function GuidedToolkit({ toolkit }: { toolkit: Toolkit }) {
                   <ChatIcon name="book" />
                 </span>
                 <span>
-                  Related reading:{" "}
+                  Related:{" "}
                   <Link
                     href={`/resources/${outcome.related.slug}`}
                     className="font-medium underline underline-offset-4 hover:text-navy-950"

@@ -521,6 +521,617 @@ export const TOOLKITS: Toolkit[] = [
       },
     ],
   },
+  {
+    slug: "report-card-conversations",
+    title: "Report Card Conversations",
+    description:
+      "A guided walk through talking about a disappointing report card without shame — matched to how your child reacted.",
+    intro:
+      "A rough report card is one conversation, and how it goes shapes the whole next quarter. Answer two quick questions about how your child reacted and get an approach matched to it.",
+    firstStep: "start",
+    steps: [
+      {
+        id: "start",
+        question: "A report card came home and it's not what you hoped. How did your child react?",
+        options: [
+          { label: "Defensive — excuses, blame, “the teacher hates me”", next: "defensive" },
+          { label: "Discouraged — “I'm just bad at school”", next: "discouraged" },
+          { label: "A shrug — they don't seem to care", next: "flat" },
+        ],
+      },
+      {
+        id: "defensive",
+        question: "What do you think the defensiveness is protecting?",
+        options: [
+          { label: "They know it's bad and can't face it", next: "rc-defensive-shame" },
+          { label: "They genuinely believe it isn't their fault", next: "rc-defensive-blame" },
+        ],
+      },
+      {
+        id: "discouraged",
+        question: "How long has that story been building?",
+        options: [
+          { label: "It's new — one rough stretch", next: "rc-discouraged-new" },
+          { label: "It's been building for a while", next: "rc-discouraged-long" },
+        ],
+      },
+      {
+        id: "flat",
+        question: "What does the shrug usually look like?",
+        options: [
+          { label: "Changes the subject, leaves the room", next: "rc-flat-avoids" },
+          { label: "Says grades don't matter anyway", next: "rc-flat-dismisses" },
+        ],
+      },
+    ],
+    outcomes: [
+      {
+        id: "rc-defensive-shame",
+        title: "Lower the stakes before you raise the subject",
+        intro:
+          "Defensiveness that guards embarrassment melts when the conversation stops feeling like a verdict. Your job in round one isn't to fix the grades — it's to make the topic safe to discuss.",
+        steps: [
+          "Wait a day. A report card read aloud at the kitchen counter in minute one goes badly for everyone; the same conversation after dinner tomorrow goes differently.",
+          "Open with curiosity, not the grade: “What felt hardest this quarter?” Questions about their experience get answers; questions about the number get walls.",
+          "Pick one subject to work on — the one they choose, ideally. A whole-report-card project feels like drowning; one subject feels like a plan.",
+          "Praise effort you actually saw, separately from outcomes: the studying that happened, the homework that got turned in. Effort is the lever they control.",
+          "Close with a next step, not a punishment: together, write one question to ask the teacher about where the points went.",
+        ],
+      },
+      {
+        id: "rc-defensive-blame",
+        title: "Follow the story to the facts",
+        intro:
+          "When a child genuinely believes the grade is unfair, arguing the point head-on entrenches it. Walking through the actual work together lets the facts do the talking — gently.",
+        steps: [
+          "Take the belief seriously first: “Walk me through what happens in that class.” You'll learn something real — and they'll stop bracing for a lecture.",
+          "Look at graded work together, side by side, with real curiosity. Patterns show up fast: missing assignments, one question type, points lost at the end.",
+          "Keep it to one subject. The goal is one clear picture, not a prosecution across five classes.",
+          "Email the teacher together asking about patterns — “Where does the grade mostly come from?” — so the answer arrives from the source, not from you.",
+          "Frame the quarter ahead around effort they control: turned-in work, corrected tests, one question asked per week in class.",
+        ],
+        related: { slug: "plan-builder", title: "Study Plan Builder" },
+      },
+      {
+        id: "rc-discouraged-new",
+        title: "Name it as a stretch, not a self",
+        intro:
+          "One rough quarter can quietly become “I'm bad at school” if nobody offers a different story. Your job is to keep the setback sized as a setback.",
+        steps: [
+          "Say the frame out loud: “One rough quarter is information, not a verdict.” Kids borrow the story the calmest adult in the room is telling.",
+          "Ask what changed this quarter — harder material, new teacher, a busy season — and listen. New struggles usually have findable causes.",
+          "Pick the one subject where a visible win is most reachable and focus there. Nothing rebuilds a discouraged student like one grade moving.",
+          "Separate effort from outcome every week: notice the studying, the redone problems, the asked question — before any grade arrives to judge it.",
+        ],
+      },
+      {
+        id: "rc-discouraged-long",
+        title: "Rebuild on a longer runway",
+        intro:
+          "A discouragement that's been building for a while deserves more than a pep talk. The plan is small wins on purpose, adults aligned, and honest thought about extra help.",
+        steps: [
+          "Start with their story, not your plan: “When did school start feeling this way?” The answer often relocates the real starting point.",
+          "Choose one subject and one small, near-term goal — this unit's quiz, not this year's grade. Small enough to win matters more than big enough to impress.",
+          "Set up a teacher follow-up in that one subject: share the goal, ask what they see, agree how you'll both know it's working.",
+          "Mark progress visibly at home — a redone test taped to the fridge outranks a lecture about potential.",
+          "If the pattern spans years and subjects, that's information: outside help that starts from where your child actually is can change the slope.",
+        ],
+        related: { slug: "tutoring-vs-school-services", title: "Tutoring vs. School Services: How to Decide" },
+      },
+      {
+        id: "rc-flat-avoids",
+        title: "Make the conversation smaller than the avoidance",
+        intro:
+          "Leaving the room is rarely indifference — it's usually a conversation that feels too big to have. Shrink it until it fits.",
+        steps: [
+          "Move it sideways: the car, a walk, cooking together. Face-to-face across a table reads as a tribunal; side-by-side reads as company.",
+          "Ask exactly one question and stop: “What felt hardest this quarter?” Twenty questions is why the room empties.",
+          "Let silence do some work. A pause that feels long to you often ends with them filling it.",
+          "Agree on one subject and one step, then genuinely drop the rest for now. Follow-through on “that's all I wanted to talk about” buys next quarter's conversation.",
+        ],
+      },
+      {
+        id: "rc-flat-dismisses",
+        title: "Connect grades to their goals, not yours",
+        intro:
+          "“Grades don't matter” is usually armor, and sometimes a test of whether you'll lecture. Skip the lecture; connect the dots to something they already want.",
+        steps: [
+          "Ask about their goals first — the team, the game design idea, the car, the college a cousin went to. Listen longer than feels natural.",
+          "Draw the line from one goal back to one subject, once, without a speech: eligibility rules, a program's requirements, a skill the goal needs.",
+          "Keep expectations concrete and small: work turned in, one subject's grade moving. Debating whether grades matter in the abstract is a game nobody wins.",
+          "Watch effort like a hawk and name it when you see it — dismissiveness often fades when trying quietly starts paying.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "parent-teacher-conference-prep",
+    title: "Parent–Teacher Conference Prep",
+    description:
+      "A guided walk through getting real value from your conference — matched to the situation you're walking in with.",
+    intro:
+      "Conference slots are short and they go fast. Two quick questions, and you'll walk in with the right questions, the right materials, and a plan for what happens after.",
+    firstStep: "start",
+    steps: [
+      {
+        id: "start",
+        question: "Your conference is coming up. What's the situation going in?",
+        options: [
+          { label: "Things seem fine — I just want to use the time well", next: "fine" },
+          { label: "Grades are slipping and I want answers", next: "slipping" },
+          { label: "There's one specific concern I need to raise", next: "concern" },
+        ],
+      },
+      {
+        id: "fine",
+        question: "What would make the meeting feel genuinely worthwhile?",
+        options: [
+          { label: "Knowing how they're really doing, beyond grades", next: "ptc-fine-depth" },
+          { label: "Knowing what we should work on next", next: "ptc-fine-next" },
+        ],
+      },
+      {
+        id: "slipping",
+        question: "Do you have a guess about why?",
+        options: [
+          { label: "Yes — I have a theory", next: "ptc-slip-theory" },
+          { label: "No — that's what I need to find out", next: "ptc-slip-mystery" },
+        ],
+      },
+      {
+        id: "concern",
+        question: "How do you expect it to land?",
+        options: [
+          { label: "The teacher probably already knows", next: "ptc-concern-known" },
+          { label: "I think it will be news to them", next: "ptc-concern-new" },
+        ],
+      },
+    ],
+    outcomes: [
+      {
+        id: "ptc-fine-depth",
+        title: "Ask the questions grades can't answer",
+        intro:
+          "When things are fine, the conference is your one chance to see the student the teacher sees. Come with questions that a report card can't answer.",
+        steps: [
+          "Bring three questions, written down: “What does she do when something is hard?” “Who does he work well with?” “Where do you see them a year from now?”",
+          "Ask about patterns, not moments: “What do you see most days?” beats any single anecdote in both directions.",
+          "Ask the teacher what they'd work on next if it were their own child — teachers almost always have an answer, and it's almost always useful.",
+          "Agree on one channel for follow-up — email, the app, a note home — and thank them specifically for something you've noticed this year.",
+        ],
+      },
+      {
+        id: "ptc-fine-next",
+        title: "Leave with one thing, not ten",
+        intro:
+          "“What should we work on?” gets vague answers unless you shape it. Aim the meeting at leaving with exactly one concrete next thing.",
+        steps: [
+          "Ask it concretely: “What's one thing we could do at home that would actually help?” The word one does real work in that sentence.",
+          "Ask where the ceiling is: “Where could they stretch that school doesn't have time for?” — a good source of enrichment that doesn't duplicate class.",
+          "Write the answer down in the meeting. It signals seriousness, and it's the difference between a plan and a pleasant chat.",
+          "Agree on one follow-up channel and one check-in point — “I'll email you at midterm about how it's going.”",
+        ],
+      },
+      {
+        id: "ptc-slip-theory",
+        title: "Test your theory — don't open with it",
+        intro:
+          "A theory is useful; leading with it isn't. Teachers give better information when they describe first and respond to theories second.",
+        steps: [
+          "Open wide: “We've noticed the grade slipping — what are you seeing?” Let them paint the picture before you show them yours.",
+          "Bring two or three recent work samples, including one that went well. Comparing a good week to a bad one often locates the change.",
+          "Then offer the theory as a question: “We wondered if it's the homework load — does that match what you see?”",
+          "Ask about patterns, not incidents: which assignments, which point in the class period, which kind of question.",
+          "Leave with one agreed step each — one thing home tries, one thing the teacher tries — and one channel to compare notes in three weeks.",
+        ],
+      },
+      {
+        id: "ptc-slip-mystery",
+        title: "Go in as a detective, not a defendant",
+        intro:
+          "Not knowing why is a fine place to start — the conference is exactly the right tool for it. Structure the questions and the picture assembles fast.",
+        steps: [
+          "Ask the timeline question first: “When did you first notice the change?” Slipping that started in November has a different story than slipping since day one.",
+          "Ask for the shape of the loss: missing work, low test scores, or fading participation — each points somewhere different.",
+          "Bring work samples from before and after the slide if you have them; the difference is often visible on the page.",
+          "Resist solving it in the room. Collect, thank, and agree on one follow-up channel — then decide at home, with your child in the conversation.",
+        ],
+        related: { slug: "toolkits/report-card-conversations", title: "Report Card Conversations" },
+      },
+      {
+        id: "ptc-concern-known",
+        title: "Move from concern to plan",
+        intro:
+          "If the teacher likely already knows, the win isn't raising it — it's converting a shared awareness into a shared plan with dates on it.",
+        steps: [
+          "Name it plainly and skip the wind-up: “I want to talk about the reading. What are you seeing?” Shared concerns don't need diplomatic paragraphs.",
+          "Ask what's been tried in class already and how it's gone — you're joining something in progress, not starting it.",
+          "Agree on one step at school and one at home, small enough to actually happen this month.",
+          "Set the check-in before you leave: who reaches out, on which channel, on what date. Plans without dates dissolve.",
+        ],
+      },
+      {
+        id: "ptc-concern-new",
+        title: "Deliver news like a partner",
+        intro:
+          "Bringing a teacher something they haven't seen works best when it lands as information, not accusation. You're handing them a puzzle piece from home.",
+        steps: [
+          "Frame it as what you see at home: “Homework takes two hours and ends in tears” travels better than “the workload is unreasonable.”",
+          "Bring evidence, gently: the work sample, the time log for one week. Concrete beats characterized.",
+          "Ask genuinely what they see at school — sometimes the same child looks different in the room, and that mismatch is itself the finding.",
+          "Ask “what would you try first?” before proposing your own fix; you'll get their best thinking instead of their defense.",
+          "Agree on one follow-up channel and a two-week check-in — new information deserves a short feedback loop.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "test-day-support",
+    title: "Test-Day Support",
+    description:
+      "A guided walk through helping before, during, and after a big test — matched to your child's usual pattern.",
+    intro:
+      "Most test trouble follows one of a few patterns, and the help looks different for each. Two quick questions and you'll get a before-morning-after playbook matched to yours.",
+    firstStep: "start",
+    steps: [
+      {
+        id: "start",
+        question: "A big test is coming. What's your child's usual pattern?",
+        options: [
+          { label: "Nerves — they know the material, then freeze", next: "nerves" },
+          { label: "Underprepared — studying starts too late", next: "underprep" },
+          { label: "Careless — knows it, loses points anyway", next: "careless" },
+        ],
+      },
+      {
+        id: "nerves",
+        question: "When do the nerves peak?",
+        options: [
+          { label: "The night before", next: "td-nerves-night" },
+          { label: "In the room, during the test", next: "td-nerves-room" },
+        ],
+      },
+      {
+        id: "underprep",
+        question: "Is it a planning problem or a starting problem?",
+        options: [
+          { label: "They don't know how to plan the studying", next: "td-underprep-plan" },
+          { label: "They put it off even with a plan", next: "td-underprep-delay" },
+        ],
+      },
+      {
+        id: "careless",
+        question: "Where do the points usually go?",
+        options: [
+          { label: "Rushing to finish", next: "td-careless-rush" },
+          { label: "Misreading what was asked", next: "td-careless-misread" },
+        ],
+      },
+    ],
+    outcomes: [
+      {
+        id: "td-nerves-night",
+        title: "Win the night before",
+        intro:
+          "Night-before nerves feed on open loops — unpacked bags, unfinished review, unknown logistics. Close the loops and the evening gets quieter on its own.",
+        steps: [
+          "Make a night-before routine and keep it identical for every test: bag packed, materials ready, clothes out, then done. Sameness is the message that this is handled.",
+          "End review by dinner. Late-night studying trades real points (sleep) for imaginary ones — say that out loud and mean it.",
+          "Swap reassurance for logistics. “You'll do great” invites debate; “Your bag's ready, breakfast is set” closes topics.",
+          "Send the morning script the night before: “You've done the work — go run the plan.” Knowing what tomorrow's send-off sounds like is itself calming.",
+          "Keep your own calm honest — kids read the room. If you're pacing, the routine isn't done: finish the checklist together and sit down.",
+        ],
+      },
+      {
+        id: "td-nerves-room",
+        title: "Give them a script for the freeze",
+        intro:
+          "Freezing mid-test needs a plan that lives inside the room, where you aren't. Practice it at home until it's automatic.",
+        steps: [
+          "Teach one reset: slow breath, drop the shoulders, reread the current question only. Practice it during homework so test day isn't its debut.",
+          "Agree on the skip rule ahead of time: stuck for 30 seconds → mark it, move on, come back. Permission to skip, granted by a parent in advance, is surprisingly powerful.",
+          "Rehearse the first minute: read the directions, do the easiest question first, get one thing right before the hard part. Momentum beats dread.",
+          "On test morning, keep breakfast normal and the script short: “You've done the work — go run the plan.” No new advice at the door.",
+          "Afterward, debrief the strategy, not the score: “Did the reset help?” builds a tool they'll carry into every test after this one.",
+        ],
+      },
+      {
+        id: "td-underprep-plan",
+        title: "Make the plan the easy part",
+        intro:
+          "Some students put off studying because nobody ever showed them what a study plan looks like. Build one together once — then hand the tool over.",
+        steps: [
+          "Count backward from test day together: what's left, how many evenings, what fits where. Ten minutes with a calendar removes most of the mystery.",
+          "Split material into small named chunks — “unit 3 vocabulary,” “chapter 5 problems” — and assign each a day. Vague plans (“study science”) don't get started.",
+          "Front-load the hardest topic while the runway is long, and keep the night before for light review only.",
+          "Build the plan with a free tool once so they see the shape — then next test, they build it themselves and you just admire it.",
+        ],
+        related: { slug: "sat-schedule", title: "SAT Schedule Builder" },
+      },
+      {
+        id: "td-underprep-delay",
+        title: "Shrink the start, protect the streak",
+        intro:
+          "A plan that never starts isn't a planning problem — it's a starting problem. Make day one so small it's hard to refuse, and guard the chain of days.",
+        steps: [
+          "Set a daily 15-minute study anchor at the same time each day — after snack, before anything fun. The clock starts it, so nobody has to negotiate it.",
+          "Use the five-minute deal: “Just the first five minutes, then decide.” Almost everyone keeps going once the notebook is open.",
+          "Track the streak visibly — an X on the calendar per day studied. Streaks recruit stubbornness to your side.",
+          "Put the phone in another room for the 15 minutes; the shortest session loses to a buzzing screen.",
+          "For a topic they're stuck on, a guided free tool can turn “I don't know where to start” into a two-week plan in five minutes.",
+        ],
+        related: { slug: "study-coach", title: "Study Coach" },
+      },
+      {
+        id: "td-careless-rush",
+        title: "Make checking a scheduled step",
+        intro:
+          "Rushing isn't a character flaw; it's a habit of treating “done” as the finish line. Move the finish line to “checked.”",
+        steps: [
+          "During homework, budget the last tenth of the time for checking — every time. Checking practiced at home shows up on tests uninvited.",
+          "Build a three-line personal checklist from their actual mistakes: reread the question, check signs or spelling, look at the last problem again.",
+          "Practice pacing with a timer on ordinary assignments: finishing with five minutes to spare, on purpose, is a trainable skill.",
+          "Debrief after the test without interrogation: “How did the pacing feel?” — then let it go until the graded copy comes back with its lessons attached.",
+        ],
+      },
+      {
+        id: "td-careless-misread",
+        title: "Slow down the first read, not the whole test",
+        intro:
+          "Misread questions lose points at the very first step, which is also the cheapest place to fix them. The whole strategy is: own the question before answering it.",
+        steps: [
+          "Teach question-first reading: underline what's actually being asked — not the whole problem, just the ask — before starting any work.",
+          "Practice the restate habit on homework: say the question in their own words first. If they can't, that's the discovery, made cheaply.",
+          "Keep an error log of misread questions and read it together weekly — the same traps (“choose the FALSE statement,” units, “both parts”) repeat forever.",
+          "After the test, debrief gently and specifically: “Any questions that turned out to be asking something different?” Naming the trap is half of never falling for it again.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "summer-learning-without-burnout",
+    title: "Summer Learning Without Burnout",
+    description:
+      "A guided walk through a summer that keeps learning alive without wrecking the break — matched to your honest goal.",
+    intro:
+      "Summers work best when the goal is named out loud — keeping fresh, catching up, and getting ahead are three different summers. Two quick questions and you'll get the version that fits yours.",
+    firstStep: "start",
+    steps: [
+      {
+        id: "start",
+        question: "What's the honest goal for this summer?",
+        options: [
+          { label: "Keep skills fresh", next: "fresh" },
+          { label: "Catch up — the year left gaps", next: "catchup" },
+          { label: "Get ahead", next: "ahead" },
+        ],
+      },
+      {
+        id: "fresh",
+        question: "What's the bigger risk at your house?",
+        options: [
+          { label: "It turns into a daily fight", next: "sl-fresh-fight" },
+          { label: "It just quietly never happens", next: "sl-fresh-drift" },
+        ],
+      },
+      {
+        id: "catchup",
+        question: "How clear are you on the gaps?",
+        options: [
+          { label: "Very — we know the subjects", next: "sl-catchup-clear" },
+          { label: "Fuzzy — just “behind”", next: "sl-catchup-fuzzy" },
+        ],
+      },
+      {
+        id: "ahead",
+        question: "Whose idea is getting ahead?",
+        options: [
+          { label: "Theirs — they're hungry for it", next: "sl-ahead-theirs" },
+          { label: "Mine — I don't want a wasted summer", next: "sl-ahead-mine" },
+        ],
+      },
+    ],
+    outcomes: [
+      {
+        id: "sl-fresh-fight",
+        title: "Make it small, samely, and not yours",
+        intro:
+          "Summer fights are usually about size and surprise. A tiny fixed anchor, owned by the routine instead of by you, removes both.",
+        steps: [
+          "Set a 20-minute daily anchor at the same time — right after breakfast works best — and let the clock be the one who starts it.",
+          "Let them choose the content inside the container: reading, math practice, a language app. The time is non-negotiable; the menu is theirs.",
+          "Never extend a session that went well. Twenty minutes means twenty — trust is what makes tomorrow's twenty happen without a fight.",
+          "Fold learning into real life where no one can call it school: recipe math, trip budgets, reading the game's rulebook aloud.",
+        ],
+      },
+      {
+        id: "sl-fresh-drift",
+        title: "Attach it to something that already happens",
+        intro:
+          "Plans that rely on remembering die by July. Plans attached to an existing daily event survive, because breakfast never forgets to happen.",
+        steps: [
+          "Anchor 20 minutes to a fixed daily event — after breakfast, before screens unlock. The sequence does the remembering.",
+          "Make it visible: a paper calendar with an X per day. In week three the chain itself becomes the reason to keep going.",
+          "Stack the environment: books in the car and bathroom, puzzle on the porch table. Availability quietly beats intention.",
+          "Give reading full autonomy — graphic novels, sports bios, reread series all count. Summer reading has one job: staying voluntary.",
+        ],
+        related: { slug: "toolkits/reading-at-home", title: "Reading at Home" },
+      },
+      {
+        id: "sl-catchup-clear",
+        title: "Run a short, honest campaign",
+        intro:
+          "Known gaps deserve a real plan — and a boundary, so catch-up doesn't quietly eat the whole summer. Aim for focused weekday minutes and a finish line.",
+        steps: [
+          "Turn last year's grades into a schedule with the free Plan Builder — subjects in, weekly plan out — so the summer plan is a document, not a mood.",
+          "Cap it: 30–45 focused minutes on weekdays, mornings if you can, weekends off. Catch-up sustained beats catch-up heroic.",
+          "Work the earliest gap first — this year's confusion usually stands on last year's shaky topic.",
+          "Set a mid-summer checkpoint: a practice quiz or a redone old test. If it's working, ease off; if not, adjust while there's still runway.",
+          "Protect actual summer on purpose — the pool, the cousins, the boredom. A rested student in September outperforms a resentful one.",
+        ],
+        related: { slug: "plan-builder", title: "Study Plan Builder" },
+      },
+      {
+        id: "sl-catchup-fuzzy",
+        title: "Find the real gaps before you plan",
+        intro:
+          "“Behind” is a feeling until you check. Spend the first week finding the real gaps — it's the highest-value week of the summer.",
+        steps: [
+          "Gather the evidence you already have: final report card, teacher comments, the last few tests. Circle anything that repeats.",
+          "Do a light skills check with free practice by grade level — twenty minutes per subject tells you more than a month of guessing.",
+          "Ask your child where it got hard — kids usually know, with startling precision, the exact chapter where a subject went dark.",
+          "Then run a focused plan on the two or three real gaps, 30–40 weekday minutes, weekends off — and let the rest of summer be summer.",
+        ],
+        related: { slug: "plan-builder", title: "Study Plan Builder" },
+      },
+      {
+        id: "sl-ahead-theirs",
+        title: "Feed the hunger without formalizing it",
+        intro:
+          "A kid who wants to get ahead needs fuel and room, not a syllabus. Your job is supply lines and an audience — not management.",
+        steps: [
+          "Ask what they want to build, master, or find out — then resource it: library trips, one good kit or course, a corner of the table that doesn't get cleared.",
+          "Shape it into one enrichment project with something to show in August: a model, a story collection, a coded game, a garden. Artifacts sustain momentum.",
+          "Add a 20-minute daily anchor for the skill behind the interest — the math under the coding, the reading behind the history obsession.",
+          "Stay the audience, not the manager: ask to be shown, not to inspect. The project stays theirs or it stops.",
+        ],
+      },
+      {
+        id: "sl-ahead-mine",
+        title: "Buy progress without selling the summer",
+        intro:
+          "When getting ahead is the parent's goal, the design has to be honest about that — light enough to keep goodwill, real enough to matter in September.",
+        steps: [
+          "Name the deal plainly: 20–30 focused minutes on weekdays, and the rest of the day is genuinely theirs. Clear edges prevent daily renegotiation.",
+          "Preview, don't race ahead: skimming next year's first chapters builds September confidence without burning the material.",
+          "Trade choice for buy-in: they pick which subject and when the minutes happen; you hold only the that-it-happens.",
+          "Watch for the burnout tells — dread, bargaining, dawdling that outlasts the session — and cut the load in half for a week rather than push through.",
+          "Put the payoff where they can feel it: “You'll walk into algebra already knowing the first month.” Getting ahead should taste like an advantage, not a punishment.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "reading-at-home",
+    title: "Reading at Home",
+    description:
+      "A guided walk through growing a reader at any age — matched to elementary, middle, or high school.",
+    intro:
+      "The goal at every age is the same — a kid who reads because they want to — but the moves change as they grow. One quick question about age, one about where things stand, and you'll get strategies that fit.",
+    firstStep: "start",
+    steps: [
+      {
+        id: "start",
+        question: "How old is your reader?",
+        options: [
+          { label: "Elementary school", next: "elementary" },
+          { label: "Middle school", next: "middle" },
+          { label: "High school", next: "high" },
+        ],
+      },
+      {
+        id: "elementary",
+        question: "What's the current relationship with books?",
+        options: [
+          { label: "Loves being read to, resists reading alone", next: "ra-elem-readaloud" },
+          { label: "Avoids books altogether", next: "ra-elem-avoids" },
+        ],
+      },
+      {
+        id: "middle",
+        question: "What happened to reading?",
+        options: [
+          { label: "Screens won the competition", next: "ra-mid-screens" },
+          { label: "They say books are boring", next: "ra-mid-boring" },
+        ],
+      },
+      {
+        id: "high",
+        question: "What's the goal?",
+        options: [
+          { label: "Get them reading anything at all", next: "ra-high-anything" },
+          { label: "Deepen what they already do", next: "ra-high-deepen" },
+        ],
+      },
+    ],
+    outcomes: [
+      {
+        id: "ra-elem-readaloud",
+        title: "Keep reading aloud — and build a bridge",
+        intro:
+          "Loving read-alouds is a strength, not a stall. Keep the ritual (it's doing more than you think) and build a low-pressure bridge to solo reading beside it.",
+        steps: [
+          "Don't retire the read-aloud — there is no “too old.” Listening comprehension runs years ahead of decoding, and the couch ritual is where the love lives.",
+          "Trade pages inside the ritual: you read a page, they read a paragraph — then gradually rebalance. The bridge is gentle and shared.",
+          "Start a series together aloud and let the next book “accidentally” be available for solo attempts. Needing to know what happens is the strongest engine there is.",
+          "Let their solo choices be easy — below-level books, comics, rereads all count. Solo reading should feel like coasting downhill.",
+          "Ask story questions, never quiz questions: “Would you have done what she did?” keeps books a conversation, not a test.",
+        ],
+      },
+      {
+        id: "ra-elem-avoids",
+        title: "Lower the bar until they trip over it",
+        intro:
+          "A young book-avoider usually finds books effortful, boring, or both. Attack both: easier entry points, higher-interest topics, zero pressure.",
+        steps: [
+          "Follow the obsession, wherever it is: dinosaurs, gaming guides, joke books, graphic novels. The topic recruits; the format doesn't matter.",
+          "Keep reading aloud daily anyway — comprehension and pleasure keep growing through the ears while the eyes catch up.",
+          "Salt the house with easy wins: comics in the car, a joke book at breakfast. Three found minutes beat a scheduled twenty that ends in tears.",
+          "Make the library trip theirs: their card, their picks, no vetoes on level or topic. Ownership converts avoiders.",
+          "If avoidance looks like real struggle — guessing at words, exhaustion after a page — ask the teacher what they see. Effort problems and skill problems need different help.",
+        ],
+      },
+      {
+        id: "ra-mid-screens",
+        title: "Compete on convenience, not virtue",
+        intro:
+          "Screens win because they're instant and everywhere. Books win middle schoolers back by matching the convenience and borrowing the interests.",
+        steps: [
+          "Put books where the phone lives: on the bed, in the backpack, in the car. The competition is fought at arm's length.",
+          "Go where the algorithm points: if they watch basketball highlights, sports bios; anime, manga. The screen already told you what they love.",
+          "Audiobooks count, fully — commutes and chores become reading time with zero friction.",
+          "Carve one screen-free reading pocket a day — 20 minutes before lights-out is the classic — and read your own book in it. Modeled beats mandated.",
+          "Feed series momentum: when one lands, have the sequel already waiting. Dead time between books is where screens win the rematch.",
+        ],
+      },
+      {
+        id: "ra-mid-boring",
+        title: "They haven't met the right book yet",
+        intro:
+          "“Books are boring” almost always means “the books adults keep handing me are boring.” The fix is range, choice, and a little cunning.",
+        steps: [
+          "Blow the doors off what counts: graphic novels, horror, sports pages, world-record books, song lyrics, recipe blogs. Reading is reading.",
+          "Use the five-book flight: bring home a wild variety, ask them to read ten pages of each, keep whatever survives. Choice plus a taste beats assignment.",
+          "Mine their people: the cousin's favorite, the coach's recommendation, what friends are passing around. Peer sourcing beats parent sourcing at this age.",
+          "Talk about your own reading at dinner — the plot twist, the fact you can't stop thinking about. Curiosity is contagious; assignments aren't.",
+        ],
+      },
+      {
+        id: "ra-high-anything",
+        title: "Meet them where their life already is",
+        intro:
+          "A high schooler who doesn't read for pleasure isn't a lost cause — they're busy, tired, and unconvinced. Win on relevance and respect.",
+        steps: [
+          "Connect books to what they already care about: the sport, the show, the career interest. A pro athlete's memoir has started more reading lives than most classics.",
+          "Respect the format: audiobooks in the car they drive, long-form articles, essay collections — short, real, and finishable all count.",
+          "Ask for their take, not their attention: “Someone said this book is overrated — settle it for me.” Teenagers will read to have an opinion.",
+          "Keep books visible and free of assignments at home. School owns required reading; home should own the voluntary kind.",
+        ],
+      },
+      {
+        id: "ra-high-deepen",
+        title: "Treat them like the reader they are",
+        intro:
+          "A high schooler who already reads needs peers, ideas, and next doors to walk through — not monitoring. Think fellow reader, not supervisor.",
+        steps: [
+          "Read what they read, sometimes — one shared book a semester turns dinner into a book club without calling it one.",
+          "Open the adult shelves: journalism, memoir, philosophy, the novels people argue about. Being handed a grown-up book is a compliment they notice.",
+          "Talk ideas, not comprehension: “Was the ending earned?” “Who was right?” The conversation is the deepening.",
+          "Point them at the pipeline: the author's other books, the essay that inspired the novel, the movie adaptation to judge against the book.",
+        ],
+      },
+    ],
+  },
 ];
 
 export function getToolkit(slug: string): Toolkit | undefined {
