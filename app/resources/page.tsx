@@ -40,6 +40,50 @@ export default function ResourcesPage() {
         </div>
       </section>
 
+      {/* Featured tool */}
+      <section className="bg-sand-100">
+        <div className="mx-auto max-w-content px-5 py-16 sm:px-8 sm:py-20">
+          <div className="grid gap-6 lg:grid-cols-3">
+            <Link
+              href="/resources/plan-builder"
+              className="group flex flex-col rounded-xl border-2 border-navy-900 bg-navy-950 p-8 transition hover:shadow-xl lg:col-span-2"
+            >
+              <p className="text-xs uppercase tracking-widest text-sand-300">
+                Featured free tool
+              </p>
+              <h2 className="mt-2 font-serif text-2xl font-semibold text-sand-50 sm:text-3xl">
+                Study Plan Builder
+              </h2>
+              <p className="mt-3 flex-1 leading-relaxed text-sand-200">
+                Enter your grades in any format — percentages, letters, or the NY scale — and get a
+                structured weekly, monthly, or quarterly study plan. Includes a NY Regents mode.
+                Runs entirely in your browser; nothing is saved or sent anywhere.
+              </p>
+              <span className="mt-6 text-sm font-medium text-sand-100 group-hover:underline">
+                Build your plan →
+              </span>
+            </Link>
+            <a
+              href="https://kunalkaiser.github.io/zened/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex flex-col rounded-xl border border-navy-100 bg-white p-8 transition hover:border-navy-300 hover:shadow-lg"
+            >
+              <p className="text-xs uppercase tracking-widest text-sand-700">
+                Free NY Regents readiness tool
+              </p>
+              <h2 className="mt-2 font-serif text-2xl font-semibold text-navy-900">ZenEd</h2>
+              <p className="mt-3 flex-1 leading-relaxed text-navy-700">
+                Our free companion site for NY students preparing for the Regents exams.
+              </p>
+              <span className="mt-6 text-sm font-medium text-navy-800 group-hover:underline">
+                Visit ZenEd ↗
+              </span>
+            </a>
+          </div>
+        </div>
+      </section>
+
       {AUDIENCES.map((section, i) => (
         <section key={section.audience} className={i % 2 === 1 ? "bg-sand-100" : undefined}>
           <div className="mx-auto max-w-content px-5 py-16 sm:px-8 sm:py-20">

@@ -32,7 +32,11 @@ Mission → Founder story → Experience & credentials (PhD in Molecular Biomedi
 7 steps: Inquiry → Discovery call → Assessment → Service plan → Delivery → Progress review → Ongoing support. Numbered vertical timeline layout.
 
 ### 9. Resources
+Featured tool row above the audience grids: Study Plan Builder (/resources/plan-builder) + external link card to ZenEd (https://kunalkaiser.github.io/zened/), our free companion Regents-readiness site for NY students.
 Three audience sections: Parents (primary, 3 placeholder guides), Teachers (2 placeholder downloads), Students (2 placeholder tools). Card grid per audience. Email-capture placeholder.
+
+### Study Plan Builder (/resources/plan-builder)
+Fully client-side tool — no backend, no AI calls, no storage, no login; all state in memory; no network calls. Inputs: free-text subjects with grades in percentage, letter (A+–F), or NY scale (NY/L/P/M); optional per-subject struggle topics; goal (raise grades / pass exams / get ahead); weekly hours slider (2–20); cadence (weekly day-by-day / monthly 4 weekly themes / quarterly 3 monthly phases with checkpoints). NY Regents mode preloads the five common Regents subjects with 65-passing-score context. Engine: pure deterministic functions in lib/planBuilder.ts (normalize → classify red <55 / yellow 55–74 / green 75+ → rank → allocate hours by need → assemble from lib/strategyBlocks.ts). Copy uses educational study-skills language only — no clinical/diagnostic/therapy terms, and no "AI" claims anywhere.
 
 ### Contact
 Short intro, form (name, email, phone, role type, service of interest, message, preferred contact), service area, response window "within 2 business days".

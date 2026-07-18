@@ -17,3 +17,14 @@
     outline-offset: 2px;
   }
 }
+
+/* Print-friendly output (used by the Study Plan Builder's printable plan) */
+@media print {
+  header,
+  footer {
+    display: none !important;
+  }
+  body {
+    background: white;
+  }
+}
